@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #102a43;
+  --color-navy-dark: #0a1c2e;
+  --color-orange: #f36b2b;
+  --color-orange-dark: #d4551a;
+  --color-sand: #f3efe7;
+  --color-sand-dark: #e8e0d0;
+  --color-slate: #52606d;
+  --color-success: #1f7a5a;
+
+  --font-sans-ar: var(--font-ibm-plex-arabic), "Segoe UI", Tahoma, sans-serif;
+  --font-sans-en: var(--font-inter), system-ui, sans-serif;
+
+  --radius-card: 1.125rem;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1px 2px rgba(16, 42, 67, 0.06), 0 8px 24px rgba(16, 42, 67, 0.08);
+  --shadow-lift: 0 2px 4px rgba(16, 42, 67, 0.08), 0 16px 40px rgba(16, 42, 67, 0.12);
+
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-count-up: count-up 0.4s ease-out both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes count-up {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background: var(--color-sand);
+  color: var(--color-navy);
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-sans-ar);
+}
+
+html[lang="en"] body {
+  font-family: var(--font-sans-en);
+}
+
+::selection {
+  background: var(--color-orange);
+  color: white;
+}
+
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* RTL-aware direction icons: flip elements that imply a horizontal reading
+   direction (arrows, chevrons) so they point the correct way in Arabic. */
+[dir="rtl"] .dir-flip {
+  transform: scaleX(-1);
+}
