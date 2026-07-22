@@ -106,11 +106,22 @@
   background: #f36b2b;
 }
 
-/* Login screen: swap Payload's default brand mark area to sand, echoing
-   the public site's hero background, so /admin doesn't look like a
-   generic vendor tool on first paint. */
-.login {
-  background: #f3efe7;
+/* Login (and other minimal views: forgot/reset password): the same real
+   brand photo the public site's hero uses, under a navy gradient — the
+   form itself sits in a white card with the site's card radius/shadow.
+   This is the first screen every editor sees; it should look like the
+   company, not like the CMS vendor. */
+.template-minimal {
+  background:
+    linear-gradient(115deg, rgba(10, 28, 46, 0.92) 0%, rgba(16, 42, 67, 0.82) 45%, rgba(16, 42, 67, 0.55) 100%),
+    url("/images/hero-technician.jpg") center / cover no-repeat fixed;
+}
+.template-minimal__wrap {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 2px 4px rgba(16, 42, 67, 0.15), 0 24px 60px rgba(10, 28, 46, 0.45);
+  padding: 40px 36px;
+  animation: ijk-fade-up 0.5s ease both;
 }
 
 /* Top app header bar — visible on every screen regardless of whether the
@@ -205,4 +216,90 @@
   --color: var(--theme-elevation-800);
   --hover-bg: var(--bg-color);
   --hover-color: var(--color);
+}
+
+/* ---------------------------------------------------------------------
+   Motion: the same quiet fade-up used across the public site's sections
+   (globals.css animate-fade-up), applied to the admin's first-paint
+   surfaces, plus small hover lifts. All gated behind prefers-reduced-
+   motion so editors who opt out of animation get a static UI. */
+
+@keyframes ijk-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Dashboard tiles fade in with a light stagger per row position. */
+.collections__card-list .card {
+  animation: ijk-fade-up 0.45s ease both;
+}
+.collections__card-list li:nth-child(2) .card {
+  animation-delay: 60ms;
+}
+.collections__card-list li:nth-child(3) .card {
+  animation-delay: 120ms;
+}
+.collections__card-list li:nth-child(4) .card {
+  animation-delay: 180ms;
+}
+
+/* Custom dashboard overview blocks (KPIs, tables) share the same entry. */
+.ijk-overview > * {
+  animation: ijk-fade-up 0.45s ease both;
+}
+.ijk-overview > *:nth-child(2) {
+  animation-delay: 70ms;
+}
+.ijk-overview > *:nth-child(3) {
+  animation-delay: 140ms;
+}
+.ijk-overview > *:nth-child(4) {
+  animation-delay: 210ms;
+}
+
+/* Sidebar links: slight inward shift on hover (logical property, so it
+   works in both RTL and LTR) with the orange accent. */
+.nav__link {
+  transition:
+    color 150ms ease,
+    padding-inline-start 150ms ease;
+}
+.nav__link:hover {
+  padding-inline-start: 5px;
+}
+
+/* Primary buttons get the same lift the public site's CTAs have. */
+.btn--style-primary {
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+.btn--style-primary:hover:not(.btn--disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(243, 107, 43, 0.35);
+}
+
+/* List-view rows: warm sand tint on hover instead of no feedback. */
+.table tbody tr:hover td {
+  background: rgba(243, 239, 231, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collections__card-list .card,
+  .ijk-overview > *,
+  .template-minimal__wrap {
+    animation: none;
+  }
+  .nav__link,
+  .btn--style-primary,
+  .card {
+    transition: none;
+  }
 }

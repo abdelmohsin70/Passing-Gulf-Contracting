@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useSyncExternalStore } from "react";
 
 /**
  * One-click admin-UI language toggle (عربي ⇄ English), shown in the admin
@@ -10,12 +10,17 @@ import React, { useEffect, useState } from "react";
  * reloads so the whole chrome (nav, buttons, system messages) re-renders
  * in the chosen language.
  */
-export function LanguageToggle() {
-  const [lang, setLang] = useState<string | null>(null);
+const emptySubscribe = () => () => {};
 
-  useEffect(() => {
-    setLang(document.documentElement.lang || "en");
-  }, []);
+export function LanguageToggle() {
+  // The current UI language lives on <html lang>, set by the server per
+  // request — read it via useSyncExternalStore so SSR renders nothing
+  // (null server snapshot) and the client hydrates with the real value.
+  const lang = useSyncExternalStore(
+    emptySubscribe,
+    () => document.documentElement.lang || "en",
+    () => null
+  );
 
   if (!lang) return null;
 

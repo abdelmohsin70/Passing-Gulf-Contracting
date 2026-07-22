@@ -194,7 +194,46 @@ export async function DashboardOverview() {
   );
 
   return (
-    <div style={{ padding: "16px 0 8px" }}>
+    <div className="ijk-overview" style={{ padding: "16px 0 8px" }}>
+      <div
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          borderRadius: 18,
+          background: "linear-gradient(100deg, #0a1c2e 0%, #102a43 55%, rgba(16, 42, 67, 0.85) 100%)",
+          color: "#ffffff",
+          padding: "28px 32px",
+          marginBottom: 24,
+          boxShadow: "0 2px 4px rgba(16, 42, 67, 0.08), 0 16px 40px rgba(16, 42, 67, 0.12)",
+        }}
+      >
+        {/* Same hero photo family the public site uses; decorative only. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/safety-helmets.jpg"
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            opacity: 0.18,
+          }}
+        />
+        <div style={{ position: "relative" }}>
+          <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#f36b2b", letterSpacing: "0.02em" }}>
+            اجتياز الخليج للمقاولات
+          </p>
+          <h2 style={{ margin: "6px 0 0", fontSize: 24, fontWeight: 700 }}>
+            {user?.name ? `أهلًا ${String(user.name)} 👋` : "أهلًا بك في لوحة التحكم"}
+          </h2>
+          <p style={{ margin: "8px 0 0", fontSize: 14, color: "rgba(255, 255, 255, 0.75)", maxWidth: 560 }}>
+            من هنا تدير محتوى الموقع بالعربية والإنجليزية، وتتابع طلبات العملاء لحظة وصولها.
+          </p>
+        </div>
+      </div>
+
       <h2
         style={{
           fontSize: 20,
