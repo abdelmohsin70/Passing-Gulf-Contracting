@@ -131,6 +131,7 @@ export function QuoteWizard({
       <form action={formAction} noValidate>
         <input type="hidden" name="clientType" value={clientType} />
         <input type="hidden" name="service" value={service} />
+        <input type="hidden" name="locale" value={locale} />
         {/* Honeypot: real users never see this field. */}
         <div aria-hidden className="absolute size-px overflow-hidden" style={{ clip: "rect(0 0 0 0)" }}>
           <label htmlFor="companyWebsite">Company website</label>
@@ -255,6 +256,7 @@ export function QuoteWizard({
 
           {step < steps.length - 1 ? (
             <Button
+              key="next"
               type="button"
               onClick={() => {
                 if (step === 1 && !service) return;
@@ -265,7 +267,7 @@ export function QuoteWizard({
               {dictionary.quoteForm.buttons.next}
             </Button>
           ) : (
-            <Button type="submit" disabled={isPending}>
+            <Button key="submit" type="submit" disabled={isPending}>
               {isPending ? dictionary.quoteForm.buttons.submitting : dictionary.quoteForm.buttons.submit}
             </Button>
           )}

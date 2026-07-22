@@ -31,9 +31,10 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Skip internal Next.js paths, API routes, and files with an extension
-     * (static assets like /favicon.ico, /robots.txt, /sitemap.xml, images).
+     * Skip internal Next.js paths, API routes, the Payload admin panel,
+     * and files with an extension (static assets like /favicon.ico,
+     * /robots.txt, /sitemap.xml, images).
      */
-    "/((?!_next|api|.*\\..*).*)",
+    "/((?!_next|api|admin|.*\\..*).*)",
   ],
 };
