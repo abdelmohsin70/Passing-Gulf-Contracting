@@ -3,6 +3,8 @@ import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { en } from "@payloadcms/translations/languages/en";
+import { ar } from "@payloadcms/translations/languages/ar";
 import sharp from "sharp";
 
 import { Users } from "./payload/collections/Users";
@@ -92,6 +94,10 @@ export default buildConfig({
     NotificationSettings,
   ],
   editor: lexicalEditor(),
+  i18n: {
+    supportedLanguages: { en, ar },
+    fallbackLanguage: "ar",
+  },
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),

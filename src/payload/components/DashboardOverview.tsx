@@ -195,7 +195,19 @@ export async function DashboardOverview() {
 
   return (
     <div style={{ padding: "16px 0 8px" }}>
-      <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 12 }}>نظرة سريعة</h2>
+      <h2
+        style={{
+          fontSize: 20,
+          fontWeight: 700,
+          color: "#102a43",
+          marginBottom: 16,
+          paddingBottom: 10,
+          borderBottom: "2px solid #f36b2b",
+          display: "inline-block",
+        }}
+      >
+        نظرة سريعة
+      </h2>
 
       {canSeeLeads ? (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 20 }}>
@@ -257,18 +269,20 @@ export async function DashboardOverview() {
           <SectionTitle>آخر الطلبات</SectionTitle>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
-              <tr style={{ textAlign: "start", borderBottom: "1px solid #e5e5e5" }}>
-                <th style={{ padding: "6px 8px" }}>المرجع</th>
-                <th style={{ padding: "6px 8px" }}>الاسم</th>
-                <th style={{ padding: "6px 8px" }}>النوع</th>
-                <th style={{ padding: "6px 8px" }}>الحالة</th>
+              <tr style={{ textAlign: "start", borderBottom: "2px solid #102a43" }}>
+                <th style={{ padding: "6px 8px", color: "#102a43" }}>المرجع</th>
+                <th style={{ padding: "6px 8px", color: "#102a43" }}>الاسم</th>
+                <th style={{ padding: "6px 8px", color: "#102a43" }}>النوع</th>
+                <th style={{ padding: "6px 8px", color: "#102a43" }}>الحالة</th>
               </tr>
             </thead>
             <tbody>
               {recentLeads.map((lead) => (
-                <tr key={String(lead.id)} style={{ borderBottom: "1px solid #f0f0f0" }}>
+                <tr key={String(lead.id)} style={{ borderBottom: "1px solid rgba(16, 42, 67, 0.08)" }}>
                   <td style={{ padding: "6px 8px" }}>
-                    <a href={`/admin/collections/leads/${lead.id}`}>{String(lead.referenceNumber)}</a>
+                    <a href={`/admin/collections/leads/${lead.id}`} style={{ color: "#f36b2b", fontWeight: 600 }}>
+                      {String(lead.referenceNumber)}
+                    </a>
                   </td>
                   <td style={{ padding: "6px 8px" }}>{String(lead.name ?? "")}</td>
                   <td style={{ padding: "6px 8px" }}>{String(lead.type ?? "")}</td>
@@ -286,10 +300,11 @@ export async function DashboardOverview() {
           <ul style={{ margin: 0, paddingInlineStart: 18 }}>
             {integrations.map((item) => (
               <li key={item.label}>
-                <span style={{ color: item.configured ? "#1a7f37" : "#a15c00" }}>
+                <span style={{ color: item.configured ? "#1f7a5a" : "#d4551a" }}>
                   {item.configured ? "●" : "○"}
                 </span>{" "}
-                <strong>{item.label}:</strong> {item.note}
+                <strong style={{ color: "#102a43" }}>{item.label}:</strong>{" "}
+                <span style={{ color: "#52606d" }}>{item.note}</span>
               </li>
             ))}
           </ul>
@@ -319,12 +334,20 @@ export async function DashboardOverview() {
 
 function BreakdownCard({ title, entries }: { title: string; entries: Array<[string, number]> }) {
   return (
-    <div style={{ border: "1px solid #e5e5e5", borderRadius: 8, padding: "10px 14px" }}>
-      <h4 style={{ fontSize: 13, fontWeight: 700, margin: "0 0 8px" }}>{title}</h4>
+    <div
+      style={{
+        border: "1px solid rgba(16, 42, 67, 0.1)",
+        borderRadius: 12,
+        padding: "12px 16px",
+        background: "#fff",
+        boxShadow: "0 1px 2px rgba(16, 42, 67, 0.06), 0 8px 24px rgba(16, 42, 67, 0.06)",
+      }}
+    >
+      <h4 style={{ fontSize: 13, fontWeight: 700, margin: "0 0 8px", color: "#102a43" }}>{title}</h4>
       {entries.length === 0 ? (
-        <p style={{ fontSize: 12, color: "#999", margin: 0 }}>لا توجد بيانات</p>
+        <p style={{ fontSize: 12, color: "#52606d", margin: 0 }}>لا توجد بيانات</p>
       ) : (
-        <ul style={{ margin: 0, paddingInlineStart: 16, fontSize: 12 }}>
+        <ul style={{ margin: 0, paddingInlineStart: 16, fontSize: 12, color: "#52606d" }}>
           {entries.map(([label, count]) => (
             <li key={label}>
               {label} — {count}
@@ -340,20 +363,21 @@ function KpiCard({ label, value, accent }: { label: string; value: number; accen
   return (
     <div
       style={{
-        border: "1px solid #e5e5e5",
-        borderRadius: 8,
-        padding: "12px 14px",
+        border: accent ? "1px solid rgba(243, 107, 43, 0.35)" : "1px solid rgba(16, 42, 67, 0.1)",
+        borderRadius: 12,
+        padding: "14px 16px",
         background: accent ? "#fff4ec" : "#fff",
+        boxShadow: "0 1px 2px rgba(16, 42, 67, 0.06), 0 8px 24px rgba(16, 42, 67, 0.06)",
       }}
     >
-      <div style={{ fontSize: 22, fontWeight: 700 }}>{value}</div>
-      <div style={{ fontSize: 12, color: "#666" }}>{label}</div>
+      <div style={{ fontSize: 24, fontWeight: 700, color: accent ? "#d4551a" : "#102a43" }}>{value}</div>
+      <div style={{ fontSize: 12, color: "#52606d", marginTop: 2 }}>{label}</div>
     </div>
   );
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h3 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 8px" }}>{children}</h3>;
+  return <h3 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 8px", color: "#102a43" }}>{children}</h3>;
 }
 
 async function countSince(

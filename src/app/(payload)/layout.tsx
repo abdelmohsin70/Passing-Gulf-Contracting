@@ -4,6 +4,7 @@ import "@/payload/styles/admin-theme.css";
 import type { ServerFunctionClient } from "payload";
 import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
 import React from "react";
+import { ibmPlexSansArabic } from "@/lib/fonts";
 
 import { importMap } from "./admin/importMap.js";
 
@@ -21,7 +22,12 @@ const serverFunction: ServerFunctionClient = async function (args) {
 };
 
 const Layout = ({ children }: Args) => (
-  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
+  <RootLayout
+    config={config}
+    importMap={importMap}
+    serverFunction={serverFunction}
+    htmlProps={{ className: ibmPlexSansArabic.variable }}
+  >
     {children}
   </RootLayout>
 );
