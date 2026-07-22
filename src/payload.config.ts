@@ -49,6 +49,10 @@ export default buildConfig({
       titleSuffix: " — لوحة تحكم اجتياز الخليج",
     },
     dateFormat: "dd/MM/yyyy",
+    // The brand identity (sand / white / navy) is a light design system —
+    // forcing light keeps every admin screen on-brand instead of showing a
+    // half-branded dark mode to users whose OS prefers dark.
+    theme: "light",
     importMap: {
       baseDir: path.resolve(dirname),
     },

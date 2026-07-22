@@ -303,3 +303,112 @@
     transition: none;
   }
 }
+
+/* ---------------------------------------------------------------------
+   Professional-template pass (modeled on the layout language of modern
+   admin dashboards, applied through Payload's own variable/BEM system —
+   the approach Payload's official theming guide recommends over swapping
+   components). The admin is forced to light theme in payload.config.ts,
+   so these values never have to fight a dark palette. */
+
+:root {
+  /* Warm off-white canvas (the site's sand, desaturated for long editing
+     sessions) with pure-white surfaces on top — the two-tone contrast
+     that makes dashboard templates read as "designed" instead of flat. */
+  --theme-bg: #f7f5f1;
+  --theme-input-bg: #ffffff;
+}
+
+/* Content area sits on the warm canvas; the nav stays navy. */
+.template-default__wrap {
+  background-color: #f7f5f1;
+}
+
+/* Form inputs: white on the warm canvas, roomier radius, navy-tinted
+   border, and the same orange focus ring the public site's forms use. */
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  border-radius: 10px;
+}
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+select:focus {
+  border-color: #f36b2b;
+  box-shadow: 0 0 0 3px rgba(243, 107, 43, 0.18);
+  outline: none;
+}
+
+/* Field labels: navy, slightly bolder — mirrors the public site's form
+   labels (font-semibold text-navy). */
+.field-label {
+  color: #102a43;
+  font-weight: 600;
+}
+
+/* List views: give the table a white card surface on the warm canvas,
+   with a sand header row and navy header text. */
+.table {
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(16, 42, 67, 0.05), 0 8px 24px rgba(16, 42, 67, 0.05);
+}
+.table thead {
+  color: #102a43;
+}
+.table th {
+  background: #f3efe7;
+  font-weight: 700;
+}
+.table th:first-child {
+  border-start-start-radius: 14px;
+}
+.table th:last-child {
+  border-start-end-radius: 14px;
+}
+
+/* Status pills (drafts, published, lead status): fully rounded like the
+   public site's Badge component. */
+.pill {
+  border-radius: 999px;
+}
+
+/* Popup menus / dropdowns: card-like surface with the site's lift
+   shadow instead of Payload's flat default. */
+.popup__content {
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(16, 42, 67, 0.08), 0 16px 40px rgba(16, 42, 67, 0.16);
+}
+
+/* App header: white surface with a soft drop so it separates from the
+   warm canvas below (sticky headers in pro templates always carry a
+   subtle elevation). */
+.app-header__bg {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* Sidebar refinements: uppercase micro group-labels with letter-spacing
+   (the signature of professional dashboard sidebars), orange-on-hover,
+   and a bolder active link. */
+.nav-group__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.45);
+}
+.nav-group__toggle:hover .nav-group__label {
+  color: #f36b2b;
+}
+.nav__link--active,
+.nav__link[aria-current] {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Nav scrollbar: thin navy-tinted instead of the OS default gray, so the
+   sidebar reads as one designed surface. */
+.nav__scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
