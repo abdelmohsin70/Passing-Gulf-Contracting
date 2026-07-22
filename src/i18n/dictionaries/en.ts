@@ -124,6 +124,13 @@ const dictionary: Dictionary = {
     subtitle: "Examples of how we turn operational needs into measurable results.",
     pendingBanner:
       "Real case studies are currently being documented with our clients. The example below is illustrative only and shows the presentation format that will be used once verified data is available.",
+    statSinceLabel: "Operating partner since",
+    statSolutions: "Integrated solution families",
+    statSectors: "Sectors we serve",
+    stat247: "Technical emergency response",
+    showcaseTitle: "Our Work in Action",
+    showcaseSubtitle: "Real photos from our work sites across our solution families — open any card for the full service details.",
+    caseStudiesTitle: "Case Studies",
   },
   caseStudy: {
     placeholderBadge: "Illustrative example — not real data",
