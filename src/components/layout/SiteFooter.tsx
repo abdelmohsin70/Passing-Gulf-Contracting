@@ -2,15 +2,16 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { company } from "@/config/company";
-import { solutions } from "@/data/solutions";
-import { sectors } from "@/data/sectors";
+import { getSolutions } from "@/payload/queries/solutions";
+import { getSectors } from "@/payload/queries/sectors";
 import { Container } from "@/components/primitives/Container";
 import { MailIcon, MapPinIcon, PhoneIcon } from "@/components/icons/icons";
 import { telHref } from "@/lib/utils";
 
-export function SiteFooter({ locale, dictionary }: { locale: Locale; dictionary: Dictionary }) {
+export async function SiteFooter({ locale, dictionary }: { locale: Locale; dictionary: Dictionary }) {
   const base = `/${locale}`;
   const year = new Date().getFullYear();
+  const [solutions, sectors] = await Promise.all([getSolutions(), getSectors()]);
 
   return (
     <footer className="border-t border-navy/10 bg-navy text-white">

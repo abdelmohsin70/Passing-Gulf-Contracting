@@ -95,16 +95,28 @@ the file at the same path, or update the `heroImage`/`gallery` fields in
 
 ## Editable content
 
-⚠️ **This section describes the current frontend, which still reads from
-static data/config files, not the CMS.** A Payload CMS with the same content
-types (Solutions, Sectors, Projects, etc.) is fully built and editable at
-`/admin` — see `CMS-GUIDE-AR.md` — but the public frontend hasn't been
-migrated to read from it yet (see "Known limitations" below). Editing
-content in `/admin` today does not yet change the live site; edit the files
-below instead until that migration lands.
+**Solutions, Sectors, and Projects/case studies are edited in the CMS
+(`/admin`), not in code.** See `CMS-GUIDE-AR.md` for the editor workflow.
+These pages are rendered on demand (`export const dynamic = "force-dynamic"`
+in each route) specifically so that publishing or editing content in
+`/admin` shows up on the live site immediately, without a redeploy:
 
-Everything a non-developer would want to change lives in typed data/config
-files — no content is hardcoded inside JSX beyond section headings.
+- **Solutions** — `/admin` → الحلول (Solutions collection). Frontend at
+  `/solutions` and `/solutions/[slug]`, sourced via `src/payload/queries/solutions.ts`.
+- **Sectors** — `/admin` → القطاعات (Sectors collection). Frontend at
+  `/sectors`, sourced via `src/payload/queries/sectors.ts`. The "relevant
+  solutions" shown per sector are derived live from each solution's own
+  `sectors` relationship, not a separate field to keep in sync.
+- **Projects / case studies** — `/admin` → المشاريع ودراسات الحالة. A case
+  study is only visible on the public site once it is **both** Published
+  *and* `verificationStatus: verified` (see `CONTENT-VERIFICATION.md`).
+  Until the first one is verified, `/projects` and the homepage
+  automatically fall back to the single static illustrative template in
+  `src/data/projects.ts` (clearly labeled, `isPlaceholder: true`) so the
+  page is never empty — sourced via `src/payload/queries/projects.ts`.
+
+A handful of things are still edited directly in code, not the CMS (a
+deliberate scope decision, not an oversight — see "Known limitations"):
 
 - **Company facts** (phone, WhatsApp, email, address, certifications, social
   links): `src/config/company.ts`. Every fact that isn't independently
@@ -113,14 +125,8 @@ files — no content is hardcoded inside JSX beyond section headings.
   link, the WhatsApp floating button, an ISO badge...) whenever its status
   is `"pending"` — **never** flip a field to `"confirmed"` without a
   verified source.
-- **Solutions** (the 8 service lines): `src/data/solutions.ts`.
-- **Solution families** (the 4 cards on the homepage): `src/data/solution-families.ts`.
-- **Sectors**: `src/data/sectors.ts`.
-- **Case studies / projects**: `src/data/projects.ts`. Currently contains a
-  single `isPlaceholder: true` template entry with bracketed placeholder
-  text — replace it with real, client-approved project data and flip
-  `isPlaceholder` to `false` (this also makes it eligible for the sitemap
-  and search indexing).
+- **Solution families** (the 4 cards on the homepage — a curated subset/
+  grouping of Solutions, not a CMS collection of its own): `src/data/solution-families.ts`.
 - **Client logos**: `src/data/clients.ts`. Empty by default — the "Our
   Clients" section renders a pending notice until logos with confirmed
   usage rights are added here.
@@ -131,19 +137,17 @@ files — no content is hardcoded inside JSX beyond section headings.
 
 ### Adding a new solution
 
-1. Add an entry to `solutions` in `src/data/solutions.ts` (title, summary,
-   scope, methodology, FAQs, relevant `sectors` slugs, an `icon` from
-   `src/components/icons/icons.tsx`).
-2. Optionally reference its slug from a `solutionFamilies` entry in
-   `src/data/solution-families.ts` to feature it on the homepage.
-3. The `/solutions` index and `/solutions/[slug]` detail page pick it up
-   automatically — no route code changes needed.
+Create it in `/admin` (see `CMS-GUIDE-AR.md`) and publish. To feature it on
+the homepage's 4 "solution family" cards, also add an entry referencing its
+slug to `src/data/solution-families.ts` (a code change, since that grouping
+isn't itself a CMS collection).
 
 ### Adding a new project / case study
 
-Add an entry to `caseStudies` in `src/data/projects.ts` with
-`isPlaceholder: false`. It will automatically appear on `/projects` and get
-its own `/projects/[slug]` page and sitemap entry.
+Create it in `/admin`, fill in real client-approved data, set
+`verificationStatus: verified`, and publish — see the checklist in
+`CMS-GUIDE-AR.md`. It automatically appears on `/projects`, gets its own
+`/projects/[slug]` page, and is added to the sitemap.
 
 ## Forms, leads, and connecting a real CRM/email provider
 
@@ -246,12 +250,25 @@ verification list). In short: deploy to Vercel or any Node host that runs
   environment. Nothing is wired to production infrastructure yet — see
   `DEPLOYMENT.md` for what's needed to go live (real `DATABASE_URI`, S3
   storage, email provider).
-- The public site's Solutions/Sectors/Projects/Homepage pages still read
-  from the typed static data files under `src/data/` and `src/config/`, not
-  from the Payload CMS. The CMS collections exist, are seeded, and are fully
-  editable in `/admin`, but the frontend doesn't read from them yet — editing
-  content in the CMS today does not change what visitors see until this
-  frontend migration is done.
+- Solutions, Sectors, and Projects are fully migrated to Payload (see
+  "Editable content" above) and render on demand so CMS edits are
+  immediately live. `src/data/solutions.ts`, `sectors.ts`, and
+  `projects.ts` still exist but are no longer the frontend's data
+  source — they're now used only as: (a) the seed script's input, and
+  (b) the Projects listing/homepage's zero-risk fallback when no case
+  study is yet published+verified in the CMS.
+- Company contact facts (`src/config/company.ts`), solution families, and
+  client logos are still code-edited, not CMS-edited — a deliberate scope
+  decision, not an oversight (see "Editable content" above for why).
+- The **footer** (rendered on every page, including the still-statically-
+  generated `/about`, `/careers`, `/quality-safety`, `/privacy` pages) reads
+  Solutions/Sectors from Payload too. On those specific static pages, the
+  footer's links reflect whatever was in the CMS **at build time**, not
+  live — the CMS-driven pages themselves (home, `/solutions`, `/sectors`,
+  `/projects`, `/contact`) always reflect live content. This is an accepted
+  trade-off, not a bug: making every single page fully dynamic just for the
+  footer's nav links would give up static generation's performance benefit
+  for content that changes rarely.
 - File upload on the quote form was intentionally left out — wire it into
   `QuoteWizard`/`submitQuoteRequest` (uploading to the `media` collection)
   if attachments become a requirement.

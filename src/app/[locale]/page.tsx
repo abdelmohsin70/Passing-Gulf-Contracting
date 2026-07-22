@@ -3,8 +3,9 @@ import Link from "next/link";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { solutionFamilies } from "@/data/solution-families";
-import { sectors } from "@/data/sectors";
-import { caseStudies } from "@/data/projects";
+import { getSectors } from "@/payload/queries/sectors";
+import { getSolutions } from "@/payload/queries/solutions";
+import { getHomepageCaseStudies } from "@/payload/queries/projects";
 import { Container } from "@/components/primitives/Container";
 import { Section } from "@/components/primitives/Section";
 import { SectionHeading } from "@/components/primitives/Heading";
@@ -20,6 +21,11 @@ import { CTASection } from "@/components/sections/CTASection";
 import { Button } from "@/components/primitives/Button";
 import { HomeIcon } from "@/components/icons/icons";
 import { Reveal } from "@/components/Reveal";
+
+// Rendered on demand rather than statically prerendered — pulls Solutions,
+// Sectors, and Projects from Payload, so publishing/editing CMS content
+// takes effect immediately without a redeploy.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -42,6 +48,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const locale = (isLocale(localeParam) ? localeParam : "ar") as Locale;
   const dictionary = getDictionary(locale);
   const base = `/${locale}`;
+  const [sectors, solutionsForCards, caseStudies] = await Promise.all([getSectors(), getSolutions(), getHomepageCaseStudies()]);
 
   return (
     <>
@@ -118,7 +125,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {caseStudies.map((caseStudy, index) => (
               <Reveal key={caseStudy.slug} delay={index * 90}>
-                <CaseStudyCard caseStudy={caseStudy} locale={locale} dictionary={dictionary} />
+                <CaseStudyCard caseStudy={caseStudy} locale={locale} dictionary={dictionary} sectors={sectors} solutions={solutionsForCards} />
               </Reveal>
             ))}
           </div>

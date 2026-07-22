@@ -37,6 +37,11 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Payload local media storage — dev-only (see DEPLOYMENT.md: production
+# must use S3-compatible storage, not local disk). These are re-derivable
+# by re-running `npm run seed` against public/images/, which IS tracked.
+/public/media/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

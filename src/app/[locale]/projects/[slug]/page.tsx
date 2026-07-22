@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { locales, isLocale, type Locale } from "@/i18n/config";
+import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { caseStudies, getCaseStudyBySlug } from "@/data/projects";
-import { sectors } from "@/data/sectors";
-import { getSolutionBySlug } from "@/data/solutions";
+import { getCaseStudyBySlug } from "@/data/projects";
+import { getVerifiedCaseStudyBySlug } from "@/payload/queries/projects";
+import { getSectors } from "@/payload/queries/sectors";
+import { getSolutionBySlug } from "@/payload/queries/solutions";
 import { Container } from "@/components/primitives/Container";
 import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
@@ -12,8 +13,12 @@ import { Badge } from "@/components/primitives/Badge";
 import { CTASection } from "@/components/sections/CTASection";
 import { ViewTracker } from "@/components/ViewTracker";
 
-export function generateStaticParams() {
-  return locales.flatMap((locale) => caseStudies.map((item) => ({ locale, slug: item.slug })));
+// No generateStaticParams — same reasoning as the solution detail page.
+// The one static placeholder slug (case-study-template) and any real,
+// verified CMS case studies are both resolved on demand below.
+
+async function resolveCaseStudy(slug: string) {
+  return (await getVerifiedCaseStudyBySlug(slug)) ?? getCaseStudyBySlug(slug);
 }
 
 export async function generateMetadata({
@@ -23,7 +28,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: localeParam, slug } = await params;
   const locale = (isLocale(localeParam) ? localeParam : "ar") as Locale;
-  const caseStudy = getCaseStudyBySlug(slug);
+  const caseStudy = await resolveCaseStudy(slug);
   if (!caseStudy) return {};
 
   return {
@@ -37,15 +42,16 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ loca
   const { locale: localeParam, slug } = await params;
   const locale = (isLocale(localeParam) ? localeParam : "ar") as Locale;
   const dictionary = getDictionary(locale);
-  const caseStudy = getCaseStudyBySlug(slug);
+  const caseStudy = await resolveCaseStudy(slug);
 
   if (!caseStudy) {
     notFound();
   }
 
   const base = `/${locale}`;
+  const sectors = await getSectors();
   const sector = sectors.find((item) => item.slug === caseStudy.sectorSlug);
-  const solution = getSolutionBySlug(caseStudy.solutionSlug);
+  const solution = await getSolutionBySlug(caseStudy.solutionSlug);
 
   return (
     <>

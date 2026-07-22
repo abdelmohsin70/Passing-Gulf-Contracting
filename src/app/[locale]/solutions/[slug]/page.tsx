@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { locales, isLocale, type Locale } from "@/i18n/config";
+import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { solutions, getSolutionBySlug } from "@/data/solutions";
-import { sectors } from "@/data/sectors";
+import { getSolutions, getSolutionBySlug } from "@/payload/queries/solutions";
+import { getSectors } from "@/payload/queries/sectors";
 import { Container } from "@/components/primitives/Container";
 import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
@@ -18,9 +18,9 @@ import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from "@/lib/seo";
 import { ViewTracker } from "@/components/ViewTracker";
 import { Reveal } from "@/components/Reveal";
 
-export function generateStaticParams() {
-  return locales.flatMap((locale) => solutions.map((solution) => ({ locale, slug: solution.slug })));
-}
+// No generateStaticParams: solution pages are rendered on demand from
+// Payload so that publishing/editing content in the CMS is reflected
+// immediately, without waiting for a redeploy.
 
 export async function generateMetadata({
   params,
@@ -29,7 +29,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale: localeParam, slug } = await params;
   const locale = (isLocale(localeParam) ? localeParam : "ar") as Locale;
-  const solution = getSolutionBySlug(slug);
+  const solution = await getSolutionBySlug(slug);
   if (!solution) return {};
 
   return {
@@ -43,12 +43,13 @@ export default async function SolutionPage({ params }: { params: Promise<{ local
   const { locale: localeParam, slug } = await params;
   const locale = (isLocale(localeParam) ? localeParam : "ar") as Locale;
   const dictionary = getDictionary(locale);
-  const solution = getSolutionBySlug(slug);
+  const solution = await getSolutionBySlug(slug);
 
   if (!solution) {
     notFound();
   }
 
+  const [sectors, solutions] = await Promise.all([getSectors(), getSolutions()]);
   const base = `/${locale}`;
   const relevantSectors = sectors.filter((sector) => solution.sectors.includes(sector.slug));
   const relatedSolutions = solutions.filter((item) => solution.sectors.some((s) => item.sectors.includes(s)) && item.slug !== solution.slug).slice(0, 3);

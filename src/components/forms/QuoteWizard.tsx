@@ -3,8 +3,8 @@
 import { useActionState, useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { solutions } from "@/data/solutions";
-import { sectors } from "@/data/sectors";
+import type { Solution } from "@/data/solutions";
+import type { Sector } from "@/data/sectors";
 import { submitQuoteRequest, type ActionResult } from "@/app/actions";
 import { Label, TextInput, Textarea, Select, FieldError } from "@/components/primitives/Field";
 import { Button } from "@/components/primitives/Button";
@@ -37,10 +37,14 @@ export function QuoteWizard({
   locale,
   dictionary,
   initialService,
+  solutions,
+  sectors,
 }: {
   locale: Locale;
   dictionary: Dictionary;
   initialService?: string;
+  solutions: Solution[];
+  sectors: Sector[];
 }) {
   const [state, formAction, isPending] = useActionState(submitQuoteRequest, initialState);
   const [step, setStep] = useState(0);

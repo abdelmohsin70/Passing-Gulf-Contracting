@@ -32,9 +32,10 @@ it flips to `"confirmed"`.
   being publicly visible.
 - **Combined gate on Projects** — a case study is only visible on the public
   site when **both** `_status = published` **and** `verificationStatus =
-  verified` are true (enforced in `src/payload/collections/Projects.ts`'s
-  admin description and must be enforced again in the frontend query once
-  case studies are read from Payload — see "Known gap" below).
+  verified` are true. Enforced twice: at the CMS access-control level, and
+  again in `src/payload/queries/projects.ts`'s `getVerifiedCaseStudies()`,
+  which the frontend actually calls (`where: { and: [{_status: published},
+  {verificationStatus: verified}] }`) — belt and suspenders.
 - **`usageApproved`** (Clients, Media) — a boolean gate separate from
   verification: even a confirmed-real client logo or photo isn't published
   until explicit usage/publication permission is on file.
@@ -75,15 +76,15 @@ it flips to `"confirmed"`.
     logos, or quotes have been fabricated or seeded.
 13. **Team members** — intentionally left empty.
 
-## Known gap
+## Where the placeholder case study still comes from
 
-The frontend currently reads case studies from the static
-`src/data/projects.ts` file, not from the Payload `projects` collection (see
-`README.md` → "Known limitations" and task #27 in this project's history).
-The `published + verified` double-gate described above is enforced at the
-CMS/access-control level today, but a frontend query that reads live from
-Payload must re-implement that same filter — do not assume the CMS access
-rules alone are sufficient once that migration happens.
+`/projects` and the homepage call `getHomepageCaseStudies()`
+(`src/payload/queries/projects.ts`), which returns real
+published+verified Payload case studies if any exist, and otherwise falls
+back to the single static illustrative template in `src/data/projects.ts`
+(`isPlaceholder: true`) so the page is never empty. As soon as the first
+real case study passes both gates, it replaces the placeholder
+automatically — no code change needed.
 
 ## Process for verifying new content
 

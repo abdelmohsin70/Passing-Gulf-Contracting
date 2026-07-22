@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { getSolutionBySlug } from "@/data/solutions";
+import { getSolutions } from "@/payload/queries/solutions";
+import { getSectors } from "@/payload/queries/sectors";
 import { Container } from "@/components/primitives/Container";
 import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
@@ -37,7 +38,8 @@ export default async function ContactPage({
   const locale = (isLocale(localeParam) ? localeParam : "ar") as Locale;
   const dictionary = getDictionary(locale);
   const base = `/${locale}`;
-  const initialService = service && getSolutionBySlug(service) ? service : undefined;
+  const [solutions, sectors] = await Promise.all([getSolutions(), getSectors()]);
+  const initialService = service && solutions.some((solution) => solution.slug === service) ? service : undefined;
   const localBusinessSchema = localBusinessJsonLd(locale);
 
   return (
@@ -55,7 +57,7 @@ export default async function ContactPage({
           <p className="mt-3 max-w-2xl text-base text-slate sm:text-lg">{dictionary.contact.subtitle}</p>
 
           <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[1.4fr_1fr]">
-            <QuoteWizard locale={locale} dictionary={dictionary} initialService={initialService} />
+            <QuoteWizard locale={locale} dictionary={dictionary} initialService={initialService} solutions={solutions} sectors={sectors} />
             <ContactCard locale={locale} dictionary={dictionary} />
           </div>
         </Container>

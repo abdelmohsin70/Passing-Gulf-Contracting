@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { caseStudies } from "@/data/projects";
+import { getHomepageCaseStudies } from "@/payload/queries/projects";
+import { getSectors } from "@/payload/queries/sectors";
+import { getSolutions } from "@/payload/queries/solutions";
 import { Container } from "@/components/primitives/Container";
 import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { CaseStudyCard } from "@/components/sections/CaseStudyCard";
 import { Badge } from "@/components/primitives/Badge";
+
+// Rendered on demand — pulls Projects/Sectors/Solutions from Payload, so
+// CMS edits take effect immediately without a redeploy.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -29,6 +35,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
   const locale = (isLocale(localeParam) ? localeParam : "ar") as Locale;
   const dictionary = getDictionary(locale);
   const base = `/${locale}`;
+  const [caseStudies, sectors, solutions] = await Promise.all([getHomepageCaseStudies(), getSectors(), getSolutions()]);
 
   return (
     <>
@@ -52,7 +59,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
         <Container>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {caseStudies.map((caseStudy) => (
-              <CaseStudyCard key={caseStudy.slug} caseStudy={caseStudy} locale={locale} dictionary={dictionary} />
+              <CaseStudyCard key={caseStudy.slug} caseStudy={caseStudy} locale={locale} dictionary={dictionary} sectors={sectors} solutions={solutions} />
             ))}
           </div>
         </Container>

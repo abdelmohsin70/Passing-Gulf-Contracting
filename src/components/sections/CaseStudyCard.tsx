@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { CaseStudy } from "@/data/projects";
-import { sectors } from "@/data/sectors";
-import { solutions } from "@/data/solutions";
+import type { Sector } from "@/data/sectors";
+import type { Solution } from "@/data/solutions";
 import { Badge } from "@/components/primitives/Badge";
 import { ChevronIcon } from "@/components/icons/icons";
 
@@ -11,10 +11,14 @@ export function CaseStudyCard({
   caseStudy,
   locale,
   dictionary,
+  sectors,
+  solutions,
 }: {
   caseStudy: CaseStudy;
   locale: Locale;
   dictionary: Dictionary;
+  sectors: Sector[];
+  solutions: Solution[];
 }) {
   const sector = sectors.find((item) => item.slug === caseStudy.sectorSlug);
   const solution = solutions.find((item) => item.slug === caseStudy.solutionSlug);

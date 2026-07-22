@@ -10,7 +10,8 @@
  * explicitly-labeled draft/unverified placeholder — see README/
  * CONTENT-VERIFICATION.md.
  */
-import { existsSync } from "fs";
+import { existsSync, readFileSync, statSync } from "fs";
+import path from "path";
 import { getPayload } from "payload";
 
 // `next dev`/`next build` load .env.local automatically; this standalone
@@ -170,6 +171,104 @@ async function seedSolutions(payload: Payload, sectorIdBySlug: Map<string, numbe
       ["scope", "faqs"]
     );
     console.log(`[seed] created solution ${solution.slug} (${doc.id})`);
+  }
+}
+
+const IMAGES_DIR = path.resolve(process.cwd(), "public/images");
+
+// Real photography extracted from the client's own brochure PDF (not stock
+// photos) — see README "Imagery". Mapped here so the CMS Media library and
+// Solutions.heroImage/gallery become the single source of truth instead of
+// the frontend hardcoding /public/images paths directly.
+const MEDIA_ALT: Record<string, { ar: string; en: string }> = {
+  "facility-management-banner.jpg": { ar: "فني صيانة يعمل في منشأة تجارية", en: "Maintenance technician working at a commercial facility" },
+  "hvac-maintenance.jpg": { ar: "صيانة نظام تكييف", en: "HVAC system maintenance" },
+  "plumbing-repair.jpg": { ar: "إصلاح أعمال سباكة", en: "Plumbing repair work" },
+  "technician-toolbox.jpg": { ar: "صندوق عدة فني الصيانة", en: "Maintenance technician's toolbox" },
+  "wrenches-hand.jpg": { ar: "أدوات صيانة يدوية", en: "Hand maintenance tools" },
+  "cleaning-soft-services-banner.jpg": { ar: "فريق نظافة يعمل في منشأة", en: "Cleaning team at work in a facility" },
+  "cleaning-supplies.jpg": { ar: "مستلزمات ومعدات نظافة", en: "Cleaning supplies and equipment" },
+  "renovation-projects-banner.jpg": { ar: "أعمال ترميم وتجديد مبنى", en: "Building renovation work" },
+  "landscape-agriculture-hero.jpg": { ar: "تنسيق وصيانة مساحات خضراء", en: "Landscaping and green space maintenance" },
+  "airport-services-hero.jpg": { ar: "خدمات أرضية في مطار", en: "Airport ground services" },
+  "pest-control-hero.jpg": { ar: "أعمال مكافحة حشرية", en: "Pest control work" },
+  "arabic-hospitality.jpg": { ar: "خدمات ضيافة", en: "Hospitality services" },
+  "workforce-driver.jpg": { ar: "سائق ضمن فريق التشغيل", en: "Driver as part of the operations workforce" },
+  "home-care-pool.jpg": { ar: "عناية منزلية — صيانة مسبح", en: "Home care — pool maintenance" },
+};
+
+const SOLUTION_IMAGES: Record<string, { hero: string; gallery?: string[] }> = {
+  "facility-management": {
+    hero: "facility-management-banner.jpg",
+    gallery: ["hvac-maintenance.jpg", "plumbing-repair.jpg", "technician-toolbox.jpg", "wrenches-hand.jpg"],
+  },
+  "cleaning-soft-services": { hero: "cleaning-soft-services-banner.jpg", gallery: ["cleaning-supplies.jpg"] },
+  "renovation-projects": { hero: "renovation-projects-banner.jpg" },
+  "landscape-agriculture": { hero: "landscape-agriculture-hero.jpg" },
+  "airport-services": { hero: "airport-services-hero.jpg" },
+  "pest-control": { hero: "pest-control-hero.jpg" },
+  "hospitality-workforce": { hero: "arabic-hospitality.jpg", gallery: ["arabic-hospitality.jpg", "workforce-driver.jpg"] },
+  "home-care": { hero: "home-care-pool.jpg", gallery: ["home-care-pool.jpg"] },
+};
+
+async function uploadMediaFile(payload: Payload, filename: string): Promise<number> {
+  const existing = await payload.find({
+    collection: "media",
+    where: { filename: { equals: filename } },
+    overrideAccess: true,
+    limit: 1,
+  });
+  if (existing.docs[0]) return existing.docs[0].id as number;
+
+  const alt = MEDIA_ALT[filename] ?? { ar: filename, en: filename };
+  const filePath = path.join(IMAGES_DIR, filename);
+  const data = readFileSync(filePath);
+  const stat = statSync(filePath);
+
+  const doc = await payload.create({
+    collection: "media",
+    overrideAccess: true,
+    data: { altAr: alt.ar, altEn: alt.en, category: "sites", usageApproved: true },
+    file: { data, mimetype: "image/jpeg", name: filename, size: stat.size },
+  });
+  console.log(`[seed] uploaded media ${filename}`);
+  return doc.id as number;
+}
+
+async function seedMedia(payload: Payload): Promise<Map<string, number>> {
+  const filenames = new Set<string>();
+  for (const entry of Object.values(SOLUTION_IMAGES)) {
+    filenames.add(entry.hero);
+    for (const g of entry.gallery ?? []) filenames.add(g);
+  }
+  const idByFilename = new Map<string, number>();
+  for (const filename of filenames) {
+    idByFilename.set(filename, await uploadMediaFile(payload, filename));
+  }
+  return idByFilename;
+}
+
+async function attachSolutionMedia(payload: Payload, mediaIdByFilename: Map<string, number>) {
+  for (const [slug, images] of Object.entries(SOLUTION_IMAGES)) {
+    const existing = await payload.find({
+      collection: "solutions",
+      where: { slug: { equals: slug } },
+      overrideAccess: true,
+      limit: 1,
+    });
+    const doc = existing.docs[0];
+    if (!doc || doc.heroImage) continue; // already attached (or solution not seeded yet) — don't overwrite editor changes
+
+    const heroImageId = mediaIdByFilename.get(images.hero);
+    const galleryIds = (images.gallery ?? []).map((f) => mediaIdByFilename.get(f)).filter((id): id is number => Boolean(id));
+
+    await payload.update({
+      collection: "solutions",
+      id: doc.id,
+      overrideAccess: true,
+      data: { heroImage: heroImageId, gallery: galleryIds },
+    });
+    console.log(`[seed] attached media to solution ${slug}`);
   }
 }
 
@@ -400,6 +499,8 @@ async function run() {
   await seedAdminUser(payload);
   const sectorIdBySlug = await seedSectors(payload);
   await seedSolutions(payload, sectorIdBySlug);
+  const mediaIdByFilename = await seedMedia(payload);
+  await attachSolutionMedia(payload, mediaIdByFilename);
   await seedCertifications(payload);
   await seedDraftProjects(payload, sectorIdBySlug);
   await seedDraftInsights(payload);

@@ -3,13 +3,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { solutions } from "@/data/solutions";
+import { getSolutions } from "@/payload/queries/solutions";
 import { Container } from "@/components/primitives/Container";
 import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SolutionIcon } from "@/components/sections/SolutionIcon";
 import { ChevronIcon } from "@/components/icons/icons";
 import { Reveal } from "@/components/Reveal";
+
+// Rendered on demand — pulls Solutions from Payload, so CMS edits take
+// effect immediately without a redeploy.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -32,6 +36,7 @@ export default async function SolutionsPage({ params }: { params: Promise<{ loca
   const locale = (isLocale(localeParam) ? localeParam : "ar") as Locale;
   const dictionary = getDictionary(locale);
   const base = `/${locale}`;
+  const solutions = await getSolutions();
 
   return (
     <>
