@@ -178,6 +178,28 @@ lost, but nobody is emailed. To connect a real provider:
    provider needs custom auth headers or a different payload shape, adapt
    that one function.
 
+### Customer-facing confirmation (email + WhatsApp)
+
+Separately from the internal team notification above,
+`src/lib/customer-notify.ts` sends the *customer* a confirmation that their
+request was received, in their own locale — after the lead is already
+safely persisted to the database, so a delivery failure on either channel
+never fails the visitor's submission (it's logged and swallowed).
+
+- **Email** via [Resend](https://resend.com) — set `RESEND_API_KEY` (free
+  tier available). `RESEND_FROM_EMAIL` defaults to Resend's shared sandbox
+  sender if unset; set it to a verified address on your own domain before
+  relying on this in production.
+- **WhatsApp** via [Twilio](https://twilio.com) — set `TWILIO_ACCOUNT_SID`,
+  `TWILIO_AUTH_TOKEN`, and `TWILIO_WHATSAPP_FROM`. Twilio's WhatsApp sandbox
+  is free for testing but requires the recipient to first message the
+  sandbox number to opt in; a production WhatsApp sender requires Meta
+  Business verification — a real business process on Twilio/Meta's side
+  that no code change can skip.
+
+Both are safe no-ops (logged, not fabricated) until configured — see
+`.env.example`.
+
 ## Environment variables
 
 See `.env.example` for the full list with explanations. The public site
@@ -193,7 +215,9 @@ safe no-ops. The CMS needs `DATABASE_URI` and `PAYLOAD_SECRET` at minimum.
 | `PAYLOAD_SECRET` | Signs admin auth tokens | Yes |
 | `NEXT_PUBLIC_SERVER_URL` | Payload's internal server URL, usually same as `NEXT_PUBLIC_SITE_URL` | Yes |
 | `S3_*` | Media storage | Recommended before launch — see `DEPLOYMENT.md` |
-| `SMTP_HOST` / `RESEND_API_KEY` | Transactional email | Recommended before launch |
+| `SMTP_HOST` / `RESEND_API_KEY` | Transactional email (Payload + customer confirmation) | Recommended before launch |
+| `RESEND_FROM_EMAIL` | Sender address for customer confirmation emails | No (defaults to Resend's sandbox sender) |
+| `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` / `TWILIO_WHATSAPP_FROM` | Customer WhatsApp confirmation | No (no WhatsApp sent until configured) |
 
 ## Analytics events
 

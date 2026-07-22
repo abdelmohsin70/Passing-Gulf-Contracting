@@ -269,6 +269,7 @@ const dictionary: Dictionary = {
       invalidEmail: "Invalid email address",
       consentRequired: "You must agree to continue",
       generic: "Something went wrong while submitting. Please try again.",
+      rateLimited: "You've submitted several requests in a short time. Please wait a moment and try again.",
     },
     success: {
       title: "Your request was received",

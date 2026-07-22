@@ -47,7 +47,7 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
       <Section tone="white">
         <Container>
           <div className="mx-auto max-w-2xl">
-            <CareerInterestForm dictionary={dictionary} />
+            <CareerInterestForm dictionary={dictionary} locale={locale} />
           </div>
         </Container>
       </Section>

@@ -113,6 +113,17 @@ export function QuoteWizard({
     return dictionary.quoteForm.errors[key];
   }
 
+  // A prominent, always-visible failure notice — not just the small
+  // per-field messages, which are easy to miss (especially when the
+  // failure has no associated field, e.g. a rate limit or a server error).
+  function topLevelError(): string | undefined {
+    if (!state || state.ok) return undefined;
+    if (state.error === "rate_limited") return dictionary.quoteForm.errors.rateLimited;
+    if (state.error === "generic") return dictionary.quoteForm.errors.generic;
+    if (state.error === "validation_failed" && !state.fieldErrors) return dictionary.quoteForm.errors.generic;
+    return undefined;
+  }
+
   return (
     <div className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft sm:p-8">
       <ol className="mb-8 flex items-center gap-2 text-xs font-semibold text-slate">
@@ -131,6 +142,15 @@ export function QuoteWizard({
           </li>
         ))}
       </ol>
+
+      {topLevelError() ? (
+        <div
+          role="alert"
+          className="mb-6 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700"
+        >
+          {topLevelError()}
+        </div>
+      ) : null}
 
       <form action={formAction} noValidate>
         <input type="hidden" name="clientType" value={clientType} />
@@ -243,9 +263,6 @@ export function QuoteWizard({
             {dictionary.quoteForm.contact.consentLabel}
           </label>
           <FieldError>{fieldError("consent")}</FieldError>
-          {state && !state.ok && state.error === "rate_limited" ? (
-            <FieldError>{dictionary.quoteForm.errors.generic}</FieldError>
-          ) : null}
         </div>
 
         <div className="mt-8 flex items-center justify-between gap-3">

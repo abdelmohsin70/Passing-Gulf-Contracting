@@ -4,7 +4,12 @@ import { headers } from "next/headers";
 import { quoteRequestSchema, careerInterestSchema } from "@/lib/validation";
 import { consumeRateLimit } from "@/lib/rate-limit";
 import { sendLeadNotification, generateReferenceId } from "@/lib/notify";
+import { sendCustomerConfirmation } from "@/lib/customer-notify";
 import { createQuoteLead, createJobApplicationLead } from "@/payload/lib/leads";
+
+function resolveLocale(raw: unknown): "ar" | "en" {
+  return raw === "en" ? "en" : "ar";
+}
 
 export type ActionResult =
   | { ok: true; referenceId: string }
@@ -78,6 +83,15 @@ export async function submitQuoteRequest(_prevState: ActionResult | null, formDa
     payload,
   });
 
+  await sendCustomerConfirmation({
+    name: payload.name,
+    email: payload.email,
+    phone: payload.phone,
+    referenceId,
+    locale: resolveLocale(raw.locale),
+    kind: "quote_request",
+  });
+
   return { ok: true, referenceId };
 }
 
@@ -123,6 +137,15 @@ export async function submitCareerInterest(_prevState: ActionResult | null, form
     kind: "career_interest",
     submittedAt: new Date().toISOString(),
     payload,
+  });
+
+  await sendCustomerConfirmation({
+    name: payload.name,
+    email: payload.email,
+    phone: payload.phone,
+    referenceId,
+    locale: resolveLocale(raw.locale),
+    kind: "career_interest",
   });
 
   return { ok: true, referenceId };

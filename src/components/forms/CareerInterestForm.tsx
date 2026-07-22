@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { submitCareerInterest, type ActionResult } from "@/app/actions";
 import { Label, TextInput, Textarea, FieldError } from "@/components/primitives/Field";
@@ -9,8 +10,16 @@ import { CheckIcon } from "@/components/icons/icons";
 
 const initialState: ActionResult | null = null;
 
-export function CareerInterestForm({ dictionary }: { dictionary: Dictionary }) {
+export function CareerInterestForm({ dictionary, locale }: { dictionary: Dictionary; locale: Locale }) {
   const [state, formAction, isPending] = useActionState(submitCareerInterest, initialState);
+
+  function topLevelError(): string | undefined {
+    if (!state || state.ok) return undefined;
+    if (state.error === "rate_limited") return dictionary.quoteForm.errors.rateLimited;
+    if (state.error === "generic") return dictionary.quoteForm.errors.generic;
+    if (state.error === "validation_failed" && !state.fieldErrors) return dictionary.quoteForm.errors.generic;
+    return undefined;
+  }
 
   if (state?.ok) {
     return (
@@ -40,6 +49,16 @@ export function CareerInterestForm({ dictionary }: { dictionary: Dictionary }) {
   return (
     <form action={formAction} className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft sm:p-8">
       <h2 className="text-lg font-bold text-navy">{dictionary.careers.formTitle}</h2>
+      <input type="hidden" name="locale" value={locale} />
+
+      {topLevelError() ? (
+        <div
+          role="alert"
+          className="mt-4 flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700"
+        >
+          {topLevelError()}
+        </div>
+      ) : null}
 
       <div aria-hidden className="absolute size-px overflow-hidden" style={{ clip: "rect(0 0 0 0)" }}>
         <label htmlFor="companyWebsite-career">Company website</label>
