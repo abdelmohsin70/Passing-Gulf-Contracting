@@ -53,6 +53,32 @@ proxy.ts                  # Next 16 "Proxy" (formerly middleware) — locale red
 tests/                     # Vitest unit/integration tests
 ```
 
+## Imagery
+
+`public/images/` contains photography extracted directly from the client's
+own company profile brochure (the source PDF supplied for this project) —
+not stock photos pulled from the internet. They're generic trade photography
+(a technician's toolbelt, an HVAC unit, a cleaning cart, etc.) rather than
+photos of this company's actual staff, sites, or equipment, so treat them as
+placeholders that give the site a professional look until the client
+supplies real branded photography and a logo. Swap them out by replacing
+the file at the same path, or update the `heroImage`/`gallery` fields in
+`src/data/solutions.ts` to point at new files.
+
+## Motion & interaction
+
+- `src/components/Reveal.tsx` — a small IntersectionObserver-driven wrapper
+  used throughout the site to fade/rise content in as it scrolls into view.
+  Fully inert under `prefers-reduced-motion` (see the `motion-reduce:`
+  classes and the global override in `globals.css`).
+- `src/app/[locale]/template.tsx` — remounts on every navigation, giving
+  each page a consistent enter transition without any router-transition
+  library.
+- Buttons, nav links, cards, and the WhatsApp button all have hover/press
+  micro-interactions (scale, shadow, underline) defined alongside their
+  components rather than globally, so search for `transition-` in a given
+  component if you want to adjust one.
+
 ## Editable content
 
 Everything a non-developer would want to change lives in typed data/config
@@ -228,3 +254,10 @@ either come from the client's brochure (unverified) or are placeholders.
 10. **Client logos** — the brochure shows a client-logo wall, but no usage
     rights were confirmed, so the "Our Clients" section is empty by design
     until logos are supplied with permission to publish.
+11. **Official logo** — no vector logo file was supplied, so the header,
+    footer, and favicon use a simple text badge ("اج" / "IK") instead.
+    Replace `src/app/icon.svg` and the badge markup in `SiteHeader.tsx` /
+    `SiteFooter.tsx` once a real logo is provided.
+12. **Photography** — see the "Imagery" section above: current photos are
+    generic trade photography pulled from the client's own brochure, not
+    photos of this company's actual people, sites, or equipment.

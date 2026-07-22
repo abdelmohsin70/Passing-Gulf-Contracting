@@ -3,11 +3,11 @@ import type { ButtonHTMLAttributes, AnchorHTMLAttributes, ReactNode } from "reac
 import { cn } from "@/lib/utils";
 
 const base =
-  "focus-ring inline-flex items-center justify-center gap-2 rounded-[var(--radius-pill)] font-semibold transition-colors duration-200 disabled:opacity-50 disabled:pointer-events-none";
+  "focus-ring inline-flex items-center justify-center gap-2 rounded-[var(--radius-pill)] font-semibold transition-[color,background-color,border-color,transform,box-shadow] duration-200 active:scale-[0.96] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100 motion-reduce:active:scale-100";
 
 const variants = {
-  primary: "bg-orange text-white hover:bg-orange-dark",
-  secondary: "bg-navy text-white hover:bg-navy-dark",
+  primary: "bg-orange text-white hover:bg-orange-dark hover:shadow-lift",
+  secondary: "bg-navy text-white hover:bg-navy-dark hover:shadow-lift",
   outline: "border border-navy/20 text-navy bg-white hover:border-orange hover:text-orange",
   // For use on dark (navy) backgrounds — kept as a distinct variant instead
   // of overriding `outline`'s classes via className, since conflicting

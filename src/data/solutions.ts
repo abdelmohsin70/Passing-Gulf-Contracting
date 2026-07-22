@@ -32,6 +32,10 @@ export type Solution = {
   faqs: FAQItem[];
   /** Leads the "one partner" narrative on the homepage. */
   featured: boolean;
+  /** Path under /public used as the hero background photo, if available. */
+  heroImage?: string;
+  /** Real site/work photos for the "A look at our sites" gallery. */
+  gallery?: string[];
 };
 
 export const solutions: Solution[] = [
@@ -97,6 +101,8 @@ export const solutions: Solution[] = [
       },
     ],
     featured: true,
+    heroImage: "/images/facility-management-banner.jpg",
+    gallery: ["/images/hvac-maintenance.jpg", "/images/plumbing-repair.jpg", "/images/technician-toolbox.jpg", "/images/wrenches-hand.jpg"],
   },
   {
     slug: "cleaning-soft-services",
@@ -157,6 +163,8 @@ export const solutions: Solution[] = [
       },
     ],
     featured: true,
+    heroImage: "/images/cleaning-soft-services-banner.jpg",
+    gallery: ["/images/cleaning-supplies.jpg"],
   },
   {
     slug: "renovation-projects",
@@ -219,6 +227,7 @@ export const solutions: Solution[] = [
       },
     ],
     featured: false,
+    heroImage: "/images/renovation-projects-banner.jpg",
   },
   {
     slug: "landscape-agriculture",
@@ -270,6 +279,7 @@ export const solutions: Solution[] = [
       },
     ],
     featured: false,
+    heroImage: "/images/landscape-agriculture-hero.jpg",
   },
   {
     slug: "airport-services",
@@ -322,6 +332,7 @@ export const solutions: Solution[] = [
       },
     ],
     featured: false,
+    heroImage: "/images/airport-services-hero.jpg",
   },
   {
     slug: "pest-control",
@@ -373,6 +384,7 @@ export const solutions: Solution[] = [
       },
     ],
     featured: false,
+    heroImage: "/images/pest-control-hero.jpg",
   },
   {
     slug: "hospitality-workforce",
@@ -424,6 +436,8 @@ export const solutions: Solution[] = [
       },
     ],
     featured: false,
+    heroImage: "/images/arabic-hospitality.jpg",
+    gallery: ["/images/arabic-hospitality.jpg", "/images/workforce-driver.jpg"],
   },
   {
     slug: "home-care",
@@ -478,6 +492,8 @@ export const solutions: Solution[] = [
       },
     ],
     featured: false,
+    heroImage: "/images/home-care-pool.jpg",
+    gallery: ["/images/home-care-pool.jpg"],
   },
 ];
 

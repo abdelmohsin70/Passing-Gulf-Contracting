@@ -9,6 +9,7 @@ import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SectorIcon } from "@/components/sections/SectorIcon";
 import { SolutionIcon } from "@/components/sections/SolutionIcon";
+import { Reveal } from "@/components/Reveal";
 
 export async function generateMetadata({
   params,
@@ -50,13 +51,14 @@ export default async function SectorsPage({ params }: { params: Promise<{ locale
       <Section tone="white">
         <Container>
           <div className="space-y-6">
-            {sectors.map((sector) => {
+            {sectors.map((sector, index) => {
               const relevant = solutions.filter((solution) => sector.relevantSolutions.includes(solution.slug));
               return (
-                <div
+                <Reveal
                   key={sector.slug}
                   id={sector.slug}
-                  className="scroll-mt-24 rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft sm:p-8"
+                  delay={Math.min(index, 4) * 60}
+                  className="scroll-mt-24 rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft transition-shadow hover:shadow-lift sm:p-8"
                 >
                   <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
                     <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-navy text-white">
@@ -79,7 +81,7 @@ export default async function SectorsPage({ params }: { params: Promise<{ locale
                       </div>
                     </div>
                   </div>
-                </div>
+                </Reveal>
               );
             })}
           </div>

@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { ChevronIcon } from "@/components/icons/icons";
+import { cn } from "@/lib/utils";
 
 export type Crumb = { label: string; href?: string };
 
-export function Breadcrumbs({ items }: { items: Crumb[] }) {
+export function Breadcrumbs({ items, tone = "light" }: { items: Crumb[]; tone?: "light" | "dark" }) {
+  const isDark = tone === "dark";
+
   return (
     <nav aria-label="Breadcrumb" className="py-4">
-      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-slate">
+      <ol className={cn("flex flex-wrap items-center gap-1.5 text-sm", isDark ? "text-white/70" : "text-slate")}>
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
@@ -16,11 +19,14 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
                   {item.label}
                 </Link>
               ) : (
-                <span aria-current={isLast ? "page" : undefined} className={isLast ? "font-semibold text-navy" : undefined}>
+                <span
+                  aria-current={isLast ? "page" : undefined}
+                  className={isLast ? cn("font-semibold", isDark ? "text-white" : "text-navy") : undefined}
+                >
                   {item.label}
                 </span>
               )}
-              {!isLast ? <ChevronIcon className="size-3.5 text-slate/50" /> : null}
+              {!isLast ? <ChevronIcon className={cn("size-3.5", isDark ? "text-white/40" : "text-slate/50")} /> : null}
             </li>
           );
         })}

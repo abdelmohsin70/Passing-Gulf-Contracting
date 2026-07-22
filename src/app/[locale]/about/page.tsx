@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { company } from "@/config/company";
@@ -7,6 +8,7 @@ import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { CTASection } from "@/components/sections/CTASection";
 import { CheckIcon } from "@/components/icons/icons";
+import { Reveal } from "@/components/Reveal";
 
 export async function generateMetadata({
   params,
@@ -49,37 +51,45 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
         <Container>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.4fr_1fr]">
             <div className="space-y-12">
-              <div>
-                <h2 className="text-xl font-bold text-navy sm:text-2xl">{dictionary.about.storyTitle}</h2>
-                <p className="mt-4 leading-relaxed text-slate">{dictionary.about.storyBody}</p>
-              </div>
+              <Reveal className="grid grid-cols-1 gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
+                <div>
+                  <h2 className="text-xl font-bold text-navy sm:text-2xl">{dictionary.about.storyTitle}</h2>
+                  <p className="mt-4 leading-relaxed text-slate">{dictionary.about.storyBody}</p>
+                </div>
+                <div className="relative h-40 w-full overflow-hidden rounded-[var(--radius-card)] shadow-soft sm:h-full sm:w-40">
+                  <Image src="/images/wrenches-hand.jpg" alt="" fill sizes="160px" className="object-cover transition-transform duration-500 hover:scale-110" />
+                </div>
+              </Reveal>
 
-              <div>
+              <Reveal delay={80}>
                 <h2 className="text-xl font-bold text-navy sm:text-2xl">{dictionary.about.missionTitle}</h2>
                 <div className="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <div className="rounded-[var(--radius-card)] bg-sand p-5">
+                  <div className="rounded-[var(--radius-card)] bg-sand p-5 transition-shadow hover:shadow-soft">
                     <h3 className="text-sm font-bold uppercase tracking-wide text-orange-dark">{dictionary.about.visionLabel}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-navy">{dictionary.about.visionBody}</p>
                   </div>
-                  <div className="rounded-[var(--radius-card)] bg-sand p-5">
+                  <div className="rounded-[var(--radius-card)] bg-sand p-5 transition-shadow hover:shadow-soft">
                     <h3 className="text-sm font-bold uppercase tracking-wide text-orange-dark">{dictionary.about.missionLabel}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-navy">{dictionary.about.missionBody}</p>
                   </div>
                 </div>
                 <h3 className="mt-6 text-sm font-bold uppercase tracking-wide text-slate">{dictionary.about.valuesLabel}</h3>
                 <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {dictionary.about.values.map((value) => (
-                    <div key={value.title} className="rounded-[var(--radius-card)] border border-navy/10 p-4">
+                  {dictionary.about.values.map((value, index) => (
+                    <Reveal key={value.title} delay={index * 80} className="rounded-[var(--radius-card)] border border-navy/10 p-4 transition-shadow hover:shadow-soft">
                       <h4 className="font-bold text-navy">{value.title}</h4>
                       <p className="mt-1.5 text-sm text-slate">{value.body}</p>
-                    </div>
+                    </Reveal>
                   ))}
                 </div>
-              </div>
+              </Reveal>
             </div>
 
-            <aside>
-              <div className="rounded-[var(--radius-card)] border border-navy/10 bg-navy p-6 text-white sm:p-8">
+            <aside className="space-y-6">
+              <Reveal variant="scale" className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-card)] shadow-soft">
+                <Image src="/images/technician-toolbox.jpg" alt="" fill sizes="(min-width: 1024px) 24vw, 90vw" className="object-cover" />
+              </Reveal>
+              <Reveal variant="scale" delay={100} className="rounded-[var(--radius-card)] border border-navy/10 bg-navy p-6 text-white sm:p-8">
                 <h3 className="text-lg font-bold">{dictionary.about.whyTitle}</h3>
                 <ul className="mt-5 space-y-3.5">
                   {dictionary.about.why.map((item) => (
@@ -92,7 +102,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 <p className="mt-6 border-t border-white/10 pt-5 text-xs text-white/60">
                   {company.foundedCity[locale]} &middot; {company.foundedYear}
                 </p>
-              </div>
+              </Reveal>
             </aside>
           </div>
         </Container>

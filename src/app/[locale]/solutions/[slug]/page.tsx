@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { locales, isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -9,12 +10,13 @@ import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SolutionIcon } from "@/components/sections/SolutionIcon";
 import { FAQAccordion } from "@/components/sections/FAQAccordion";
-import { PlaceholderGallery } from "@/components/sections/PlaceholderGallery";
+import { SiteGallery } from "@/components/sections/SiteGallery";
 import { CTASection } from "@/components/sections/CTASection";
 import { Button } from "@/components/primitives/Button";
 import { CheckIcon } from "@/components/icons/icons";
 import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from "@/lib/seo";
 import { ViewTracker } from "@/components/ViewTracker";
+import { Reveal } from "@/components/Reveal";
 
 export function generateStaticParams() {
   return locales.flatMap((locale) => solutions.map((solution) => ({ locale, slug: solution.slug })));
@@ -68,47 +70,56 @@ export default async function SolutionPage({ params }: { params: Promise<{ local
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <ViewTracker event="service_view" params={{ slug: solution.slug }} />
 
-      <Section tone="navy" className="py-0">
-        <Container>
+      <div className="relative overflow-hidden bg-navy pt-4 text-white">
+        {solution.heroImage ? (
+          <>
+            <Image
+              src={solution.heroImage}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover opacity-30"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/85 to-navy/70" />
+          </>
+        ) : null}
+        <Container className="relative">
           <Breadcrumbs
+            tone="dark"
             items={[
               { label: dictionary.common.breadcrumbHome, href: base },
               { label: dictionary.solutionsIndex.title, href: `${base}/solutions` },
               { label: solution.title[locale] },
             ]}
           />
-        </Container>
-      </Section>
-
-      <Section tone="navy" className="pt-4">
-        <Container>
-          <div className="flex max-w-3xl flex-col gap-5">
-            <span className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-orange">
+          <div className="flex max-w-3xl flex-col gap-5 pb-20 pt-6 sm:pb-24">
+            <span className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-orange animate-fade-up">
               <SolutionIcon icon={solution.icon} className="size-7" />
             </span>
-            <h1 className="text-3xl font-bold sm:text-4xl">{solution.title[locale]}</h1>
-            <p className="text-lg text-white/85">{solution.heroOutcome[locale]}</p>
-            <div>
+            <h1 className="text-3xl font-bold sm:text-4xl animate-fade-up">{solution.title[locale]}</h1>
+            <p className="text-lg text-white/85 animate-fade-up">{solution.heroOutcome[locale]}</p>
+            <div className="animate-fade-up">
               <Button href={`${base}/contact?service=${solution.slug}`} size="lg">
                 {dictionary.common.requestTechnicalVisit}
               </Button>
             </div>
           </div>
         </Container>
-      </Section>
+      </div>
 
       <Section tone="white">
         <Container>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.6fr_1fr]">
             <div className="space-y-12">
-              <div>
+              <Reveal>
                 <h2 className="text-xl font-bold text-navy sm:text-2xl">
                   {locale === "ar" ? "المشكلة التي نحلها" : "The Problem We Solve"}
                 </h2>
                 <p className="mt-4 leading-relaxed text-slate">{solution.problem[locale]}</p>
-              </div>
+              </Reveal>
 
-              <div>
+              <Reveal>
                 <h2 className="text-xl font-bold text-navy sm:text-2xl">{dictionary.common.scopeOfWork}</h2>
                 <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {solution.scope.map((item, index) => (
@@ -118,23 +129,27 @@ export default async function SolutionPage({ params }: { params: Promise<{ local
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
 
-              <div>
+              <Reveal>
                 <h2 className="text-xl font-bold text-navy sm:text-2xl">{dictionary.common.methodology}</h2>
                 <p className="mt-4 leading-relaxed text-slate">{solution.methodology[locale]}</p>
-              </div>
+              </Reveal>
 
-              <div>
+              <Reveal>
                 <h2 className="text-xl font-bold text-navy sm:text-2xl">{dictionary.common.qualityAndSafety}</h2>
                 <p className="mt-4 leading-relaxed text-slate">{solution.quality[locale]}</p>
-              </div>
+              </Reveal>
 
               <div>
                 <h2 className="mb-4 text-xl font-bold text-navy sm:text-2xl">
                   {locale === "ar" ? "لمحة من مواقع العمل" : "A Look at Our Sites"}
                 </h2>
-                <PlaceholderGallery icon={solution.icon} label={locale === "ar" ? "صور حقيقية قريبًا" : "Real photography coming soon"} />
+                <SiteGallery
+                  images={solution.gallery}
+                  icon={solution.icon}
+                  placeholderLabel={locale === "ar" ? "صور حقيقية قريبًا" : "Real photography coming soon"}
+                />
               </div>
 
               <div>
@@ -144,7 +159,7 @@ export default async function SolutionPage({ params }: { params: Promise<{ local
             </div>
 
             <aside className="space-y-6">
-              <div className="rounded-[var(--radius-card)] border border-navy/10 bg-sand p-6">
+              <Reveal variant="scale" className="rounded-[var(--radius-card)] border border-navy/10 bg-sand p-6">
                 <h3 className="text-sm font-bold uppercase tracking-wide text-slate">{dictionary.common.relevantSectors}</h3>
                 <ul className="mt-4 space-y-2.5">
                   {relevantSectors.map((sector) => (
@@ -155,10 +170,10 @@ export default async function SolutionPage({ params }: { params: Promise<{ local
                     </li>
                   ))}
                 </ul>
-              </div>
+              </Reveal>
 
               {relatedSolutions.length ? (
-                <div className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft">
+                <Reveal variant="scale" delay={100} className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft">
                   <h3 className="text-sm font-bold uppercase tracking-wide text-slate">{dictionary.common.relatedSolutions}</h3>
                   <ul className="mt-4 space-y-3">
                     {relatedSolutions.map((item) => (
@@ -170,7 +185,7 @@ export default async function SolutionPage({ params }: { params: Promise<{ local
                       </li>
                     ))}
                   </ul>
-                </div>
+                </Reveal>
               ) : null}
             </aside>
           </div>

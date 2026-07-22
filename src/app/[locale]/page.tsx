@@ -19,6 +19,7 @@ import { ClientLogoGrid } from "@/components/sections/ClientLogoGrid";
 import { CTASection } from "@/components/sections/CTASection";
 import { Button } from "@/components/primitives/Button";
 import { HomeIcon } from "@/components/icons/icons";
+import { Reveal } from "@/components/Reveal";
 
 export async function generateMetadata({
   params,
@@ -49,14 +50,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <Section tone="sand">
         <Container>
-          <SectionHeading
-            eyebrow={dictionary.trust.integrated}
-            title={dictionary.home.partnerTitle}
-            subtitle={dictionary.home.partnerSubtitle}
-          />
+          <Reveal>
+            <SectionHeading
+              eyebrow={dictionary.trust.integrated}
+              title={dictionary.home.partnerTitle}
+              subtitle={dictionary.home.partnerSubtitle}
+            />
+          </Reveal>
           <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {solutionFamilies.map((family) => (
-              <SolutionFamilyCard key={family.id} family={family} locale={locale} learnMoreLabel={dictionary.common.learnMore} />
+            {solutionFamilies.map((family, index) => (
+              <Reveal key={family.id} delay={index * 90}>
+                <SolutionFamilyCard family={family} locale={locale} learnMoreLabel={dictionary.common.learnMore} />
+              </Reveal>
             ))}
           </div>
           <div className="mt-8 text-center">
@@ -69,10 +74,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <Section tone="white">
         <Container>
-          <SectionHeading title={dictionary.home.sectorsTitle} subtitle={dictionary.home.sectorsSubtitle} />
+          <Reveal>
+            <SectionHeading title={dictionary.home.sectorsTitle} subtitle={dictionary.home.sectorsSubtitle} />
+          </Reveal>
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {sectors.map((sector) => (
-              <SectorCard key={sector.slug} sector={sector} locale={locale} href={`${base}/sectors#${sector.slug}`} />
+            {sectors.map((sector, index) => (
+              <Reveal key={sector.slug} delay={(index % 3) * 90}>
+                <SectorCard sector={sector} locale={locale} href={`${base}/sectors#${sector.slug}`} />
+              </Reveal>
             ))}
           </div>
         </Container>
@@ -80,7 +89,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <Section tone="sand">
         <Container>
-          <SectionHeading title={dictionary.home.outcomesTitle} subtitle={dictionary.home.outcomesSubtitle} />
+          <Reveal>
+            <SectionHeading title={dictionary.home.outcomesTitle} subtitle={dictionary.home.outcomesSubtitle} />
+          </Reveal>
           <div className="mt-10">
             <OutcomeGrid locale={locale} />
           </div>
@@ -89,7 +100,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <Section tone="white">
         <Container>
-          <SectionHeading title={dictionary.home.processTitle} subtitle={dictionary.home.processSubtitle} />
+          <Reveal>
+            <SectionHeading title={dictionary.home.processTitle} subtitle={dictionary.home.processSubtitle} />
+          </Reveal>
           <div className="mt-10">
             <ProcessTimeline locale={locale} />
           </div>
@@ -98,11 +111,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <Section tone="sand">
         <Container>
-          <SectionHeading title={dictionary.home.caseStudyTitle} subtitle={dictionary.home.caseStudySubtitle} />
+          <Reveal>
+            <SectionHeading title={dictionary.home.caseStudyTitle} subtitle={dictionary.home.caseStudySubtitle} />
+          </Reveal>
           <p className="mt-4 max-w-2xl text-sm text-slate">{dictionary.home.caseStudyPendingNote}</p>
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {caseStudies.map((caseStudy) => (
-              <CaseStudyCard key={caseStudy.slug} caseStudy={caseStudy} locale={locale} dictionary={dictionary} />
+            {caseStudies.map((caseStudy, index) => (
+              <Reveal key={caseStudy.slug} delay={index * 90}>
+                <CaseStudyCard caseStudy={caseStudy} locale={locale} dictionary={dictionary} />
+              </Reveal>
             ))}
           </div>
         </Container>
@@ -110,7 +127,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <Section tone="white">
         <Container>
-          <SectionHeading align="center" title={dictionary.home.clientsTitle} />
+          <Reveal variant="fade">
+            <SectionHeading align="center" title={dictionary.home.clientsTitle} />
+          </Reveal>
           <div className="mt-10">
             <ClientLogoGrid dictionary={dictionary} />
           </div>
@@ -119,7 +138,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <Section tone="sand">
         <Container>
-          <div className="flex flex-col items-center gap-6 rounded-[var(--radius-card)] border border-navy/10 bg-white p-8 text-center shadow-soft sm:p-12">
+          <Reveal variant="scale" className="flex flex-col items-center gap-6 rounded-[var(--radius-card)] border border-navy/10 bg-white p-8 text-center shadow-soft sm:p-12">
             <span className="flex size-14 items-center justify-center rounded-2xl bg-navy/5 text-navy">
               <HomeIcon className="size-7" />
             </span>
@@ -131,7 +150,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
             >
               {dictionary.home.homeCareBannerCta}
             </Link>
-          </div>
+          </Reveal>
         </Container>
       </Section>
 
