@@ -5,6 +5,7 @@ export const Clients: CollectionConfig = {
   slug: "clients",
   labels: { singular: "عميل", plural: "شعارات العملاء" },
   admin: {
+    group: { ar: "الثقة والاعتماد", en: "Trust & Proof" },
     useAsTitle: "name",
     description: "لا يظهر أي شعار في \"عملاؤنا\" إلا إذا كان usageApproved مفعّلًا هنا وعلى ملف الصورة نفسه.",
   },

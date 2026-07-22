@@ -4,7 +4,11 @@ import { anyone, isContentEditor } from "../access";
 export const Careers: CollectionConfig = {
   slug: "careers",
   labels: { singular: "شاغر وظيفي", plural: "الشواغر الوظيفية" },
-  admin: { useAsTitle: "title", defaultColumns: ["title", "department", "city", "open"] },
+  admin: {
+    group: { ar: "التوظيف", en: "Recruitment" },
+    useAsTitle: "title",
+    defaultColumns: ["title", "department", "city", "open"],
+  },
   access: {
     read: anyone,
     create: isContentEditor,

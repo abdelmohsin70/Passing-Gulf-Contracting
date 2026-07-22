@@ -4,7 +4,10 @@ import { anyone, isContentEditor } from "../access";
 export const Redirects: CollectionConfig = {
   slug: "redirects",
   labels: { singular: "إعادة توجيه", plural: "إعادة التوجيهات" },
-  admin: { useAsTitle: "from" },
+  admin: {
+    group: { ar: "النظام والمستخدمون", en: "System & Users" },
+    useAsTitle: "from",
+  },
   access: {
     read: anyone,
     create: isContentEditor,

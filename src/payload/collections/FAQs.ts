@@ -5,6 +5,7 @@ export const FAQs: CollectionConfig = {
   slug: "faqs",
   labels: { singular: "سؤال شائع", plural: "الأسئلة الشائعة العامة" },
   admin: {
+    group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "question",
     description: "أسئلة عامة (غير مرتبطة بحل معيّن) تُستخدم حيث يلزم عبر الموقع.",
   },

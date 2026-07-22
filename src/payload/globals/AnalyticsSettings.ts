@@ -3,6 +3,9 @@ import { isAnalyst, isSuperAdmin } from "../access";
 
 export const AnalyticsSettings: GlobalConfig = {
   slug: "analytics-settings",
+  admin: {
+    group: { ar: "الإعدادات", en: "Settings" },
+  },
   label: "إعدادات التحليلات",
   access: { read: isAnalyst, update: isSuperAdmin },
   fields: [

@@ -8,7 +8,7 @@ export const LeadActivities: CollectionConfig = {
     useAsTitle: "type",
     defaultColumns: ["lead", "type", "actor", "occurredAt"],
     description: "سجل تلقائي بكل ملاحظة أو تغيير حالة على طلب — للقراءة والإضافة فقط.",
-    group: "المبيعات",
+    group: { ar: "المبيعات والطلبات", en: "Sales & Leads" },
   },
   access: {
     read: isSalesTeam,

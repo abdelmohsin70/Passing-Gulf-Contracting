@@ -6,6 +6,7 @@ export const Solutions: CollectionConfig = {
   slug: "solutions",
   labels: { singular: "حل", plural: "الحلول" },
   admin: {
+    group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
     defaultColumns: ["title", "featured", "_status", "updatedAt"],
     description: "عائلات وخدمات الحلول الثمانية المعروضة في /solutions.",

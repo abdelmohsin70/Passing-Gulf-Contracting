@@ -4,6 +4,9 @@ import { seoField } from "../fields/seo";
 
 export const Homepage: GlobalConfig = {
   slug: "homepage",
+  admin: {
+    group: { ar: "صفحات الموقع", en: "Site Pages" },
+  },
   label: "الصفحة الرئيسية",
   // Globals have no draft/publish state unless versions.drafts is enabled
   // (it isn't here) — authenticatedOrPublished's `{_status: ...}` filter

@@ -4,6 +4,9 @@ import { seoField } from "../fields/seo";
 
 export const AboutPage: GlobalConfig = {
   slug: "about-page",
+  admin: {
+    group: { ar: "صفحات الموقع", en: "Site Pages" },
+  },
   label: "صفحة من نحن",
   // Globals have no draft/publish state unless versions.drafts is enabled
   // (it isn't here) — authenticatedOrPublished's `{_status: ...}` filter

@@ -6,6 +6,7 @@ export const Sectors: CollectionConfig = {
   slug: "sectors",
   labels: { singular: "قطاع", plural: "القطاعات" },
   admin: {
+    group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
     defaultColumns: ["title", "_status", "updatedAt"],
   },

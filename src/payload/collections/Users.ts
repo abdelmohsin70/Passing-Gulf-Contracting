@@ -4,6 +4,7 @@ import { ROLES, isSuperAdmin, authenticated } from "../access";
 export const Users: CollectionConfig = {
   slug: "users",
   admin: {
+    group: { ar: "النظام والمستخدمون", en: "System & Users" },
     useAsTitle: "name",
     defaultColumns: ["name", "email", "roles", "active"],
     description: "لوحة الوصول: من يستطيع الدخول للوحة التحكم ودوره.",

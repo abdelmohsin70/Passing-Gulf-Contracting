@@ -17,6 +17,7 @@ export const Pages: CollectionConfig = {
   slug: "pages",
   labels: { singular: "صفحة", plural: "الصفحات" },
   admin: {
+    group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
     defaultColumns: ["title", "slug", "_status", "updatedAt"],
   },

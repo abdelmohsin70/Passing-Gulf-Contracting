@@ -3,6 +3,9 @@ import { anyone, isSuperAdmin } from "../access";
 
 export const SEOSettings: GlobalConfig = {
   slug: "seo-settings",
+  admin: {
+    group: { ar: "الإعدادات", en: "Settings" },
+  },
   label: "إعدادات SEO العامة",
   access: { read: anyone, update: isSuperAdmin },
   fields: [

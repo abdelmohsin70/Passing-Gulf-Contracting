@@ -4,7 +4,10 @@ import { anyone, isContentEditor } from "../access";
 export const TeamMembers: CollectionConfig = {
   slug: "team-members",
   labels: { singular: "عضو فريق", plural: "أعضاء الفريق" },
-  admin: { useAsTitle: "name" },
+  admin: {
+    group: { ar: "الثقة والاعتماد", en: "Trust & Proof" },
+    useAsTitle: "name",
+  },
   access: {
     read: anyone,
     create: isContentEditor,

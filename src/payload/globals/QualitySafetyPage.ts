@@ -4,6 +4,9 @@ import { seoField } from "../fields/seo";
 
 export const QualitySafetyPage: GlobalConfig = {
   slug: "quality-safety-page",
+  admin: {
+    group: { ar: "صفحات الموقع", en: "Site Pages" },
+  },
   label: "صفحة الجودة والسلامة",
   // Globals have no draft/publish state unless versions.drafts is enabled
   // (it isn't here) — authenticatedOrPublished's `{_status: ...}` filter

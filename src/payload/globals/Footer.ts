@@ -3,6 +3,9 @@ import { anyone, isContentEditor } from "../access";
 
 export const Footer: GlobalConfig = {
   slug: "footer",
+  admin: {
+    group: { ar: "صفحات الموقع", en: "Site Pages" },
+  },
   label: "الفوتر",
   access: { read: anyone, update: isContentEditor },
   fields: [

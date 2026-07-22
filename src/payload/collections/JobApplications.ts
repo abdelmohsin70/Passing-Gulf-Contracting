@@ -5,9 +5,9 @@ export const JobApplications: CollectionConfig = {
   slug: "job-applications",
   labels: { singular: "طلب توظيف", plural: "طلبات التوظيف" },
   admin: {
+    group: { ar: "التوظيف", en: "Recruitment" },
     useAsTitle: "name",
     defaultColumns: ["name", "areaOfInterest", "status", "createdAt"],
-    group: "المبيعات",
   },
   access: {
     read: isSalesTeam,

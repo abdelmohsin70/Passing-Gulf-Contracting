@@ -20,7 +20,7 @@ export const Leads: CollectionConfig = {
     useAsTitle: "referenceNumber",
     defaultColumns: ["referenceNumber", "name", "type", "status", "assignedTo", "createdAt"],
     description: "طلبات المعاينة والعروض والاهتمام الوظيفي الواردة من الموقع.",
-    group: "المبيعات",
+    group: { ar: "المبيعات والطلبات", en: "Sales & Leads" },
   },
   access: {
     // Public submissions go through the server action using the Local API

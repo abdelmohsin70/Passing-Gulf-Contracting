@@ -9,6 +9,7 @@ const dirname = path.dirname(filename);
 export const Media: CollectionConfig = {
   slug: "media",
   admin: {
+    group: { ar: "الوسائط", en: "Media" },
     useAsTitle: "altEn",
     defaultColumns: ["filename", "altAr", "category", "usageApproved"],
     description: "مكتبة الصور والملفات — لكل صورة نص بديل بالعربي والإنجليزي.",

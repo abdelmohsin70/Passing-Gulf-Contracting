@@ -3,6 +3,9 @@ import { isSuperAdmin } from "../access";
 
 export const NotificationSettings: GlobalConfig = {
   slug: "notification-settings",
+  admin: {
+    group: { ar: "الإعدادات", en: "Settings" },
+  },
   label: "إعدادات الإشعارات",
   access: { read: isSuperAdmin, update: isSuperAdmin },
   fields: [

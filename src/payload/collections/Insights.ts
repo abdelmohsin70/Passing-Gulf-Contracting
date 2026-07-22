@@ -7,6 +7,7 @@ export const Insights: CollectionConfig = {
   slug: "insights",
   labels: { singular: "مقالة", plural: "مركز المعرفة" },
   admin: {
+    group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
     defaultColumns: ["title", "author", "_status", "publishedAt"],
   },

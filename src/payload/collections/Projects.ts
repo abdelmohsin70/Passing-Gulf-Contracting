@@ -6,6 +6,7 @@ export const Projects: CollectionConfig = {
   slug: "projects",
   labels: { singular: "مشروع / دراسة حالة", plural: "المشاريع ودراسات الحالة" },
   admin: {
+    group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
     defaultColumns: ["title", "verificationStatus", "_status", "updatedAt"],
     description:

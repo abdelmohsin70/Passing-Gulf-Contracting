@@ -12,6 +12,7 @@ export const AnalyticsDaily: CollectionConfig = {
   slug: "analytics-daily",
   labels: { singular: "إحصائية يومية", plural: "الإحصائيات اليومية" },
   admin: {
+    group: { ar: "النظام والمستخدمون", en: "System & Users" },
     useAsTitle: "date",
     defaultColumns: ["date", "pageViews", "visitors", "quoteSubmits"],
     description: "بيانات مجمّعة يوميًا من مزود التحليلات المربوط — للقراءة فقط.",

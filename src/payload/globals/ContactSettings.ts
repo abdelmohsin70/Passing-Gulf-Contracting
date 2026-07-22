@@ -14,6 +14,9 @@ const statusOptions = [
  */
 export const ContactSettings: GlobalConfig = {
   slug: "contact-settings",
+  admin: {
+    group: { ar: "الإعدادات", en: "Settings" },
+  },
   label: "بيانات التواصل",
   access: { read: anyone, update: isSuperAdmin },
   fields: [

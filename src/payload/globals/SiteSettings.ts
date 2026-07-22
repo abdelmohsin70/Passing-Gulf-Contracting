@@ -3,6 +3,9 @@ import { anyone, isSuperAdmin } from "../access";
 
 export const SiteSettings: GlobalConfig = {
   slug: "site-settings",
+  admin: {
+    group: { ar: "الإعدادات", en: "Settings" },
+  },
   label: "إعدادات الشركة",
   access: { read: anyone, update: isSuperAdmin },
   fields: [

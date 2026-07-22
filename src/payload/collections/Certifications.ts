@@ -5,6 +5,7 @@ export const Certifications: CollectionConfig = {
   slug: "certifications",
   labels: { singular: "شهادة اعتماد", plural: "شهادات الاعتماد" },
   admin: {
+    group: { ar: "الثقة والاعتماد", en: "Trust & Proof" },
     useAsTitle: "code",
     defaultColumns: ["code", "issuer", "expiresAt", "publicVisibility"],
     description: "شهادات ISO وغيرها. لا تُعرض للعامة حتى يتم رفع نسخة سارية وتفعيل الظهور العام.",

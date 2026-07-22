@@ -263,15 +263,38 @@
   animation-delay: 210ms;
 }
 
-/* Sidebar links: slight inward shift on hover (logical property, so it
-   works in both RTL and LTR) with the orange accent. */
+/* Sidebar links as rounded pills (the pattern every modern dashboard
+   template uses): breathing room, soft white hover wash, and a tinted
+   orange pill on the active item — logical properties keep it correct
+   in both RTL and LTR. */
 .nav__link {
+  border-radius: 10px;
+  padding: 6px 12px;
+  padding-inline-end: 12px;
+  margin-block: 2px;
+  width: 100%;
   transition:
     color 150ms ease,
-    padding-inline-start 150ms ease;
+    background-color 150ms ease;
 }
 .nav__link:hover {
-  padding-inline-start: 5px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.nav__link--active {
+  background: rgba(243, 107, 43, 0.22);
+  color: #ffffff;
+  font-weight: 700;
+}
+/* The pill background replaces Payload's thin edge indicator bar. */
+.nav__link-indicator {
+  display: none;
+}
+
+/* Clear separation between sidebar groups. */
+.nav-group + .nav-group {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 14px;
+  margin-top: 8px;
 }
 
 /* Primary buttons get the same lift the public site's CTAs have. */

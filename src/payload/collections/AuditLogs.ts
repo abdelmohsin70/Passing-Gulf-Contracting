@@ -12,6 +12,7 @@ export const AuditLogs: CollectionConfig = {
   slug: "audit-logs",
   labels: { singular: "سجل تدقيق", plural: "سجلات التدقيق" },
   admin: {
+    group: { ar: "النظام والمستخدمون", en: "System & Users" },
     useAsTitle: "action",
     defaultColumns: ["actor", "action", "collectionSlug", "timestamp"],
     description: "سجل تلقائي للعمليات الحساسة — للقراءة فقط، لا يمكن تعديله من الواجهة.",

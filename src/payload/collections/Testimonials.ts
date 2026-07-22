@@ -5,7 +5,10 @@ import { verificationField } from "../fields/seo";
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
   labels: { singular: "شهادة عميل", plural: "شهادات العملاء" },
-  admin: { useAsTitle: "attribution" },
+  admin: {
+    group: { ar: "الثقة والاعتماد", en: "Trust & Proof" },
+    useAsTitle: "attribution",
+  },
   access: {
     read: authenticatedOrPublished,
     create: isContentEditor,
