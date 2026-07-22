@@ -8,12 +8,33 @@ import { Container } from "@/components/primitives/Container";
 import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SolutionIcon } from "@/components/sections/SolutionIcon";
+import { HeroSlider } from "@/components/sections/HeroSlider";
 import { ChevronIcon } from "@/components/icons/icons";
 import { Reveal } from "@/components/Reveal";
 
 // Rendered on demand — pulls Solutions from Payload, so CMS edits take
 // effect immediately without a redeploy.
 export const dynamic = "force-dynamic";
+
+const HERO_IMAGES = [
+  "/images/hero-technician.jpg",
+  "/images/pest-control-hero.jpg",
+  "/images/landscape-agriculture-hero.jpg",
+  "/images/renovation-projects-banner.jpg",
+];
+
+// If a solution has no hero image in the CMS yet, fall back to the
+// client's real photo for that service so every card stays visual.
+const CARD_IMAGE_FALLBACKS: Record<string, string> = {
+  "home-care": "/images/home-care-pool.jpg",
+  "hospitality-workforce": "/images/arabic-hospitality.jpg",
+  "pest-control": "/images/pest-control-hero.jpg",
+  "airport-services": "/images/airport-services-hero.jpg",
+  "landscape-agriculture": "/images/landscape-agriculture-hero.jpg",
+  "renovation-projects": "/images/renovation-projects-banner.jpg",
+  "cleaning-soft-services": "/images/cleaning-soft-services-banner.jpg",
+  "facility-management": "/images/facility-management-banner.jpg",
+};
 
 export async function generateMetadata({
   params,
@@ -40,32 +61,31 @@ export default async function SolutionsPage({ params }: { params: Promise<{ loca
 
   return (
     <>
-      <Section tone="sand" className="py-0">
-        <Container>
-          <Breadcrumbs items={[{ label: dictionary.common.breadcrumbHome, href: base }, { label: dictionary.solutionsIndex.title }]} />
+      <HeroSlider images={HERO_IMAGES}>
+        <Container className="py-4">
+          <Breadcrumbs tone="dark" items={[{ label: dictionary.common.breadcrumbHome, href: base }, { label: dictionary.solutionsIndex.title }]} />
+          <div className="max-w-2xl pb-16 pt-6 sm:pb-20">
+            <h1 className="animate-fade-up text-3xl font-bold sm:text-4xl">{dictionary.solutionsIndex.title}</h1>
+            <p className="animate-fade-up mt-3 max-w-2xl text-base text-white/85 sm:text-lg">{dictionary.solutionsIndex.subtitle}</p>
+          </div>
         </Container>
-      </Section>
-
-      <Section tone="sand" className="pt-4">
-        <Container>
-          <h1 className="text-3xl font-bold text-navy sm:text-4xl">{dictionary.solutionsIndex.title}</h1>
-          <p className="mt-3 max-w-2xl text-base text-slate sm:text-lg">{dictionary.solutionsIndex.subtitle}</p>
-        </Container>
-      </Section>
+      </HeroSlider>
 
       <Section tone="white">
         <Container>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {solutions.map((solution, index) => (
+            {solutions.map((solution, index) => {
+              const cardImage = solution.heroImage ?? CARD_IMAGE_FALLBACKS[solution.slug];
+              return (
               <Reveal key={solution.slug} delay={(index % 3) * 90}>
                 <Link
                   href={`${base}/solutions/${solution.slug}`}
                   className="focus-ring group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-navy/10 bg-white shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift"
                 >
-                  {solution.heroImage ? (
-                    <div className="relative h-36 w-full overflow-hidden">
+                  {cardImage ? (
+                    <div className="relative h-44 w-full overflow-hidden">
                       <Image
-                        src={solution.heroImage}
+                        src={cardImage}
                         alt=""
                         fill
                         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
@@ -91,7 +111,8 @@ export default async function SolutionsPage({ params }: { params: Promise<{ loca
                   </div>
                 </Link>
               </Reveal>
-            ))}
+              );
+            })}
           </div>
         </Container>
       </Section>
