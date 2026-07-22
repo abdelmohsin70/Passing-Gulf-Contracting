@@ -52,7 +52,8 @@ const dictionary: Dictionary = {
     coverage: "Coverage across the Kingdom",
     availability: "24/7 technical emergency response",
     integrated: "Integrated solutions under one management",
-    certifications: "ISO certifications (pending verification)",
+    certifications: "ISO certifications",
+    certificationsPending: "Pending verification",
   },
   home: {
     heroTitle: "We run your facilities. We protect your assets. We keep your business moving.",

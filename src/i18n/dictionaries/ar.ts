@@ -50,7 +50,8 @@ const dictionary = {
     coverage: "تغطية جميع مناطق المملكة",
     availability: "خدمة طوارئ فنية 24/7",
     integrated: "حلول متكاملة تحت إدارة واحدة",
-    certifications: "شهادات الأيزو (قيد التوثيق)",
+    certifications: "شهادات الأيزو",
+    certificationsPending: "قيد التوثيق",
   },
   home: {
     heroTitle: "نشغّل مرافقك. نحمي أصولك. ونحافظ على استمرارية أعمالك.",
