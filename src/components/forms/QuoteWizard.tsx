@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Solution } from "@/data/solutions";
@@ -47,6 +47,7 @@ export function QuoteWizard({
   sectors: Sector[];
 }) {
   const [state, formAction, isPending] = useActionState(submitQuoteRequest, initialState);
+  const rootRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(0);
   const [clientType, setClientType] = useState<"facility" | "home">(
     initialService === "home-care" ? "home" : "facility"
@@ -72,6 +73,12 @@ export function QuoteWizard({
   // effects exist for, so the setState-in-effect call here is intentional.
   useEffect(() => {
     if (!state) return;
+    // Every outcome — success or failure — must be unmissable, not just
+    // present somewhere in the DOM. The submit button lives at the bottom
+    // of the card; without this, a banner or the success screen rendered
+    // near the top can end up scrolled out of view on first paint,
+    // reading to the visitor as if the click did nothing.
+    rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     if (state.ok) {
       trackEvent("quote_submit", { locale, referenceId: state.referenceId });
       return;
@@ -88,7 +95,7 @@ export function QuoteWizard({
 
   if (state?.ok) {
     return (
-      <div className="rounded-[var(--radius-card)] border border-success/20 bg-success/5 p-8 text-center">
+      <div ref={rootRef} className="rounded-[var(--radius-card)] border border-success/20 bg-success/5 p-8 text-center">
         <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-success text-white">
           <CheckIcon className="size-7" />
         </span>
@@ -125,7 +132,7 @@ export function QuoteWizard({
   }
 
   return (
-    <div className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft sm:p-8">
+    <div ref={rootRef} className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft sm:p-8">
       <ol className="mb-8 flex items-center gap-2 text-xs font-semibold text-slate">
         {steps.map((label, index) => (
           <li key={label} className="flex flex-1 items-center gap-2">

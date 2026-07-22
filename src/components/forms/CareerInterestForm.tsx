@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef, type RefObject } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { submitCareerInterest, type ActionResult } from "@/app/actions";
@@ -12,6 +12,14 @@ const initialState: ActionResult | null = null;
 
 export function CareerInterestForm({ dictionary, locale }: { dictionary: Dictionary; locale: Locale }) {
   const [state, formAction, isPending] = useActionState(submitCareerInterest, initialState);
+  // Only one of the two branches below is ever mounted at a time (success
+  // vs. form), so a single ref safely covers both root element types.
+  const rootRef = useRef<HTMLDivElement | HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!state) return;
+    rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [state]);
 
   function topLevelError(): string | undefined {
     if (!state || state.ok) return undefined;
@@ -23,7 +31,7 @@ export function CareerInterestForm({ dictionary, locale }: { dictionary: Diction
 
   if (state?.ok) {
     return (
-      <div className="rounded-[var(--radius-card)] border border-success/20 bg-success/5 p-8 text-center">
+      <div ref={rootRef as RefObject<HTMLDivElement>} className="rounded-[var(--radius-card)] border border-success/20 bg-success/5 p-8 text-center">
         <span className="mx-auto flex size-14 items-center justify-center rounded-full bg-success text-white">
           <CheckIcon className="size-7" />
         </span>
@@ -47,7 +55,11 @@ export function CareerInterestForm({ dictionary, locale }: { dictionary: Diction
   }
 
   return (
-    <form action={formAction} className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft sm:p-8">
+    <form
+      ref={rootRef as RefObject<HTMLFormElement>}
+      action={formAction}
+      className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-6 shadow-soft sm:p-8"
+    >
       <h2 className="text-lg font-bold text-navy">{dictionary.careers.formTitle}</h2>
       <input type="hidden" name="locale" value={locale} />
 
