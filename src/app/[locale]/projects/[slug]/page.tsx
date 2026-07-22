@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { isLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -56,42 +57,84 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ loca
   return (
     <>
       <ViewTracker event="case_study_view" params={{ slug: caseStudy.slug }} />
-      <Section tone="sand" className="py-0">
-        <Container>
-          <Breadcrumbs
-            items={[
-              { label: dictionary.common.breadcrumbHome, href: base },
-              { label: dictionary.projectsIndex.title, href: `${base}/projects` },
-              { label: caseStudy.clientLabel[locale] },
-            ]}
-          />
-        </Container>
-      </Section>
 
-      <Section tone="sand" className="pt-4">
-        <Container>
-          {caseStudy.isPlaceholder ? (
-            <Badge tone="pending" className="mb-4">
-              {dictionary.caseStudy.placeholderBadge}
-            </Badge>
-          ) : null}
-          <h1 className="text-3xl font-bold text-navy sm:text-4xl">{caseStudy.clientLabel[locale]}</h1>
-          <dl className="mt-5 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
-            <div>
-              <dt className="font-semibold text-slate">{dictionary.caseStudy.city}</dt>
-              <dd className="mt-1 text-navy">{caseStudy.city[locale]}</dd>
+      {caseStudy.image ? (
+        <div className="relative overflow-hidden bg-navy text-white">
+          <Image src={caseStudy.image} alt="" fill priority sizes="100vw" className="object-cover opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/85 to-navy/65" />
+          <Container className="relative py-4">
+            <Breadcrumbs
+              tone="dark"
+              items={[
+                { label: dictionary.common.breadcrumbHome, href: base },
+                { label: dictionary.projectsIndex.title, href: `${base}/projects` },
+                { label: caseStudy.clientLabel[locale] },
+              ]}
+            />
+            <div className="pb-14 pt-6">
+              {caseStudy.isPlaceholder ? (
+                <Badge tone="pending" className="mb-4">
+                  {dictionary.caseStudy.placeholderBadge}
+                </Badge>
+              ) : null}
+              <h1 className="animate-fade-up text-3xl font-bold sm:text-4xl">{caseStudy.clientLabel[locale]}</h1>
+              <dl className="mt-6 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+                <div>
+                  <dt className="font-semibold text-white/60">{dictionary.caseStudy.city}</dt>
+                  <dd className="mt-1 font-medium">{caseStudy.city[locale]}</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-white/60">{dictionary.caseStudy.sector}</dt>
+                  <dd className="mt-1 font-medium">{sector?.title[locale]}</dd>
+                </div>
+                <div className="col-span-2">
+                  <dt className="font-semibold text-white/60">{dictionary.caseStudy.solution}</dt>
+                  <dd className="mt-1 font-medium">{solution?.title[locale]}</dd>
+                </div>
+              </dl>
             </div>
-            <div>
-              <dt className="font-semibold text-slate">{dictionary.caseStudy.sector}</dt>
-              <dd className="mt-1 text-navy">{sector?.title[locale]}</dd>
-            </div>
-            <div className="col-span-2 sm:col-span-2">
-              <dt className="font-semibold text-slate">{dictionary.caseStudy.solution}</dt>
-              <dd className="mt-1 text-navy">{solution?.title[locale]}</dd>
-            </div>
-          </dl>
-        </Container>
-      </Section>
+          </Container>
+        </div>
+      ) : (
+        <>
+          <Section tone="sand" className="py-0">
+            <Container>
+              <Breadcrumbs
+                items={[
+                  { label: dictionary.common.breadcrumbHome, href: base },
+                  { label: dictionary.projectsIndex.title, href: `${base}/projects` },
+                  { label: caseStudy.clientLabel[locale] },
+                ]}
+              />
+            </Container>
+          </Section>
+
+          <Section tone="sand" className="pt-4">
+            <Container>
+              {caseStudy.isPlaceholder ? (
+                <Badge tone="pending" className="mb-4">
+                  {dictionary.caseStudy.placeholderBadge}
+                </Badge>
+              ) : null}
+              <h1 className="text-3xl font-bold text-navy sm:text-4xl">{caseStudy.clientLabel[locale]}</h1>
+              <dl className="mt-5 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
+                <div>
+                  <dt className="font-semibold text-slate">{dictionary.caseStudy.city}</dt>
+                  <dd className="mt-1 text-navy">{caseStudy.city[locale]}</dd>
+                </div>
+                <div>
+                  <dt className="font-semibold text-slate">{dictionary.caseStudy.sector}</dt>
+                  <dd className="mt-1 text-navy">{sector?.title[locale]}</dd>
+                </div>
+                <div className="col-span-2 sm:col-span-2">
+                  <dt className="font-semibold text-slate">{dictionary.caseStudy.solution}</dt>
+                  <dd className="mt-1 text-navy">{solution?.title[locale]}</dd>
+                </div>
+              </dl>
+            </Container>
+          </Section>
+        </>
+      )}
 
       <Section tone="white">
         <Container>
