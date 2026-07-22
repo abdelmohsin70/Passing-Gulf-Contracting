@@ -28,6 +28,8 @@ import { AnalyticsDaily } from "./payload/collections/AnalyticsDaily";
 import { SiteSettings } from "./payload/globals/SiteSettings";
 import { ContactSettings } from "./payload/globals/ContactSettings";
 import { Homepage } from "./payload/globals/Homepage";
+import { AboutPage } from "./payload/globals/AboutPage";
+import { QualitySafetyPage } from "./payload/globals/QualitySafetyPage";
 import { Header } from "./payload/globals/Header";
 import { Footer } from "./payload/globals/Footer";
 import { SEOSettings } from "./payload/globals/SEOSettings";
@@ -77,7 +79,18 @@ export default buildConfig({
     AuditLogs,
     AnalyticsDaily,
   ],
-  globals: [SiteSettings, ContactSettings, Homepage, Header, Footer, SEOSettings, AnalyticsSettings, NotificationSettings],
+  globals: [
+    SiteSettings,
+    ContactSettings,
+    Homepage,
+    AboutPage,
+    QualitySafetyPage,
+    Header,
+    Footer,
+    SEOSettings,
+    AnalyticsSettings,
+    NotificationSettings,
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

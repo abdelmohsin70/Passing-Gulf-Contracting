@@ -125,6 +125,8 @@ export interface Config {
     'site-settings': SiteSetting;
     'contact-settings': ContactSetting;
     homepage: Homepage;
+    'about-page': AboutPage;
+    'quality-safety-page': QualitySafetyPage;
     header: Header;
     footer: Footer;
     'seo-settings': SeoSetting;
@@ -135,6 +137,8 @@ export interface Config {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'contact-settings': ContactSettingsSelect<false> | ContactSettingsSelect<true>;
     homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
+    'quality-safety-page': QualitySafetyPageSelect<false> | QualitySafetyPageSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'seo-settings': SeoSettingsSelect<false> | SeoSettingsSelect<true>;
@@ -1605,6 +1609,107 @@ export interface Homepage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: number;
+  title: string;
+  subtitle: string;
+  story: {
+    title: string;
+    body: string;
+    image?: (number | null) | Media;
+  };
+  missionSection: {
+    sectionTitle: string;
+    visionLabel: string;
+    visionBody: string;
+    missionLabel: string;
+    missionBody: string;
+  };
+  values?:
+    | {
+        title: string;
+        body: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * عنوان قسم القيم، مثال: قيمنا.
+   */
+  valuesLabel?: string | null;
+  /**
+   * الصورة الجانبية بجوار مربّع "لماذا اجتياز الخليج".
+   */
+  sideImage?: (number | null) | Media;
+  whyTitle: string;
+  why?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * عنوان ووصف الصفحة في نتائج البحث ومشاركات التواصل.
+   */
+  seo?: {
+    /**
+     * 60 حرفًا تقريبًا. اتركه فارغًا لاستخدام العنوان الافتراضي.
+     */
+    metaTitle?: string | null;
+    /**
+     * 155 حرفًا تقريبًا.
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quality-safety-page".
+ */
+export interface QualitySafetyPage {
+  id: number;
+  title: string;
+  subtitle: string;
+  heroImage?: (number | null) | Media;
+  commitments?:
+    | {
+        title: string;
+        body: string;
+        id?: string | null;
+      }[]
+    | null;
+  certificationsSection: {
+    title: string;
+    /**
+     * نص توضيحي يظهر أسفل الشهادات — مثال: حالة التحقق من الشهادات.
+     */
+    note?: string | null;
+  };
+  /**
+   * عنوان ووصف الصفحة في نتائج البحث ومشاركات التواصل.
+   */
+  seo?: {
+    /**
+     * 60 حرفًا تقريبًا. اتركه فارغًا لاستخدام العنوان الافتراضي.
+     */
+    metaTitle?: string | null;
+    /**
+     * 155 حرفًا تقريبًا.
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header".
  */
 export interface Header {
@@ -1806,6 +1911,90 @@ export interface HomepageSelect<T extends boolean = true> {
         title?: T;
         subtitle?: T;
         buttonLabel?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  story?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        image?: T;
+      };
+  missionSection?:
+    | T
+    | {
+        sectionTitle?: T;
+        visionLabel?: T;
+        visionBody?: T;
+        missionLabel?: T;
+        missionBody?: T;
+      };
+  values?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        id?: T;
+      };
+  valuesLabel?: T;
+  sideImage?: T;
+  whyTitle?: T;
+  why?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+        noIndex?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quality-safety-page_select".
+ */
+export interface QualitySafetyPageSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  heroImage?: T;
+  commitments?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        id?: T;
+      };
+  certificationsSection?:
+    | T
+    | {
+        title?: T;
+        note?: T;
       };
   seo?:
     | T

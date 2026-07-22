@@ -1,5 +1,6 @@
 import * as migration_20260722_122251_initial from './20260722_122251_initial';
 import * as migration_20260722_122949_add_lead_slugs from './20260722_122949_add_lead_slugs';
+import * as migration_20260722_162042_add_about_quality_pages from './20260722_162042_add_about_quality_pages';
 
 export const migrations = [
   {
@@ -10,6 +11,11 @@ export const migrations = [
   {
     up: migration_20260722_122949_add_lead_slugs.up,
     down: migration_20260722_122949_add_lead_slugs.down,
-    name: '20260722_122949_add_lead_slugs'
+    name: '20260722_122949_add_lead_slugs',
+  },
+  {
+    up: migration_20260722_162042_add_about_quality_pages.up,
+    down: migration_20260722_162042_add_about_quality_pages.down,
+    name: '20260722_162042_add_about_quality_pages'
   },
 ];

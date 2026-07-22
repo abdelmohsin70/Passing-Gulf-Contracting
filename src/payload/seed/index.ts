@@ -195,7 +195,11 @@ const MEDIA_ALT: Record<string, { ar: string; en: string }> = {
   "arabic-hospitality.jpg": { ar: "خدمات ضيافة", en: "Hospitality services" },
   "workforce-driver.jpg": { ar: "سائق ضمن فريق التشغيل", en: "Driver as part of the operations workforce" },
   "home-care-pool.jpg": { ar: "عناية منزلية — صيانة مسبح", en: "Home care — pool maintenance" },
+  "safety-helmets.jpg": { ar: "خوذات سلامة لفريق العمل", en: "Safety helmets for the operations team" },
 };
+
+const ABOUT_PAGE_IMAGES = { story: "wrenches-hand.jpg", side: "technician-toolbox.jpg" };
+const QUALITY_SAFETY_HERO_IMAGE = "safety-helmets.jpg";
 
 const SOLUTION_IMAGES: Record<string, { hero: string; gallery?: string[] }> = {
   "facility-management": {
@@ -241,6 +245,10 @@ async function seedMedia(payload: Payload): Promise<Map<string, number>> {
     filenames.add(entry.hero);
     for (const g of entry.gallery ?? []) filenames.add(g);
   }
+  filenames.add(ABOUT_PAGE_IMAGES.story);
+  filenames.add(ABOUT_PAGE_IMAGES.side);
+  filenames.add(QUALITY_SAFETY_HERO_IMAGE);
+
   const idByFilename = new Map<string, number>();
   for (const filename of filenames) {
     idByFilename.set(filename, await uploadMediaFile(payload, filename));
@@ -269,6 +277,31 @@ async function attachSolutionMedia(payload: Payload, mediaIdByFilename: Map<stri
       data: { heroImage: heroImageId, gallery: galleryIds },
     });
     console.log(`[seed] attached media to solution ${slug}`);
+  }
+}
+
+async function attachPageMedia(payload: Payload, mediaIdByFilename: Map<string, number>) {
+  const aboutDoc = await payload.findGlobal({ slug: "about-page", overrideAccess: true, depth: 0 });
+  if (aboutDoc.title && !aboutDoc.story?.image) {
+    await payload.updateGlobal({
+      slug: "about-page",
+      overrideAccess: true,
+      data: {
+        story: { image: mediaIdByFilename.get(ABOUT_PAGE_IMAGES.story) },
+        sideImage: mediaIdByFilename.get(ABOUT_PAGE_IMAGES.side),
+      },
+    });
+    console.log("[seed] attached media to about-page");
+  }
+
+  const qualityDoc = await payload.findGlobal({ slug: "quality-safety-page", overrideAccess: true, depth: 0 });
+  if (qualityDoc.title && !qualityDoc.heroImage) {
+    await payload.updateGlobal({
+      slug: "quality-safety-page",
+      overrideAccess: true,
+      data: { heroImage: mediaIdByFilename.get(QUALITY_SAFETY_HERO_IMAGE) },
+    });
+    console.log("[seed] attached media to quality-safety-page");
   }
 }
 
@@ -436,6 +469,151 @@ async function seedDraftInsights(payload: Payload) {
   }
 }
 
+/**
+ * Same row-ID-orphaning problem as createBilingual (see withRowIds above),
+ * but for updateGlobal instead of create/update on a collection.
+ */
+async function updateGlobalBilingual(
+  payload: Payload,
+  slug: Parameters<Payload["updateGlobal"]>[0]["slug"],
+  arData: Record<string, unknown>,
+  enData: Record<string, unknown>,
+  arrayFields: string[] = []
+) {
+  const arDoc = await payload.updateGlobal({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic helper spans multiple global shapes
+    slug: slug as any,
+    locale: "ar",
+    overrideAccess: true,
+    data: arData,
+  });
+
+  const enDataWithIds: Record<string, unknown> = { ...enData };
+  for (const field of arrayFields) {
+    if (Array.isArray(enData[field])) {
+      enDataWithIds[field] = withRowIds((arDoc as unknown as Record<string, unknown>)[field], enData[field] as unknown[]);
+    }
+  }
+
+  await payload.updateGlobal({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic helper spans multiple global shapes
+    slug: slug as any,
+    locale: "en",
+    overrideAccess: true,
+    data: enDataWithIds,
+  });
+}
+
+async function seedAboutQualityPages(payload: Payload) {
+  const existingAbout = await payload.findGlobal({ slug: "about-page", overrideAccess: true, depth: 0 });
+  if (!existingAbout.title) {
+    await updateGlobalBilingual(
+      payload,
+      "about-page",
+      {
+        title: "من نحن",
+        subtitle: "شريك تشغيل سعودي يحمي أصولك ويضمن استمرارية أعمالك منذ عام 2015.",
+        story: {
+          title: "قصتنا",
+          body: "تأسست اجتياز الخليج للمقاولات في مدينة الرياض عام 2015، بهدف تقديم حلول تشغيل وصيانة متكاملة للقطاعات التجارية والسكنية والصناعية والسياحية والصحية في جميع أنحاء المملكة العربية السعودية. نُدير مشاريعنا النوعية بإشراف مباشر من فريق العمل الخاص بالشركة، ونعمل على تعزيز شراكات طويلة الأمد مع عملائنا من خلال حلول موجهة نحو تحسين الأداء والكفاءة وجودة الخدمة.",
+        },
+        missionSection: {
+          sectionTitle: "الرؤية والرسالة والقيم",
+          visionLabel: "رؤيتنا",
+          visionBody: "أن نكون شريك التشغيل والصيانة الأول الذي تلجأ إليه المنشآت الكبرى في المملكة.",
+          missionLabel: "رسالتنا",
+          missionBody: "تقديم حلول متكاملة وشاملة لإدارة المرافق تُحسّن الأداء وتخفض التكلفة وتطيل عمر الأصول، من خلال فرق فنية مؤهلة تعمل بأعلى معايير الجودة والسلامة.",
+        },
+        valuesLabel: "قيمنا",
+        values: [
+          { title: "المسؤولية", body: "نلتزم بما نتعهد به، ونتحمل مسؤولية كل موقع نعمل فيه." },
+          { title: "الجودة", body: "نطبق إجراءات ضبط جودة صارمة في كل خدمة نقدمها." },
+          { title: "السلامة", body: "صحة وسلامة فريقنا وعملائنا خط أحمر لا نتنازل عنه." },
+          { title: "الشراكة", body: "نبني علاقات طويلة الأمد مبنية على الثقة والاستجابة السريعة." },
+        ],
+        whyTitle: "لماذا اجتياز الخليج",
+        why: [
+          { item: "نقطة مسؤولية واحدة بدل تعدد الموردين" },
+          { item: "برامج وقائية وتصحيحية مصممة حسب الأصل والمنشأة" },
+          { item: "فرق متخصصة واستجابة على مدار الساعة" },
+          { item: "خدمات متكاملة من الأعمال الكهروميكانيكية حتى النظافة واللاندسكيب والضيافة" },
+          { item: "رقابة جودة وتقارير أداء دورية" },
+        ],
+      },
+      {
+        title: "About Us",
+        subtitle: "A Saudi operating partner protecting your assets and keeping your business running since 2015.",
+        story: {
+          title: "Our Story",
+          body: "Ijtiyaz Al Khaleej Contracting was founded in Riyadh in 2015 to deliver integrated operation and maintenance solutions for the commercial, residential, industrial, tourism, and healthcare sectors across the Kingdom of Saudi Arabia. We manage our flagship projects under the direct supervision of our own team, and we build long-term partnerships with our clients through solutions aimed at improving performance, efficiency, and service quality.",
+        },
+        missionSection: {
+          sectionTitle: "Vision, Mission & Values",
+          visionLabel: "Our Vision",
+          visionBody: "To be the first operation and maintenance partner major facilities across the Kingdom turn to.",
+          missionLabel: "Our Mission",
+          missionBody: "To deliver integrated, comprehensive facility management solutions that improve performance, reduce cost, and extend asset life, through qualified technical teams working to the highest quality and safety standards.",
+        },
+        valuesLabel: "Our Values",
+        values: [
+          { title: "Accountability", body: "We deliver on our commitments and take ownership of every site we operate." },
+          { title: "Quality", body: "We apply strict quality control measures across every service we provide." },
+          { title: "Safety", body: "The health and safety of our team and clients is a line we never cross." },
+          { title: "Partnership", body: "We build long-term relationships grounded in trust and fast response." },
+        ],
+        whyTitle: "Why Ijtiyaz Al Khaleej",
+        why: [
+          { item: "One point of accountability instead of multiple vendors" },
+          { item: "Preventive and corrective programs designed around your asset and facility" },
+          { item: "Specialized teams and round-the-clock response" },
+          { item: "Integrated services from MEP works to cleaning, landscaping, and hospitality" },
+          { item: "Quality oversight and recurring performance reports" },
+        ],
+      },
+      ["values", "why"]
+    );
+    console.log("[seed] seeded about-page global");
+  }
+
+  const existingQuality = await payload.findGlobal({ slug: "quality-safety-page", overrideAccess: true, depth: 0 });
+  if (!existingQuality.title) {
+    await updateGlobalBilingual(
+      payload,
+      "quality-safety-page",
+      {
+        title: "الجودة والسلامة",
+        subtitle: "التزام لا يتغير بمعايير الصحة والسلامة المهنية وجودة الخدمة في كل موقع نعمل فيه.",
+        commitments: [
+          { title: "مواد آمنة ومعتمدة", body: "نستخدم مواد وأدوات صديقة للبيئة تراعي سلامة العاملين والعملاء." },
+          { title: "تدريب مستمر", body: "فرقنا الفنية تخضع لتدريب دوري على أحدث معايير الصحة والسلامة." },
+          { title: "ضبط جودة صارم", body: "إجراءات مراجعة وتقييم دورية لكل موقع تشغيل." },
+          { title: "ضمان على خدماتنا", body: "نقف خلف جودة عملنا في كل عقد نوقعه." },
+        ],
+        certificationsSection: {
+          title: "الاعتمادات والشهادات",
+          note: "الشهادات المذكورة في ملفات الشركة (ISO 9001:2015 وISO 14001:2015 وISO 45001:2018) قيد التوثيق حاليًا. سيتم نشر أرقام الشهادات وشعاراتها فور استلام نسخ سارية من العميل.",
+        },
+      },
+      {
+        title: "Quality & Safety",
+        subtitle: "An unwavering commitment to occupational health, safety, and service quality standards on every site.",
+        commitments: [
+          { title: "Safe, Approved Materials", body: "We use environmentally friendly materials and tools that safeguard staff and client health." },
+          { title: "Continuous Training", body: "Our technical teams undergo regular training on the latest health and safety standards." },
+          { title: "Strict Quality Control", body: "Recurring review and assessment procedures across every operating site." },
+          { title: "Guaranteed Work", body: "We stand behind the quality of our work on every contract we sign." },
+        ],
+        certificationsSection: {
+          title: "Certifications & Accreditations",
+          note: "Certifications referenced in company materials (ISO 9001:2015, ISO 14001:2015, and ISO 45001:2018) are currently pending verification. Certificate numbers and logos will be published once valid, current copies are received from the client.",
+        },
+      },
+      ["commitments"]
+    );
+    console.log("[seed] seeded quality-safety-page global");
+  }
+}
+
 async function seedGlobals(payload: Payload) {
   await payload.updateGlobal({
     slug: "site-settings",
@@ -505,6 +683,8 @@ async function run() {
   await seedDraftProjects(payload, sectorIdBySlug);
   await seedDraftInsights(payload);
   await seedGlobals(payload);
+  await seedAboutQualityPages(payload);
+  await attachPageMedia(payload, mediaIdByFilename);
 
   console.log("[seed] done.");
   process.exit(0);

@@ -1,11 +1,17 @@
 import type { GlobalConfig } from "payload";
-import { authenticatedOrPublished, isContentEditor } from "../access";
+import { anyone, isContentEditor } from "../access";
 import { seoField } from "../fields/seo";
 
 export const Homepage: GlobalConfig = {
   slug: "homepage",
   label: "الصفحة الرئيسية",
-  access: { read: authenticatedOrPublished, update: isContentEditor },
+  // Globals have no draft/publish state unless versions.drafts is enabled
+  // (it isn't here) — authenticatedOrPublished's `{_status: ...}` filter
+  // would 500 on every anonymous read since the field doesn't exist. This
+  // was a latent bug (never triggered because the frontend never actually
+  // queried this global) until the AboutPage/QualitySafetyPage globals hit
+  // the identical issue and revealed the root cause.
+  access: { read: anyone, update: isContentEditor },
   fields: [
     {
       name: "hero",
