@@ -17,6 +17,7 @@ import { HeroSlider } from "@/components/sections/HeroSlider";
 import { ChevronIcon } from "@/components/icons/icons";
 import { Badge } from "@/components/primitives/Badge";
 import { Reveal } from "@/components/Reveal";
+import { CountUp } from "@/components/CountUp";
 
 // Rendered on demand — pulls Projects/Sectors/Solutions from Payload, so
 // CMS edits take effect immediately without a redeploy.
@@ -95,9 +96,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
                 delay={index * 80}
                 className="rounded-[var(--radius-card)] border border-navy/10 bg-white p-5 text-center shadow-soft"
               >
-                <p className="text-2xl font-bold text-orange sm:text-3xl" dir="ltr">
-                  {stat.value}
-                </p>
+                <CountUp value={stat.value} className="text-2xl font-bold text-orange sm:text-3xl" />
                 <p className="mt-1.5 text-xs font-semibold text-navy sm:text-sm">{stat.label}</p>
               </Reveal>
             ))}
