@@ -50,6 +50,10 @@ export default buildConfig({
     },
     components: {
       beforeDashboard: ["@/payload/components/DashboardOverview#DashboardOverview"],
+      graphics: {
+        Logo: "@/payload/components/Logo#Logo",
+        Icon: "@/payload/components/Icon#Icon",
+      },
     },
   },
   collections: [

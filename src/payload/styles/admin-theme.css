@@ -1,0 +1,89 @@
+/**
+ * Re-tints the Payload admin panel to the public site's brand palette
+ * (navy / orange / sand — see src/app/globals.css) instead of Payload's
+ * default neutral-gray/blue theme.
+ *
+ * Rather than chasing Payload's internal component class names (which can
+ * change between versions), this overrides the two CSS custom-property
+ * scales the whole admin UI is actually built on:
+ *   --color-base-*  — the neutral scale behind --theme-elevation-* (every
+ *                      background, border, and body text color)
+ *   --color-blue-*   — the accent scale Payload uses for links, focus
+ *                      rings, checked states, and other interactive accents
+ * Each stop keeps the exact lightness of Payload's original value at that
+ * stop (only hue/saturation changed), so the contrast ratios Payload
+ * designed for accessibility are preserved — this is a re-tint, not a
+ * redesign of the scale.
+ *
+ * Deliberately NOT wrapped in @layer: Payload's own rules live inside
+ * `@layer payload-default`, and per the CSS cascade layers spec, any
+ * unlayered rule beats a layered one regardless of selector specificity —
+ * that's what lets this file override the palette without !important.
+ */
+
+:root {
+  --color-base-50: rgb(244, 245, 246);
+  --color-base-100: rgb(233, 235, 237);
+  --color-base-150: rgb(218, 221, 224);
+  --color-base-200: rgb(203, 208, 213);
+  --color-base-250: rgb(189, 195, 201);
+  --color-base-300: rgb(174, 181, 188);
+  --color-base-350: rgb(159, 168, 177);
+  --color-base-400: rgb(144, 154, 164);
+  --color-base-450: rgb(130, 141, 152);
+  --color-base-500: rgb(115, 128, 141);
+  --color-base-550: rgb(103, 114, 125);
+  --color-base-600: rgb(91, 101, 111);
+  --color-base-650: rgb(78, 87, 96);
+  --color-base-700: rgb(67, 74, 81);
+  --color-base-750: rgb(54, 60, 66);
+  --color-base-800: rgb(42, 47, 52);
+  --color-base-850: rgb(31, 34, 37);
+  --color-base-900: rgb(18, 20, 22);
+  --color-base-950: rgb(6, 7, 8);
+
+  --color-blue-50: rgb(254, 239, 232);
+  --color-blue-100: rgb(253, 226, 213);
+  --color-blue-150: rgb(251, 206, 185);
+  --color-blue-200: rgb(250, 188, 159);
+  --color-blue-250: rgb(248, 164, 125);
+  --color-blue-300: rgb(246, 141, 92);
+  --color-blue-350: rgb(244, 117, 57);
+  --color-blue-400: rgb(242, 89, 17);
+  --color-blue-450: rgb(210, 75, 12);
+  --color-blue-500: rgb(196, 70, 11);
+  --color-blue-550: rgb(170, 61, 10);
+  --color-blue-600: rgb(155, 56, 9);
+  --color-blue-650: rgb(138, 50, 8);
+  --color-blue-700: rgb(131, 47, 7);
+  --color-blue-750: rgb(115, 41, 7);
+  --color-blue-800: rgb(102, 37, 6);
+  --color-blue-850: rgb(89, 32, 5);
+  --color-blue-900: rgb(73, 26, 4);
+  --color-blue-950: rgb(58, 21, 3);
+}
+
+/* Payload's own nav sidebar is pure white/near-black by default; give it
+   the same navy the public site's header uses so the two feel like one
+   product instead of two different tools bolted together. Class names
+   verified against the actual rendered admin DOM (not guessed from
+   minified source), since Payload doesn't document these as a stable
+   public API — if a future Payload upgrade renames them, these rules
+   simply become no-ops rather than breaking anything. */
+.nav {
+  background: #102a43;
+}
+.nav__link,
+.nav-group__label {
+  color: rgba(255, 255, 255, 0.82);
+}
+.nav__link:hover {
+  color: #ffffff;
+}
+
+/* Login screen: swap Payload's default brand mark area to sand, echoing
+   the public site's hero background, so /admin doesn't look like a
+   generic vendor tool on first paint. */
+.login {
+  background: #f3efe7;
+}
