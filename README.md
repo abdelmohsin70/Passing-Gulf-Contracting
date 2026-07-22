@@ -4,7 +4,9 @@ Bilingual (Arabic/English), RTL/LTR production website for Ijtiyaz Al Khaleej
 Contracting — a Saudi facility management, operation, maintenance, and
 support-services company based in Riyadh (est. 2015).
 
-Built with Next.js (App Router), TypeScript, and Tailwind CSS v4.
+Built with Next.js (App Router), TypeScript, and Tailwind CSS v4, with an
+embedded Payload CMS (Postgres-backed) for content, a sales CRM (Leads), and
+a role-based admin dashboard.
 
 ## Getting started
 
@@ -15,6 +17,18 @@ npm run dev
 
 The site redirects `/` to `/ar` (default locale) or `/en` based on the
 browser's `Accept-Language` header. Visit `http://localhost:3000`.
+
+The CMS requires a Postgres database — set `DATABASE_URI` and
+`PAYLOAD_SECRET` in `.env.local` (see `.env.example`), then run:
+
+```bash
+npm run payload migrate   # create the schema
+npm run seed               # optional: baseline sectors/solutions + first admin user
+```
+
+Visit `http://localhost:3000/admin` to log in. See `CMS-GUIDE-AR.md` (content
+editors), `SALES-DASHBOARD-GUIDE-AR.md` (sales team), and `DEPLOYMENT.md`
+(production setup) for details.
 
 ## Scripts
 
@@ -80,6 +94,14 @@ the file at the same path, or update the `heroImage`/`gallery` fields in
   component if you want to adjust one.
 
 ## Editable content
+
+⚠️ **This section describes the current frontend, which still reads from
+static data/config files, not the CMS.** A Payload CMS with the same content
+types (Solutions, Sectors, Projects, etc.) is fully built and editable at
+`/admin` — see `CMS-GUIDE-AR.md` — but the public frontend hasn't been
+migrated to read from it yet (see "Known limitations" below). Editing
+content in `/admin` today does not yet change the live site; edit the files
+below instead until that migration lands.
 
 Everything a non-developer would want to change lives in typed data/config
 files — no content is hardcoded inside JSX beyond section headings.
@@ -154,14 +176,20 @@ lost, but nobody is emailed. To connect a real provider:
 
 ## Environment variables
 
-See `.env.example`. None are required for local development; all default to
-safe no-ops.
+See `.env.example` for the full list with explanations. The public site
+(everything outside `/admin`) needs none of them to run — all default to
+safe no-ops. The CMS needs `DATABASE_URI` and `PAYLOAD_SECRET` at minimum.
 
 | Variable | Purpose | Required? |
 | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URL used in metadata, sitemap.xml, robots.txt | Recommended before launch (defaults to `https://example.com`) |
 | `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Enables GA4 — unset means zero tracking scripts load | No |
-| `NOTIFY_WEBHOOK_URL` | Where quote/career leads are POSTed | No (falls back to console logging) |
+| `NOTIFY_WEBHOOK_URL` | Where quote/career leads are POSTed for real-time alerting | No (leads are always saved to the DB regardless; this only adds a push notification) |
+| `DATABASE_URI` | Postgres connection string for the CMS | Yes, for `/admin` and lead capture to work |
+| `PAYLOAD_SECRET` | Signs admin auth tokens | Yes |
+| `NEXT_PUBLIC_SERVER_URL` | Payload's internal server URL, usually same as `NEXT_PUBLIC_SITE_URL` | Yes |
+| `S3_*` | Media storage | Recommended before launch — see `DEPLOYMENT.md` |
+| `SMTP_HOST` / `RESEND_API_KEY` | Transactional email | Recommended before launch |
 
 ## Analytics events
 
@@ -204,22 +232,31 @@ all silent no-ops until `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set:
 
 ## Deployment
 
-This is a standard Next.js app — deploy to Vercel, or any Node host that
-runs `npm run build && npm start`. Set the environment variables above in
-your hosting provider before going live.
+See `DEPLOYMENT.md` for the full production checklist (Postgres, S3, email,
+migrations, the Vercel Deployment Protection fix, and a post-deploy
+verification list). In short: deploy to Vercel or any Node host that runs
+`npm run build && npm start`, with the environment variables above set and
+`npm run payload migrate` run once against the production database.
 
 ## Known limitations / follow-ups
 
 - The lead rate-limiter is in-memory only (see above) — fine for a single
   instance, not durable across multiple serverless invocations.
-- No CMS is wired up; content is edited directly in the typed data files
-  under `src/data/` and `src/config/`. If the team needs to edit content
-  without a code deploy, introduce a headless CMS (Sanity/Strapi) behind
-  the same data shapes.
-- File upload on the quote form was intentionally left out — there is no
-  storage backend configured yet. Add one (e.g. S3-compatible storage) and
-  wire it into `QuoteWizard`/`submitQuoteRequest` if attachments become a
-  requirement.
+- The CMS runs against a local development Postgres database in this
+  environment. Nothing is wired to production infrastructure yet — see
+  `DEPLOYMENT.md` for what's needed to go live (real `DATABASE_URI`, S3
+  storage, email provider).
+- The public site's Solutions/Sectors/Projects/Homepage pages still read
+  from the typed static data files under `src/data/` and `src/config/`, not
+  from the Payload CMS. The CMS collections exist, are seeded, and are fully
+  editable in `/admin`, but the frontend doesn't read from them yet — editing
+  content in the CMS today does not change what visitors see until this
+  frontend migration is done.
+- File upload on the quote form was intentionally left out — wire it into
+  `QuoteWizard`/`submitQuoteRequest` (uploading to the `media` collection)
+  if attachments become a requirement.
+- See `CONTENT-VERIFICATION.md` for what CMS content is currently seeded as
+  unverified/draft and must not be published without client confirmation.
 
 ## TODO_VERIFY — facts that must be confirmed before launch
 
