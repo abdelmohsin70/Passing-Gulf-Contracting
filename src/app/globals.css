@@ -115,6 +115,15 @@
 :root[data-theme="dark"] .bg-white\/50 {
   background-color: rgb(23 23 27 / 60%);
 }
+/* Sticky header (bg-white/95 + backdrop-blur) → dark translucent surface,
+   so the header goes dark with the rest of the page instead of staying a
+   bright white bar with unreadable light nav text. */
+:root[data-theme="dark"] .bg-white\/95 {
+  background-color: rgb(12 12 15 / 92%);
+}
+/* bg-white/10 and /15 sit on already-dark surfaces (icon chips, hero
+   overlays) and hero-slider dots (bg-white/40, /70) sit on the navy hero —
+   those stay light on purpose and are not remapped. */
 :root[data-theme="dark"] .bg-white\/10 {
   background-color: rgb(255 255 255 / 10%);
 }
