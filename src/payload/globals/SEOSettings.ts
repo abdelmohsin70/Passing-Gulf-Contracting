@@ -15,6 +15,6 @@ export const SEOSettings: GlobalConfig = {
     { name: "defaultMetaDescriptionEn", type: "textarea" },
     { name: "defaultOgImage", type: "upload", relationTo: "media" },
     { name: "googleSiteVerification", type: "text" },
-    { name: "robotsExtraRules", type: "textarea", admin: { description: "أسطر إضافية تُلحق بملف robots.txt عند الحاجة." } },
+    { name: "robotsExtraRules", type: "textarea", admin: { description: { en: "Extra lines appended to robots.txt when needed.", ar: "أسطر إضافية تُلحق بملف robots.txt عند الحاجة." } } },
   ],
 };

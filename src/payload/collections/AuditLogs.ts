@@ -15,7 +15,7 @@ export const AuditLogs: CollectionConfig = {
     group: { ar: "النظام والمستخدمون", en: "System & Users" },
     useAsTitle: "action",
     defaultColumns: ["actor", "action", "collectionSlug", "timestamp"],
-    description: "سجل تلقائي للعمليات الحساسة — للقراءة فقط، لا يمكن تعديله من الواجهة.",
+    description: { en: "Automatic log of sensitive operations — read only, cannot be edited from the interface.", ar: "سجل تلقائي للعمليات الحساسة — للقراءة فقط، لا يمكن تعديله من الواجهة." },
   },
   access: {
     read: isSuperAdmin,
@@ -28,7 +28,7 @@ export const AuditLogs: CollectionConfig = {
     { name: "action", type: "text", required: true },
     { name: "collectionSlug", type: "text" },
     { name: "documentId", type: "text" },
-    { name: "safeSummary", type: "text", admin: { description: "وصف مختصر لا يحتوي أسرارًا أو بيانات شخصية كاملة." } },
+    { name: "safeSummary", type: "text", admin: { description: { en: "A short description containing no secrets or full personal data.", ar: "وصف مختصر لا يحتوي أسرارًا أو بيانات شخصية كاملة." } } },
     { name: "timestamp", type: "date", required: true, defaultValue: () => new Date().toISOString() },
   ],
   timestamps: false,

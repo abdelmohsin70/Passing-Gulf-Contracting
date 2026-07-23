@@ -15,7 +15,7 @@ export const AnalyticsDaily: CollectionConfig = {
     group: { ar: "النظام والمستخدمون", en: "System & Users" },
     useAsTitle: "date",
     defaultColumns: ["date", "pageViews", "visitors", "quoteSubmits"],
-    description: "بيانات مجمّعة يوميًا من مزود التحليلات المربوط — للقراءة فقط.",
+    description: { en: "Data aggregated daily from the connected analytics provider — read only.", ar: "بيانات مجمّعة يوميًا من مزود التحليلات المربوط — للقراءة فقط." },
   },
   access: {
     read: isAnalyst,

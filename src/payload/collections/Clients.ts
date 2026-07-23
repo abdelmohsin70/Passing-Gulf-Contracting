@@ -7,7 +7,7 @@ export const Clients: CollectionConfig = {
   admin: {
     group: { ar: "الثقة والاعتماد", en: "Trust & Proof" },
     useAsTitle: "name",
-    description: "لا يظهر أي شعار في \"عملاؤنا\" إلا إذا كان usageApproved مفعّلًا هنا وعلى ملف الصورة نفسه.",
+    description: { en: "No logo appears in \"Our clients\" unless usageApproved is enabled both here and on the image file itself.", ar: "لا يظهر أي شعار في \"عملاؤنا\" إلا إذا كان usageApproved مفعّلًا هنا وعلى ملف الصورة نفسه." },
   },
   access: {
     read: authenticatedOrPublished,
@@ -25,7 +25,7 @@ export const Clients: CollectionConfig = {
       name: "usageApproved",
       type: "checkbox",
       defaultValue: false,
-      label: "موافقة استخدام الشعار موثّقة",
+      label: { en: "Logo usage approval documented", ar: "موافقة استخدام الشعار موثّقة" },
       admin: { position: "sidebar" },
     },
   ],

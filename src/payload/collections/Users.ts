@@ -7,7 +7,7 @@ export const Users: CollectionConfig = {
     group: { ar: "النظام والمستخدمون", en: "System & Users" },
     useAsTitle: "name",
     defaultColumns: ["name", "email", "roles", "active"],
-    description: "لوحة الوصول: من يستطيع الدخول للوحة التحكم ودوره.",
+    description: { en: "Access panel: who can sign in to the dashboard and their role.", ar: "لوحة الوصول: من يستطيع الدخول للوحة التحكم ودوره." },
   },
   auth: {
     // Keep sessions reasonably short for an internal admin tool.
@@ -38,27 +38,26 @@ export const Users: CollectionConfig = {
       defaultValue: ["viewer"],
       options: ROLES.map((role) => ({ label: roleLabel(role), value: role })),
       admin: {
-        description:
-          "super-admin: كل الصلاحيات · content-manager: المحتوى والوسائط · sales: الطلبات والعملاء · analyst: التقارير فقط · viewer: قراءة فقط.",
+        description: { en: "super-admin: full access · content-manager: content & media · sales: leads & clients · analyst: reports only · viewer: read only.", ar: "super-admin: كل الصلاحيات · content-manager: المحتوى والوسائط · sales: الطلبات والعملاء · analyst: التقارير فقط · viewer: قراءة فقط." },
       },
     },
     {
       name: "active",
       type: "checkbox",
       defaultValue: true,
-      admin: { description: "عطّل هذا الخيار لإيقاف دخول المستخدم دون حذف حسابه." },
+      admin: { description: { en: "Turn this off to block the user's sign-in without deleting their account.", ar: "عطّل هذا الخيار لإيقاف دخول المستخدم دون حذف حسابه." } },
     },
   ],
   timestamps: true,
 };
 
-function roleLabel(role: string): string {
-  const labels: Record<string, string> = {
-    "super-admin": "مدير عام",
-    "content-manager": "مدير محتوى",
-    sales: "مبيعات",
-    analyst: "محلل",
-    viewer: "قراءة فقط",
+function roleLabel(role: string): { en: string; ar: string } {
+  const labels: Record<string, { en: string; ar: string }> = {
+    "super-admin": { en: "Super admin", ar: "مدير عام" },
+    "content-manager": { en: "Content manager", ar: "مدير محتوى" },
+    sales: { en: "Sales", ar: "مبيعات" },
+    analyst: { en: "Analyst", ar: "محلل" },
+    viewer: { en: "Viewer", ar: "قراءة فقط" },
   };
-  return labels[role] ?? role;
+  return labels[role] ?? { en: role, ar: role };
 }

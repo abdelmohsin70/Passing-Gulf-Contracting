@@ -30,7 +30,7 @@ export const Homepage: GlobalConfig = {
     {
       name: "partnerSection",
       type: "group",
-      label: "شريك واحد، منظومة متكاملة",
+      label: { en: "One partner, an integrated system", ar: "شريك واحد، منظومة متكاملة" },
       fields: [
         { name: "title", type: "text", localized: true },
         { name: "subtitle", type: "textarea", localized: true },
@@ -39,7 +39,7 @@ export const Homepage: GlobalConfig = {
     {
       name: "outcomesSection",
       type: "group",
-      label: "لماذا تختار اجتياز الخليج",
+      label: { en: "Why choose Ijtiyaz Al Khaleej", ar: "لماذا تختار اجتياز الخليج" },
       fields: [
         { name: "title", type: "text", localized: true },
         { name: "subtitle", type: "textarea", localized: true },
@@ -50,20 +50,20 @@ export const Homepage: GlobalConfig = {
       type: "relationship",
       relationTo: "projects",
       admin: {
-        description: "لا يظهر في الرئيسية إلا إذا كان هذا المشروع منشورًا وverificationStatus = verified.",
+        description: { en: "Appears on the homepage only if this project is published and verificationStatus = verified.", ar: "لا يظهر في الرئيسية إلا إذا كان هذا المشروع منشورًا وverificationStatus = verified." },
       },
     },
     {
       name: "showClientsSection",
       type: "checkbox",
       defaultValue: false,
-      label: "إظهار قسم \"عملاؤنا\"",
-      admin: { description: "فعّله فقط بعد إضافة شعارات عملاء معتمدة usageApproved في مجموعة Clients." },
+      label: { en: "Show the \"Our clients\" section", ar: "إظهار قسم \"عملاؤنا\"" },
+      admin: { description: { en: "Enable only after adding usageApproved client logos in the Clients collection.", ar: "فعّله فقط بعد إضافة شعارات عملاء معتمدة usageApproved في مجموعة Clients." } },
     },
     {
       name: "homeCareBanner",
       type: "group",
-      label: "بانر العناية المنزلية",
+      label: { en: "Home-care banner", ar: "بانر العناية المنزلية" },
       fields: [
         { name: "title", type: "text", localized: true },
         { name: "subtitle", type: "textarea", localized: true },

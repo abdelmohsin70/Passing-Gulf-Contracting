@@ -9,8 +9,7 @@ export const Projects: CollectionConfig = {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
     defaultColumns: ["title", "verificationStatus", "_status", "updatedAt"],
-    description:
-      "لا يظهر أي مشروع في الموقع العام إلا إذا كانت حالته Published وverificationStatus = verified معًا.",
+    description: { en: "No project appears on the public site unless its status is Published and verificationStatus = verified together.", ar: "لا يظهر أي مشروع في الموقع العام إلا إذا كانت حالته Published وverificationStatus = verified معًا." },
   },
   access: {
     // Public visitors only ever see published + verified case studies —
@@ -32,11 +31,11 @@ export const Projects: CollectionConfig = {
       defaultValue: "draft",
       admin: { position: "sidebar" },
       options: [
-        { label: "مسودة", value: "draft" },
-        { label: "قيد المراجعة", value: "review" },
-        { label: "معتمد داخليًا", value: "approved" },
-        { label: "منشور", value: "published" },
-        { label: "مؤرشف", value: "archived" },
+        { label: { en: "Draft", ar: "مسودة" }, value: "draft" },
+        { label: { en: "Under review", ar: "قيد المراجعة" }, value: "review" },
+        { label: { en: "Internally approved", ar: "معتمد داخليًا" }, value: "approved" },
+        { label: { en: "Published", ar: "منشور" }, value: "published" },
+        { label: { en: "Archived", ar: "مؤرشف" }, value: "archived" },
       ],
     },
     {
@@ -45,8 +44,8 @@ export const Projects: CollectionConfig = {
       defaultValue: "named",
       admin: { position: "sidebar" },
       options: [
-        { label: "اسم العميل ظاهر", value: "named" },
-        { label: "سري — يظهر وصف القطاع فقط", value: "confidential" },
+        { label: { en: "Client name visible", ar: "اسم العميل ظاهر" }, value: "named" },
+        { label: { en: "Confidential — only the sector description is shown", ar: "سري — يظهر وصف القطاع فقط" }, value: "confidential" },
       ],
     },
     {
@@ -55,8 +54,7 @@ export const Projects: CollectionConfig = {
       localized: true,
       required: true,
       admin: {
-        description:
-          "عند اختيار \"سري\" اكتب وصفًا عامًا مثل \"جهة في القطاع الصحي\" بدل اسم العميل الفعلي.",
+        description: { en: "When \"Confidential\" is selected, write a general description like \"an entity in the healthcare sector\" instead of the actual client name.", ar: "عند اختيار \"سري\" اكتب وصفًا عامًا مثل \"جهة في القطاع الصحي\" بدل اسم العميل الفعلي." },
       },
     },
     { name: "sector", type: "relationship", relationTo: "sectors" },
@@ -64,7 +62,7 @@ export const Projects: CollectionConfig = {
     { name: "city", type: "text", localized: true },
     { name: "contractStartDate", type: "date" },
     { name: "contractEndDate", type: "date" },
-    { name: "durationLabel", type: "text", localized: true, admin: { description: "مثال: عقد سنوي متجدد." } },
+    { name: "durationLabel", type: "text", localized: true, admin: { description: { en: "e.g. renewable annual contract.", ar: "مثال: عقد سنوي متجدد." } } },
     { name: "challenge", type: "textarea", localized: true, required: true },
     { name: "scope", type: "textarea", localized: true, required: true },
     { name: "solutionApproach", type: "textarea", localized: true, required: true },
@@ -72,12 +70,12 @@ export const Projects: CollectionConfig = {
       name: "kpis",
       type: "array",
       labels: { singular: { en: "KPI", ar: "مؤشر" }, plural: { en: "KPIs", ar: "مؤشرات الأداء" } },
-      admin: { description: "لا تُضف مؤشرًا هنا إلا برقم موثّق من العميل أو من فريق التشغيل." },
+      admin: { description: { en: "Do not add a metric here unless it is a figure verified by the client or the operations team.", ar: "لا تُضف مؤشرًا هنا إلا برقم موثّق من العميل أو من فريق التشغيل." } },
       fields: [
         { name: "label", type: "text", localized: true, required: true },
         { name: "beforeValue", type: "text" },
         { name: "afterValue", type: "text" },
-        { name: "sourceNote", type: "text", admin: { description: "مصدر الرقم (داخلي فقط، لا يُنشر)." } },
+        { name: "sourceNote", type: "text", admin: { description: { en: "Source of the figure (internal only, not published).", ar: "مصدر الرقم (داخلي فقط، لا يُنشر)." } } },
       ],
     },
     { name: "gallery", type: "upload", relationTo: "media", hasMany: true },
@@ -87,7 +85,7 @@ export const Projects: CollectionConfig = {
       fields: [
         { name: "quote", type: "textarea", localized: true },
         { name: "attribution", type: "text", localized: true },
-        { name: "approved", type: "checkbox", defaultValue: false, label: "موافقة العميل على النشر" },
+        { name: "approved", type: "checkbox", defaultValue: false, label: { en: "Client's consent to publish", ar: "موافقة العميل على النشر" } },
       ],
     },
     {
@@ -96,7 +94,7 @@ export const Projects: CollectionConfig = {
       relationTo: "media",
       admin: {
         position: "sidebar",
-        description: "إثبات موافقة العميل (بريد/خطاب) — داخلي فقط، لا يظهر على الموقع العام.",
+        description: { en: "Proof of client consent (email/letter) — internal only, never shown on the public site.", ar: "إثبات موافقة العميل (بريد/خطاب) — داخلي فقط، لا يظهر على الموقع العام." },
       },
       access: {
         read: fieldHasRole("super-admin", "content-manager"),

@@ -26,7 +26,7 @@ export const Header: GlobalConfig = {
       fields: [
         { name: "labelAr", type: "text", required: true },
         { name: "labelEn", type: "text", required: true },
-        { name: "path", type: "text", required: true, admin: { description: "مسار نسبي بدون locale، مثال: /solutions" } },
+        { name: "path", type: "text", required: true, admin: { description: { en: "A relative path without locale, e.g. /solutions", ar: "مسار نسبي بدون locale، مثال: /solutions" } } },
       ],
     },
     { name: "ctaLabelAr", type: "text", defaultValue: "اطلب معاينة وعرضًا" },

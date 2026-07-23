@@ -12,7 +12,7 @@ export const Media: CollectionConfig = {
     group: { ar: "الوسائط", en: "Media" },
     useAsTitle: "altEn",
     defaultColumns: ["filename", "altAr", "category", "usageApproved"],
-    description: "مكتبة الصور والملفات — لكل صورة نص بديل بالعربي والإنجليزي.",
+    description: { en: "Library of images and files — each image has Arabic and English alt text.", ar: "مكتبة الصور والملفات — لكل صورة نص بديل بالعربي والإنجليزي." },
   },
   access: {
     read: anyone,
@@ -25,7 +25,7 @@ export const Media: CollectionConfig = {
       name: "altAr",
       type: "text",
       required: true,
-      label: "النص البديل (عربي)",
+      label: { en: "Alt text (Arabic)", ar: "النص البديل (عربي)" },
     },
     {
       name: "altEn",
@@ -36,7 +36,7 @@ export const Media: CollectionConfig = {
     {
       name: "captionAr",
       type: "text",
-      label: "تعليق الصورة (عربي)",
+      label: { en: "Image caption (Arabic)", ar: "تعليق الصورة (عربي)" },
     },
     {
       name: "captionEn",
@@ -46,19 +46,19 @@ export const Media: CollectionConfig = {
     {
       name: "credit",
       type: "text",
-      label: "مصدر الصورة / التصوير",
-      admin: { description: "مثال: تصوير ميداني — اجتياز الخليج، 2026." },
+      label: { en: "Image / photography source", ar: "مصدر الصورة / التصوير" },
+      admin: { description: { en: "e.g. Field photography — Ijtiyaz Al Khaleej, 2026.", ar: "مثال: تصوير ميداني — اجتياز الخليج، 2026." } },
     },
     {
       name: "category",
       type: "select",
       options: [
-        { label: "فريق العمل", value: "team" },
-        { label: "مواقع العمل", value: "sites" },
-        { label: "معدات", value: "equipment" },
-        { label: "مشاريع", value: "projects" },
-        { label: "شعارات عملاء", value: "client-logos" },
-        { label: "أخرى", value: "other" },
+        { label: { en: "Team", ar: "فريق العمل" }, value: "team" },
+        { label: { en: "Job locations", ar: "مواقع العمل" }, value: "sites" },
+        { label: { en: "Equipment", ar: "معدات" }, value: "equipment" },
+        { label: { en: "Projects", ar: "مشاريع" }, value: "projects" },
+        { label: { en: "Client logos", ar: "شعارات عملاء" }, value: "client-logos" },
+        { label: { en: "Other", ar: "أخرى" }, value: "other" },
       ],
     },
     {
@@ -70,10 +70,9 @@ export const Media: CollectionConfig = {
       name: "usageApproved",
       type: "checkbox",
       defaultValue: false,
-      label: "معتمد للنشر",
+      label: { en: "Approved for publishing", ar: "معتمد للنشر" },
       admin: {
-        description:
-          "اترك هذا الخيار غير مفعّل لأي صورة (خصوصًا شعارات العملاء) حتى تصل موافقة استخدام موثقة.",
+        description: { en: "Leave this off for any image (especially client logos) until documented usage approval is received.", ar: "اترك هذا الخيار غير مفعّل لأي صورة (خصوصًا شعارات العملاء) حتى تصل موافقة استخدام موثقة." },
       },
     },
   ],

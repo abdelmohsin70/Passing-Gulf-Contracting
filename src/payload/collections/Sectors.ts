@@ -53,7 +53,7 @@ export const Sectors: CollectionConfig = {
       name: "operatingModel",
       type: "textarea",
       localized: true,
-      admin: { description: "كيف نموذج التشغيل المناسب لهذا القطاع." },
+      admin: { description: { en: "How the operating model fits this sector.", ar: "كيف نموذج التشغيل المناسب لهذا القطاع." } },
     },
     { name: "media", type: "upload", relationTo: "media" },
     {

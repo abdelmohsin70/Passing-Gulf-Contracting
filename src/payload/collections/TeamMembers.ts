@@ -16,7 +16,7 @@ export const TeamMembers: CollectionConfig = {
   },
   fields: [
     { name: "name", type: "text", required: true },
-    { name: "roleAr", type: "text", label: "المسمى الوظيفي (عربي)" },
+    { name: "roleAr", type: "text", label: { en: "Job title (Arabic)", ar: "المسمى الوظيفي (عربي)" } },
     { name: "roleEn", type: "text", label: "Job title (English)" },
     { name: "photo", type: "upload", relationTo: "media" },
     { name: "sortOrder", type: "number", defaultValue: 0 },

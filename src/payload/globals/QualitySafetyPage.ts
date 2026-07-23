@@ -19,7 +19,7 @@ export const QualitySafetyPage: GlobalConfig = {
     {
       name: "commitments",
       type: "array",
-      label: "التزاماتنا",
+      label: { en: "Our commitments", ar: "التزاماتنا" },
       labels: { singular: "التزام", plural: "الالتزامات" },
       minRows: 1,
       fields: [
@@ -30,14 +30,14 @@ export const QualitySafetyPage: GlobalConfig = {
     {
       name: "certificationsSection",
       type: "group",
-      label: "قسم الشهادات",
+      label: { en: "Certifications section", ar: "قسم الشهادات" },
       fields: [
         { name: "title", type: "text", localized: true, required: true },
         {
           name: "note",
           type: "textarea",
           localized: true,
-          admin: { description: "نص توضيحي يظهر أسفل الشهادات — مثال: حالة التحقق من الشهادات." },
+          admin: { description: { en: "Explanatory text shown under the certifications — e.g. certification verification status.", ar: "نص توضيحي يظهر أسفل الشهادات — مثال: حالة التحقق من الشهادات." } },
         },
       ],
     },

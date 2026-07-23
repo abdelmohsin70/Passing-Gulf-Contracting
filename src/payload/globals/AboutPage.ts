@@ -18,7 +18,7 @@ export const AboutPage: GlobalConfig = {
     {
       name: "story",
       type: "group",
-      label: "قصتنا",
+      label: { en: "Our story", ar: "قصتنا" },
       fields: [
         { name: "title", type: "text", localized: true, required: true },
         { name: "body", type: "textarea", localized: true, required: true },
@@ -28,7 +28,7 @@ export const AboutPage: GlobalConfig = {
     {
       name: "missionSection",
       type: "group",
-      label: "الرؤية والرسالة",
+      label: { en: "Vision & mission", ar: "الرؤية والرسالة" },
       fields: [
         { name: "sectionTitle", type: "text", localized: true, required: true },
         { name: "visionLabel", type: "text", localized: true, required: true },
@@ -40,7 +40,7 @@ export const AboutPage: GlobalConfig = {
     {
       name: "values",
       type: "array",
-      label: "القيم",
+      label: { en: "Values", ar: "القيم" },
       labels: { singular: "قيمة", plural: "القيم" },
       minRows: 1,
       fields: [
@@ -52,19 +52,19 @@ export const AboutPage: GlobalConfig = {
       name: "valuesLabel",
       type: "text",
       localized: true,
-      admin: { description: "عنوان قسم القيم، مثال: قيمنا." },
+      admin: { description: { en: "The values section heading, e.g. Our values.", ar: "عنوان قسم القيم، مثال: قيمنا." } },
     },
     {
       name: "sideImage",
       type: "upload",
       relationTo: "media",
-      admin: { description: "الصورة الجانبية بجوار مربّع \"لماذا اجتياز الخليج\"." },
+      admin: { description: { en: "The side image next to the \"Why Ijtiyaz Al Khaleej\" box.", ar: "الصورة الجانبية بجوار مربّع \"لماذا اجتياز الخليج\"." } },
     },
-    { name: "whyTitle", type: "text", localized: true, required: true, label: "عنوان \"لماذا اجتياز الخليج\"" },
+    { name: "whyTitle", type: "text", localized: true, required: true, label: { en: "The \"Why Ijtiyaz Al Khaleej\" heading", ar: "عنوان \"لماذا اجتياز الخليج\"" } },
     {
       name: "why",
       type: "array",
-      label: "أسباب اختيار اجتياز الخليج",
+      label: { en: "Reasons to choose Ijtiyaz Al Khaleej", ar: "أسباب اختيار اجتياز الخليج" },
       labels: { singular: "سبب", plural: "الأسباب" },
       minRows: 1,
       fields: [{ name: "item", type: "text", localized: true, required: true }],

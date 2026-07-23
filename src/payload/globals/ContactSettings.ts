@@ -2,8 +2,8 @@ import type { GlobalConfig } from "payload";
 import { anyone, isSuperAdmin } from "../access";
 
 const statusOptions = [
-  { label: "قيد التوثيق", value: "pending" },
-  { label: "مؤكَّد", value: "confirmed" },
+  { label: { en: "Pending verification", ar: "قيد التوثيق" }, value: "pending" },
+  { label: { en: "Confirmed", ar: "مؤكَّد" }, value: "confirmed" },
 ];
 
 /**
@@ -35,7 +35,7 @@ export const ContactSettings: GlobalConfig = {
     {
       name: "socials",
       type: "group",
-      admin: { description: "روابط كاملة لصفحات التواصل الاجتماعي (تبدأ بـ https://). تظهر في الفوتر تلقائيًا عند إضافتها." },
+      admin: { description: { en: "Full social media links (starting with https://). They appear in the footer automatically once added.", ar: "روابط كاملة لصفحات التواصل الاجتماعي (تبدأ بـ https://). تظهر في الفوتر تلقائيًا عند إضافتها." } },
       fields: [
         { name: "instagram", type: "text" },
         { name: "linkedin", type: "text" },
@@ -49,7 +49,7 @@ export const ContactSettings: GlobalConfig = {
     {
       name: "certifications",
       type: "array",
-      admin: { description: "شريط الشهادات المختصر في الهيدر/الفوتر (تفاصيلها الكاملة في مجموعة Certifications)." },
+      admin: { description: { en: "The short certifications strip in the header/footer (full details live in the Certifications collection).", ar: "شريط الشهادات المختصر في الهيدر/الفوتر (تفاصيلها الكاملة في مجموعة Certifications)." } },
       fields: [
         { name: "code", type: "text" },
         { name: "labelAr", type: "text" },

@@ -18,10 +18,10 @@ export const Testimonials: CollectionConfig = {
   versions: { drafts: true },
   fields: [
     { name: "quote", type: "textarea", localized: true, required: true },
-    { name: "attribution", type: "text", localized: true, required: true, admin: { description: "الاسم/المسمى — أو وصف عام إذا طُلبت السرية." } },
+    { name: "attribution", type: "text", localized: true, required: true, admin: { description: { en: "Name/title — or a general description if confidentiality is requested.", ar: "الاسم/المسمى — أو وصف عام إذا طُلبت السرية." } } },
     { name: "organization", type: "text", localized: true },
     { name: "sector", type: "relationship", relationTo: "sectors" },
-    { name: "approved", type: "checkbox", defaultValue: false, label: "موافقة العميل على النشر", admin: { position: "sidebar" } },
+    { name: "approved", type: "checkbox", defaultValue: false, label: { en: "Client's consent to publish", ar: "موافقة العميل على النشر" }, admin: { position: "sidebar" } },
     verificationField,
   ],
 };

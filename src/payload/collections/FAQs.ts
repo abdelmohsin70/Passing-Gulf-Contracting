@@ -7,7 +7,7 @@ export const FAQs: CollectionConfig = {
   admin: {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "question",
-    description: "أسئلة عامة (غير مرتبطة بحل معيّن) تُستخدم حيث يلزم عبر الموقع.",
+    description: { en: "General questions (not tied to a specific solution) used wherever needed across the site.", ar: "أسئلة عامة (غير مرتبطة بحل معيّن) تُستخدم حيث يلزم عبر الموقع." },
   },
   access: {
     read: anyone,
@@ -22,10 +22,10 @@ export const FAQs: CollectionConfig = {
       name: "topic",
       type: "select",
       options: [
-        { label: "عام", value: "general" },
-        { label: "الطلبات والعروض", value: "quotes" },
-        { label: "الجودة والسلامة", value: "quality" },
-        { label: "الوظائف", value: "careers" },
+        { label: { en: "General", ar: "عام" }, value: "general" },
+        { label: { en: "Requests & quotes", ar: "الطلبات والعروض" }, value: "quotes" },
+        { label: { en: "Quality & Safety", ar: "الجودة والسلامة" }, value: "quality" },
+        { label: { en: "Vacancies", ar: "الوظائف" }, value: "careers" },
       ],
     },
     { name: "sortOrder", type: "number", defaultValue: 0 },

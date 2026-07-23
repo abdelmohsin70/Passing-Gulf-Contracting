@@ -7,7 +7,7 @@ export const LeadActivities: CollectionConfig = {
   admin: {
     useAsTitle: "type",
     defaultColumns: ["lead", "type", "actor", "occurredAt"],
-    description: "سجل تلقائي بكل ملاحظة أو تغيير حالة على طلب — للقراءة والإضافة فقط.",
+    description: { en: "Automatic log of every note or status change on a lead — read and add only.", ar: "سجل تلقائي بكل ملاحظة أو تغيير حالة على طلب — للقراءة والإضافة فقط." },
     group: { ar: "المبيعات والطلبات", en: "Sales & Leads" },
   },
   access: {
@@ -25,12 +25,12 @@ export const LeadActivities: CollectionConfig = {
       type: "select",
       required: true,
       options: [
-        { label: "ملاحظة", value: "note" },
-        { label: "تغيير حالة", value: "status-change" },
-        { label: "تعيين مسؤول", value: "assignment" },
-        { label: "مكالمة", value: "call" },
-        { label: "بريد إلكتروني", value: "email" },
-        { label: "زيارة", value: "visit" },
+        { label: { en: "Note", ar: "ملاحظة" }, value: "note" },
+        { label: { en: "Change status", ar: "تغيير حالة" }, value: "status-change" },
+        { label: { en: "Assign owner", ar: "تعيين مسؤول" }, value: "assignment" },
+        { label: { en: "Call", ar: "مكالمة" }, value: "call" },
+        { label: { en: "Email", ar: "بريد إلكتروني" }, value: "email" },
+        { label: { en: "Visit", ar: "زيارة" }, value: "visit" },
       ],
     },
     { name: "note", type: "textarea" },

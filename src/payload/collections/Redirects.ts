@@ -15,15 +15,15 @@ export const Redirects: CollectionConfig = {
     delete: isContentEditor,
   },
   fields: [
-    { name: "from", type: "text", required: true, unique: true, admin: { description: "المسار القديم، مثال: /ar/old-page" } },
-    { name: "to", type: "text", required: true, admin: { description: "المسار الجديد أو رابط كامل." } },
+    { name: "from", type: "text", required: true, unique: true, admin: { description: { en: "The old path, e.g. /ar/old-page", ar: "المسار القديم، مثال: /ar/old-page" } } },
+    { name: "to", type: "text", required: true, admin: { description: { en: "The new path or a full URL.", ar: "المسار الجديد أو رابط كامل." } } },
     {
       name: "type",
       type: "select",
       defaultValue: "301",
       options: [
-        { label: "301 — دائم", value: "301" },
-        { label: "302 — مؤقت", value: "302" },
+        { label: { en: "301 — Permanent", ar: "301 — دائم" }, value: "301" },
+        { label: { en: "302 — Temporary", ar: "302 — مؤقت" }, value: "302" },
       ],
     },
   ],

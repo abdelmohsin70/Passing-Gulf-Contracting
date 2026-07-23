@@ -9,7 +9,7 @@ export const Solutions: CollectionConfig = {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
     defaultColumns: ["title", "featured", "_status", "updatedAt"],
-    description: "عائلات وخدمات الحلول الثمانية المعروضة في /solutions.",
+    description: { en: "The families and services of the eight solutions shown on /solutions.", ar: "عائلات وخدمات الحلول الثمانية المعروضة في /solutions." },
   },
   access: {
     read: authenticatedOrPublished,
@@ -25,7 +25,7 @@ export const Solutions: CollectionConfig = {
       type: "text",
       required: true,
       unique: true,
-      admin: { position: "sidebar", description: "يظهر في الرابط: /solutions/<slug>" },
+      admin: { position: "sidebar", description: { en: "Appears in the URL: /solutions/<slug>", ar: "يظهر في الرابط: /solutions/<slug>" } },
     },
     {
       name: "icon",

@@ -35,7 +35,7 @@ export const Pages: CollectionConfig = {
       type: "text",
       required: true,
       unique: true,
-      admin: { position: "sidebar", description: "مثال: about، quality-safety، privacy، careers" },
+      admin: { position: "sidebar", description: { en: "e.g. about, quality-safety, privacy, careers", ar: "مثال: about، quality-safety، privacy، careers" } },
     },
     { name: "subtitle", type: "textarea", localized: true },
     { name: "body", type: "richText", localized: true, editor: lexicalEditor() },
