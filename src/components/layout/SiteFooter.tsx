@@ -6,34 +6,14 @@ import { getSolutions } from "@/payload/queries/solutions";
 import { getSectors } from "@/payload/queries/sectors";
 import { getSocialLinks } from "@/payload/queries/contactSettings";
 import { Container } from "@/components/primitives/Container";
-import {
-  MailIcon,
-  MapPinIcon,
-  PhoneIcon,
-  InstagramIcon,
-  LinkedInIcon,
-  XIcon,
-  YouTubeIcon,
-  SnapchatIcon,
-  TikTokIcon,
-  FacebookIcon,
-} from "@/components/icons/icons";
+import { SocialLinks } from "@/components/layout/SocialLinks";
+import { MailIcon, MapPinIcon, PhoneIcon } from "@/components/icons/icons";
 import { telHref } from "@/lib/utils";
 
 export async function SiteFooter({ locale, dictionary }: { locale: Locale; dictionary: Dictionary }) {
   const base = `/${locale}`;
   const year = new Date().getFullYear();
   const [solutions, sectors, socials] = await Promise.all([getSolutions(), getSectors(), getSocialLinks()]);
-
-  const socialLinks = [
-    { key: "instagram", href: socials.instagram, Icon: InstagramIcon, label: "Instagram" },
-    { key: "linkedin", href: socials.linkedin, Icon: LinkedInIcon, label: "LinkedIn" },
-    { key: "x", href: socials.x, Icon: XIcon, label: "X" },
-    { key: "youtube", href: socials.youtube, Icon: YouTubeIcon, label: "YouTube" },
-    { key: "snapchat", href: socials.snapchat, Icon: SnapchatIcon, label: "Snapchat" },
-    { key: "tiktok", href: socials.tiktok, Icon: TikTokIcon, label: "TikTok" },
-    { key: "facebook", href: socials.facebook, Icon: FacebookIcon, label: "Facebook" },
-  ].filter((s): s is { key: string; href: string; Icon: typeof InstagramIcon; label: string } => Boolean(s.href));
 
   return (
     <footer className="border-t border-navy/10 bg-navy text-white">
@@ -49,22 +29,7 @@ export async function SiteFooter({ locale, dictionary }: { locale: Locale; dicti
           <p className="mt-4 text-xs text-white/50">
             {dictionary.trust.since} &middot; {dictionary.trust.coverage}
           </p>
-          {socialLinks.length > 0 ? (
-            <div className="mt-6 flex items-center gap-3">
-              {socialLinks.map(({ key, href, Icon, label }) => (
-                <a
-                  key={key}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="focus-ring flex size-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition-colors hover:border-orange hover:text-orange"
-                >
-                  <Icon className="size-4" />
-                </a>
-              ))}
-            </div>
-          ) : null}
+          <SocialLinks socials={socials} variant="footer" className="mt-6" />
         </div>
 
         <div>

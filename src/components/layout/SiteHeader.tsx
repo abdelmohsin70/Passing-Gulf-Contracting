@@ -7,13 +7,16 @@ import { Container } from "@/components/primitives/Container";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { SocialLinks } from "@/components/layout/SocialLinks";
 import { StickyHeaderShell } from "@/components/layout/StickyHeaderShell";
+import { getSocialLinks } from "@/payload/queries/contactSettings";
 import { ClockIcon, MapPinIcon } from "@/components/icons/icons";
 
-export function SiteHeader({ locale, dictionary }: { locale: Locale; dictionary: Dictionary }) {
+export async function SiteHeader({ locale, dictionary }: { locale: Locale; dictionary: Dictionary }) {
   const items = getNavItems(locale, dictionary);
   const home = `/${locale}`;
   const contactHref = `/${locale}/contact`;
+  const socials = await getSocialLinks();
 
   return (
     <StickyHeaderShell>
@@ -29,7 +32,10 @@ export function SiteHeader({ locale, dictionary }: { locale: Locale; dictionary:
               {dictionary.topbar.availability}
             </span>
           </div>
-          <LanguageSwitcher locale={locale} label={dictionary.common.language} className="border-white/20 text-white hover:border-orange hover:text-orange" />
+          <div className="flex items-center gap-4">
+            <SocialLinks socials={socials} variant="topbar" />
+            <LanguageSwitcher locale={locale} label={dictionary.common.language} className="border-white/20 text-white hover:border-orange hover:text-orange" />
+          </div>
         </Container>
       </div>
 
