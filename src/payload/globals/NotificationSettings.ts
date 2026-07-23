@@ -6,7 +6,7 @@ export const NotificationSettings: GlobalConfig = {
   admin: {
     group: { ar: "الإعدادات", en: "Settings" },
   },
-  label: "إعدادات الإشعارات",
+  label: { en: "Notification Settings", ar: "إعدادات الإشعارات" },
   access: { read: isSuperAdmin, update: isSuperAdmin },
   fields: [
     { name: "teamNotificationEmail", type: "email", admin: { description: "البريد الذي يستقبل تنبيه عند وصول طلب جديد." } },

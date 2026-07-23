@@ -4,7 +4,7 @@ import { seoField } from "../fields/seo";
 
 export const Sectors: CollectionConfig = {
   slug: "sectors",
-  labels: { singular: "قطاع", plural: "القطاعات" },
+  labels: { singular: { en: "Sector", ar: "قطاع" }, plural: { en: "Sectors", ar: "القطاعات" } },
   admin: {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
@@ -40,7 +40,7 @@ export const Sectors: CollectionConfig = {
     {
       name: "challenges",
       type: "array",
-      labels: { singular: "تحدٍ", plural: "تحديات القطاع" },
+      labels: { singular: { en: "Challenge", ar: "تحدٍ" }, plural: { en: "Sector Challenges", ar: "تحديات القطاع" } },
       fields: [{ name: "item", type: "text", localized: true, required: true }],
     },
     {

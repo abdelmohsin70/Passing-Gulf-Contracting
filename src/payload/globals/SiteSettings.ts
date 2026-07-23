@@ -6,7 +6,7 @@ export const SiteSettings: GlobalConfig = {
   admin: {
     group: { ar: "الإعدادات", en: "Settings" },
   },
-  label: "إعدادات الشركة",
+  label: { en: "Company Settings", ar: "إعدادات الشركة" },
   access: { read: anyone, update: isSuperAdmin },
   fields: [
     { name: "nameAr", type: "text", required: true, defaultValue: "شركة اجتياز الخليج للمقاولات" },

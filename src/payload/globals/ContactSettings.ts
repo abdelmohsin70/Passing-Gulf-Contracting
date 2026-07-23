@@ -17,7 +17,7 @@ export const ContactSettings: GlobalConfig = {
   admin: {
     group: { ar: "الإعدادات", en: "Settings" },
   },
-  label: "بيانات التواصل",
+  label: { en: "Contact Settings", ar: "بيانات التواصل" },
   access: { read: anyone, update: isSuperAdmin },
   fields: [
     { name: "phone", type: "text" },

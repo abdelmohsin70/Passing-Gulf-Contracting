@@ -3,7 +3,7 @@ import { anyone, isContentEditor } from "../access";
 
 export const FAQs: CollectionConfig = {
   slug: "faqs",
-  labels: { singular: "سؤال شائع", plural: "الأسئلة الشائعة العامة" },
+  labels: { singular: { en: "FAQ", ar: "سؤال شائع" }, plural: { en: "FAQs", ar: "الأسئلة الشائعة العامة" } },
   admin: {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "question",

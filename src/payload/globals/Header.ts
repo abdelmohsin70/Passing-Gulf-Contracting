@@ -6,7 +6,7 @@ export const Header: GlobalConfig = {
   admin: {
     group: { ar: "صفحات الموقع", en: "Site Pages" },
   },
-  label: "الهيدر والقائمة",
+  label: { en: "Header & Menu", ar: "الهيدر والقائمة" },
   access: { read: anyone, update: isContentEditor },
   fields: [
     {

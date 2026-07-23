@@ -3,7 +3,7 @@ import { anyone, isContentEditor } from "../access";
 
 export const Certifications: CollectionConfig = {
   slug: "certifications",
-  labels: { singular: "شهادة اعتماد", plural: "شهادات الاعتماد" },
+  labels: { singular: { en: "Certification", ar: "شهادة اعتماد" }, plural: { en: "Certifications", ar: "شهادات الاعتماد" } },
   admin: {
     group: { ar: "الثقة والاعتماد", en: "Trust & Proof" },
     useAsTitle: "code",

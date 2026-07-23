@@ -3,7 +3,7 @@ import { isSalesTeam, isSuperAdmin } from "../access";
 
 export const JobApplications: CollectionConfig = {
   slug: "job-applications",
-  labels: { singular: "طلب توظيف", plural: "طلبات التوظيف" },
+  labels: { singular: { en: "Job Application", ar: "طلب توظيف" }, plural: { en: "Job Applications", ar: "طلبات التوظيف" } },
   admin: {
     group: { ar: "التوظيف", en: "Recruitment" },
     useAsTitle: "name",

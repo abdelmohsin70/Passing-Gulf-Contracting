@@ -6,7 +6,7 @@ export const Footer: GlobalConfig = {
   admin: {
     group: { ar: "صفحات الموقع", en: "Site Pages" },
   },
-  label: "الفوتر",
+  label: { en: "Footer", ar: "الفوتر" },
   access: { read: anyone, update: isContentEditor },
   fields: [
     { name: "descriptionAr", type: "textarea" },

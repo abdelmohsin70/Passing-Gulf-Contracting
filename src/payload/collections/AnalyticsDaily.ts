@@ -10,7 +10,7 @@ import { isAnalyst, systemWriteOnly } from "../access";
  */
 export const AnalyticsDaily: CollectionConfig = {
   slug: "analytics-daily",
-  labels: { singular: "إحصائية يومية", plural: "الإحصائيات اليومية" },
+  labels: { singular: { en: "Daily Analytics", ar: "إحصائية يومية" }, plural: { en: "Daily Analytics", ar: "الإحصائيات اليومية" } },
   admin: {
     group: { ar: "النظام والمستخدمون", en: "System & Users" },
     useAsTitle: "date",

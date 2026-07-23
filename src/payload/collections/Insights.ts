@@ -5,7 +5,7 @@ import { seoField } from "../fields/seo";
 
 export const Insights: CollectionConfig = {
   slug: "insights",
-  labels: { singular: "مقالة", plural: "مركز المعرفة" },
+  labels: { singular: { en: "Article", ar: "مقالة" }, plural: { en: "Knowledge Center", ar: "مركز المعرفة" } },
   admin: {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",

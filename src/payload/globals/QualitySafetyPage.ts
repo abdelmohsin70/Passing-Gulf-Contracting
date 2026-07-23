@@ -7,7 +7,7 @@ export const QualitySafetyPage: GlobalConfig = {
   admin: {
     group: { ar: "صفحات الموقع", en: "Site Pages" },
   },
-  label: "صفحة الجودة والسلامة",
+  label: { en: "Quality & Safety Page", ar: "صفحة الجودة والسلامة" },
   // Globals have no draft/publish state unless versions.drafts is enabled
   // (it isn't here) — authenticatedOrPublished's `{_status: ...}` filter
   // would 500 on every anonymous read since the field doesn't exist.

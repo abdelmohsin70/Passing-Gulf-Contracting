@@ -3,7 +3,7 @@ import { isSalesTeam, isSuperAdmin } from "../access";
 
 export const LeadActivities: CollectionConfig = {
   slug: "lead-activities",
-  labels: { singular: "نشاط على طلب", plural: "سجل أنشطة الطلبات" },
+  labels: { singular: { en: "Lead Activity", ar: "نشاط على طلب" }, plural: { en: "Lead Activities", ar: "سجل أنشطة الطلبات" } },
   admin: {
     useAsTitle: "type",
     defaultColumns: ["lead", "type", "actor", "occurredAt"],

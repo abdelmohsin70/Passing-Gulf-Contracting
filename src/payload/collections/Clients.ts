@@ -3,7 +3,7 @@ import { authenticatedOrPublished, isContentEditor } from "../access";
 
 export const Clients: CollectionConfig = {
   slug: "clients",
-  labels: { singular: "عميل", plural: "شعارات العملاء" },
+  labels: { singular: { en: "Client", ar: "عميل" }, plural: { en: "Client Logos", ar: "شعارات العملاء" } },
   admin: {
     group: { ar: "الثقة والاعتماد", en: "Trust & Proof" },
     useAsTitle: "name",

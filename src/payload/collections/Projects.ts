@@ -4,7 +4,7 @@ import { seoField, verificationField } from "../fields/seo";
 
 export const Projects: CollectionConfig = {
   slug: "projects",
-  labels: { singular: "مشروع / دراسة حالة", plural: "المشاريع ودراسات الحالة" },
+  labels: { singular: { en: "Project / Case Study", ar: "مشروع / دراسة حالة" }, plural: { en: "Projects & Case Studies", ar: "المشاريع ودراسات الحالة" } },
   admin: {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
@@ -71,7 +71,7 @@ export const Projects: CollectionConfig = {
     {
       name: "kpis",
       type: "array",
-      labels: { singular: "مؤشر", plural: "مؤشرات الأداء" },
+      labels: { singular: { en: "KPI", ar: "مؤشر" }, plural: { en: "KPIs", ar: "مؤشرات الأداء" } },
       admin: { description: "لا تُضف مؤشرًا هنا إلا برقم موثّق من العميل أو من فريق التشغيل." },
       fields: [
         { name: "label", type: "text", localized: true, required: true },

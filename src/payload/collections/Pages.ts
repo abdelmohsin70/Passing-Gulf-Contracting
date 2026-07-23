@@ -15,7 +15,7 @@ import { seoField } from "../fields/seo";
  */
 export const Pages: CollectionConfig = {
   slug: "pages",
-  labels: { singular: "صفحة", plural: "الصفحات" },
+  labels: { singular: { en: "Page", ar: "صفحة" }, plural: { en: "Pages", ar: "الصفحات" } },
   admin: {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",

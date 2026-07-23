@@ -10,7 +10,7 @@ import { isSuperAdmin, systemWriteOnly } from "../access";
  */
 export const AuditLogs: CollectionConfig = {
   slug: "audit-logs",
-  labels: { singular: "سجل تدقيق", plural: "سجلات التدقيق" },
+  labels: { singular: { en: "Audit Log", ar: "سجل تدقيق" }, plural: { en: "Audit Logs", ar: "سجلات التدقيق" } },
   admin: {
     group: { ar: "النظام والمستخدمون", en: "System & Users" },
     useAsTitle: "action",

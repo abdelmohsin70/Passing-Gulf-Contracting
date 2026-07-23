@@ -3,7 +3,7 @@ import { anyone, isContentEditor } from "../access";
 
 export const TeamMembers: CollectionConfig = {
   slug: "team-members",
-  labels: { singular: "عضو فريق", plural: "أعضاء الفريق" },
+  labels: { singular: { en: "Team Member", ar: "عضو فريق" }, plural: { en: "Team Members", ar: "أعضاء الفريق" } },
   admin: {
     group: { ar: "الثقة والاعتماد", en: "Trust & Proof" },
     useAsTitle: "name",

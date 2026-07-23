@@ -6,7 +6,7 @@ export const AnalyticsSettings: GlobalConfig = {
   admin: {
     group: { ar: "الإعدادات", en: "Settings" },
   },
-  label: "إعدادات التحليلات",
+  label: { en: "Analytics Settings", ar: "إعدادات التحليلات" },
   access: { read: isAnalyst, update: isSuperAdmin },
   fields: [
     {

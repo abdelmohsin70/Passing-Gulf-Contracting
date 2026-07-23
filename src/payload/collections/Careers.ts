@@ -3,7 +3,7 @@ import { anyone, isContentEditor } from "../access";
 
 export const Careers: CollectionConfig = {
   slug: "careers",
-  labels: { singular: "شاغر وظيفي", plural: "الشواغر الوظيفية" },
+  labels: { singular: { en: "Vacancy", ar: "شاغر وظيفي" }, plural: { en: "Vacancies", ar: "الشواغر الوظيفية" } },
   admin: {
     group: { ar: "التوظيف", en: "Recruitment" },
     useAsTitle: "title",

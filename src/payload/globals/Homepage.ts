@@ -7,7 +7,7 @@ export const Homepage: GlobalConfig = {
   admin: {
     group: { ar: "صفحات الموقع", en: "Site Pages" },
   },
-  label: "الصفحة الرئيسية",
+  label: { en: "Homepage", ar: "الصفحة الرئيسية" },
   // Globals have no draft/publish state unless versions.drafts is enabled
   // (it isn't here) — authenticatedOrPublished's `{_status: ...}` filter
   // would 500 on every anonymous read since the field doesn't exist. This

@@ -4,7 +4,7 @@ import { seoField } from "../fields/seo";
 
 export const Solutions: CollectionConfig = {
   slug: "solutions",
-  labels: { singular: "حل", plural: "الحلول" },
+  labels: { singular: { en: "Solution", ar: "حل" }, plural: { en: "Solutions", ar: "الحلول" } },
   admin: {
     group: { ar: "المحتوى", en: "Content" },
     useAsTitle: "title",
@@ -52,7 +52,7 @@ export const Solutions: CollectionConfig = {
       name: "scope",
       type: "array",
       minRows: 4,
-      labels: { singular: "بند", plural: "نطاق الأعمال" },
+      labels: { singular: { en: "Item", ar: "بند" }, plural: { en: "Scope of Work", ar: "نطاق الأعمال" } },
       fields: [{ name: "item", type: "text", localized: true, required: true }],
     },
     {
@@ -68,7 +68,7 @@ export const Solutions: CollectionConfig = {
     {
       name: "faqs",
       type: "array",
-      labels: { singular: "سؤال", plural: "الأسئلة الشائعة" },
+      labels: { singular: { en: "Question", ar: "سؤال" }, plural: { en: "FAQs", ar: "الأسئلة الشائعة" } },
       fields: [
         { name: "question", type: "text", localized: true, required: true },
         { name: "answer", type: "textarea", localized: true, required: true },

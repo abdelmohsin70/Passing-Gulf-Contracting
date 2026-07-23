@@ -15,7 +15,7 @@ export const LEAD_STATUSES = [
 
 export const Leads: CollectionConfig = {
   slug: "leads",
-  labels: { singular: "طلب", plural: "الطلبات" },
+  labels: { singular: { en: "Lead", ar: "طلب" }, plural: { en: "Leads", ar: "الطلبات" } },
   admin: {
     useAsTitle: "referenceNumber",
     defaultColumns: ["referenceNumber", "name", "type", "status", "assignedTo", "createdAt"],

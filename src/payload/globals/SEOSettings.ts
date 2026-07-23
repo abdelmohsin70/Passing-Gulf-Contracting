@@ -6,7 +6,7 @@ export const SEOSettings: GlobalConfig = {
   admin: {
     group: { ar: "الإعدادات", en: "Settings" },
   },
-  label: "إعدادات SEO العامة",
+  label: { en: "SEO Settings", ar: "إعدادات SEO العامة" },
   access: { read: anyone, update: isSuperAdmin },
   fields: [
     { name: "defaultMetaTitleAr", type: "text" },
