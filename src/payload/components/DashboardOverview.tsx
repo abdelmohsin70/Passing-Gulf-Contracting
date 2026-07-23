@@ -238,7 +238,7 @@ export async function DashboardOverview() {
         style={{
           fontSize: 20,
           fontWeight: 700,
-          color: "#102a43",
+          color: "var(--theme-text)",
           marginBottom: 16,
           paddingBottom: 10,
           borderBottom: "2px solid #f36b2b",
@@ -308,16 +308,16 @@ export async function DashboardOverview() {
           <SectionTitle>آخر الطلبات</SectionTitle>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
-              <tr style={{ textAlign: "start", borderBottom: "2px solid #102a43" }}>
-                <th style={{ padding: "6px 8px", color: "#102a43" }}>المرجع</th>
-                <th style={{ padding: "6px 8px", color: "#102a43" }}>الاسم</th>
-                <th style={{ padding: "6px 8px", color: "#102a43" }}>النوع</th>
-                <th style={{ padding: "6px 8px", color: "#102a43" }}>الحالة</th>
+              <tr style={{ textAlign: "start", borderBottom: "2px solid var(--theme-elevation-200)" }}>
+                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>المرجع</th>
+                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>الاسم</th>
+                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>النوع</th>
+                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>الحالة</th>
               </tr>
             </thead>
             <tbody>
               {recentLeads.map((lead) => (
-                <tr key={String(lead.id)} style={{ borderBottom: "1px solid rgba(16, 42, 67, 0.08)" }}>
+                <tr key={String(lead.id)} style={{ borderBottom: "1px solid var(--theme-elevation-100)" }}>
                   <td style={{ padding: "6px 8px" }}>
                     <a href={`/admin/collections/leads/${lead.id}`} style={{ color: "#f36b2b", fontWeight: 600 }}>
                       {String(lead.referenceNumber)}
@@ -342,8 +342,8 @@ export async function DashboardOverview() {
                 <span style={{ color: item.configured ? "#1f7a5a" : "#d4551a" }}>
                   {item.configured ? "●" : "○"}
                 </span>{" "}
-                <strong style={{ color: "#102a43" }}>{item.label}:</strong>{" "}
-                <span style={{ color: "#52606d" }}>{item.note}</span>
+                <strong style={{ color: "var(--theme-text)" }}>{item.label}:</strong>{" "}
+                <span style={{ color: "var(--theme-elevation-500)" }}>{item.note}</span>
               </li>
             ))}
           </ul>
@@ -354,7 +354,7 @@ export async function DashboardOverview() {
         <div>
           <SectionTitle>الزيارات وقمع التحويل (آخر 7 أيام)</SectionTitle>
           {analyticsDaily.length === 0 ? (
-            <p style={{ fontSize: 13, color: "#666", margin: 0 }}>
+            <p style={{ fontSize: 13, color: "var(--theme-elevation-500)", margin: 0 }}>
               لا يوجد مزود تحليلات مربوط بعد — لا تُعرض أرقام افتراضية. اربط GA4 أو PostHog من إعدادات التحليلات
               لتفعيل هذا القسم.
             </p>
@@ -371,22 +371,24 @@ export async function DashboardOverview() {
   );
 }
 
+// These read from Payload's theme variables (which flip between light and
+// dark) rather than hardcoded hex, so the custom dashboard adapts to the
+// editor's chosen admin theme. The orange accent is brand and stays fixed.
 function BreakdownCard({ title, entries }: { title: string; entries: Array<[string, number]> }) {
   return (
     <div
       style={{
-        border: "1px solid rgba(16, 42, 67, 0.1)",
+        border: "1px solid var(--theme-elevation-100)",
         borderRadius: 12,
         padding: "12px 16px",
-        background: "#fff",
-        boxShadow: "0 1px 2px rgba(16, 42, 67, 0.06), 0 8px 24px rgba(16, 42, 67, 0.06)",
+        background: "var(--theme-elevation-0)",
       }}
     >
-      <h4 style={{ fontSize: 13, fontWeight: 700, margin: "0 0 8px", color: "#102a43" }}>{title}</h4>
+      <h4 style={{ fontSize: 13, fontWeight: 700, margin: "0 0 8px", color: "var(--theme-text)" }}>{title}</h4>
       {entries.length === 0 ? (
-        <p style={{ fontSize: 12, color: "#52606d", margin: 0 }}>لا توجد بيانات</p>
+        <p style={{ fontSize: 12, color: "var(--theme-elevation-500)", margin: 0 }}>لا توجد بيانات</p>
       ) : (
-        <ul style={{ margin: 0, paddingInlineStart: 16, fontSize: 12, color: "#52606d" }}>
+        <ul style={{ margin: 0, paddingInlineStart: 16, fontSize: 12, color: "var(--theme-elevation-500)" }}>
           {entries.map(([label, count]) => (
             <li key={label}>
               {label} — {count}
@@ -402,21 +404,20 @@ function KpiCard({ label, value, accent }: { label: string; value: number; accen
   return (
     <div
       style={{
-        border: accent ? "1px solid rgba(243, 107, 43, 0.35)" : "1px solid rgba(16, 42, 67, 0.1)",
+        border: accent ? "1px solid rgba(243, 107, 43, 0.35)" : "1px solid var(--theme-elevation-100)",
         borderRadius: 12,
         padding: "14px 16px",
-        background: accent ? "#fff4ec" : "#fff",
-        boxShadow: "0 1px 2px rgba(16, 42, 67, 0.06), 0 8px 24px rgba(16, 42, 67, 0.06)",
+        background: accent ? "rgba(243, 107, 43, 0.1)" : "var(--theme-elevation-0)",
       }}
     >
-      <div style={{ fontSize: 24, fontWeight: 700, color: accent ? "#d4551a" : "#102a43" }}>{value}</div>
-      <div style={{ fontSize: 12, color: "#52606d", marginTop: 2 }}>{label}</div>
+      <div style={{ fontSize: 24, fontWeight: 700, color: accent ? "#f36b2b" : "var(--theme-text)" }}>{value}</div>
+      <div style={{ fontSize: 12, color: "var(--theme-elevation-500)", marginTop: 2 }}>{label}</div>
     </div>
   );
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h3 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 8px", color: "#102a43" }}>{children}</h3>;
+  return <h3 style={{ fontSize: 14, fontWeight: 700, margin: "0 0 8px", color: "var(--theme-text)" }}>{children}</h3>;
 }
 
 async function countSince(
