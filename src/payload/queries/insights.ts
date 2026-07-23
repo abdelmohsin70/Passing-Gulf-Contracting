@@ -35,10 +35,9 @@ type RawInsightDoc = {
 };
 
 function coverUrl(cover: RawInsightDoc["cover"]): string | undefined {
-  if (cover && typeof cover === "object" && cover.url) {
-    return resolveMediaUrl(cover.url) ?? undefined;
-  }
-  return undefined;
+  // resolveMediaUrl expects the populated upload doc (it reads `.url`), so
+  // pass the whole cover object, not cover.url.
+  return resolveMediaUrl(cover);
 }
 
 function mapListItem(doc: RawInsightDoc): InsightListItem {

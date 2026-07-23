@@ -62,7 +62,7 @@ Strongly recommended before go-live:
 
 | Variable | Purpose |
 | --- | --- |
-| `S3_BUCKET`, `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_REGION` | Media storage. Without these, uploaded media is written to local disk, which most hosting platforms (including Vercel) do **not** persist across deployments — uploaded images will disappear on the next deploy. |
+| `S3_BUCKET`, `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_REGION` | Media storage. Without these, uploaded media is written to local disk, which most hosting platforms (including Vercel) do **not** persist across deployments — **newly** uploaded images will disappear on the next deploy. Note: the images that ship with the seed all come from the bundled `/public/images` photos, and the frontend automatically serves those bundled files (see `resolveMediaUrl` in `src/payload/queries/media.ts`), so the seeded imagery always renders even without S3. Configure S3 before the client starts uploading their **own** new photos through the admin. |
 | `SMTP_HOST` or `RESEND_API_KEY` | Transactional email (password resets, etc.). Without these, Payload logs emails to the server console instead of sending them. |
 | `NOTIFY_WEBHOOK_URL` | Where quote/career leads are POSTed for real-time notification (Slack, Zapier, CRM). Without this, leads are still saved to the database and visible in the admin dashboard — they just won't trigger an external alert. |
 
