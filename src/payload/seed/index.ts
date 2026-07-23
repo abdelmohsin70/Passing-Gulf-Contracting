@@ -412,60 +412,233 @@ async function seedDraftProjects(payload: Payload, sectorIdBySlug: Map<string, n
   }
 }
 
-const DRAFT_INSIGHTS: Array<{ slug: string; titleAr: string; titleEn: string }> = [
+// --- Lexical rich-text builders (minimal node shapes Payload accepts) ---
+type LexNode = Record<string, unknown>;
+
+function lexText(text: string): LexNode {
+  return { type: "text", text, detail: 0, format: 0, mode: "normal", style: "", version: 1 };
+}
+function lexPara(text: string, dir: "rtl" | "ltr"): LexNode {
+  return { type: "paragraph", children: [lexText(text)], direction: dir, format: "", indent: 0, version: 1, textFormat: 0 };
+}
+function lexHeading(text: string, dir: "rtl" | "ltr"): LexNode {
+  return { type: "heading", tag: "h2", children: [lexText(text)], direction: dir, format: "", indent: 0, version: 1 };
+}
+function lexList(items: string[], dir: "rtl" | "ltr"): LexNode {
+  return {
+    type: "list",
+    listType: "bullet",
+    tag: "ul",
+    start: 1,
+    direction: dir,
+    format: "",
+    indent: 0,
+    version: 1,
+    children: items.map((text, i) => ({
+      type: "listitem",
+      value: i + 1,
+      children: [lexText(text)],
+      direction: dir,
+      format: "",
+      indent: 0,
+      version: 1,
+    })),
+  };
+}
+type Block = { h?: string; p?: string; ul?: string[] };
+function lexBody(blocks: Block[], dir: "rtl" | "ltr"): LexNode {
+  const children: LexNode[] = [];
+  for (const b of blocks) {
+    if (b.h) children.push(lexHeading(b.h, dir));
+    if (b.p) children.push(lexPara(b.p, dir));
+    if (b.ul) children.push(lexList(b.ul, dir));
+  }
+  return { root: { type: "root", children, direction: dir, format: "", indent: 0, version: 1 } };
+}
+
+type InsightSeed = {
+  slug: string;
+  category: "maintenance" | "facility-management" | "buyers-guide";
+  readingTimeMinutes: number;
+  titleAr: string;
+  titleEn: string;
+  excerptAr: string;
+  excerptEn: string;
+  bodyAr: Block[];
+  bodyEn: Block[];
+};
+
+// Educational, industry-generic articles — no client names, no fabricated
+// performance figures — so they are safe to publish (unlike case studies).
+const INSIGHTS: InsightSeed[] = [
   {
     slug: "preventive-maintenance-reduces-downtime",
+    category: "maintenance",
+    readingTimeMinutes: 5,
     titleAr: "كيف تقلل الصيانة الوقائية توقف المنشأة؟",
     titleEn: "How Preventive Maintenance Reduces Facility Downtime",
+    excerptAr: "الصيانة الوقائية ليست تكلفة إضافية، بل استثمار يقلل الأعطال المفاجئة ويطيل عمر الأصول ويحافظ على استمرارية التشغيل.",
+    excerptEn: "Preventive maintenance is not an extra cost — it's an investment that cuts sudden failures, extends asset life, and keeps operations running.",
+    bodyAr: [
+      { p: "توقف أي مرفق عن العمل بسبب عطل مفاجئ يكلّف أكثر بكثير من تكلفة إصلاح العطل نفسه: خسارة إنتاجية، إزعاج للمستخدمين، وأحيانًا مخاطر على السلامة. الصيانة الوقائية هي المنهج الذي يحوّل الصيانة من رد فعل إلى خطة مدروسة." },
+      { h: "ما الفرق بين الصيانة الوقائية والتصحيحية؟" },
+      { p: "الصيانة التصحيحية تنتظر حدوث العطل ثم تعالجه. الصيانة الوقائية تفحص الأصول وتخدمها وفق جدول منتظم قبل أن تتعطل، معتمدة على توصيات المصنّع وحالة كل أصل وتاريخ أعطاله." },
+      { h: "الفوائد العملية" },
+      { ul: [
+        "تقليل الأعطال الطارئة المكلفة والمفاجئة",
+        "إطالة العمر التشغيلي للمعدات وتأجيل استبدالها",
+        "استهلاك أكفأ للطاقة عند تشغيل الأنظمة ضمن حالتها المثلى",
+        "بيئة أكثر أمانًا للمستخدمين والعاملين",
+        "تكاليف تشغيل أكثر قابلية للتنبؤ ضمن الميزانية",
+      ] },
+      { h: "كيف نطبّقها في اجتياز الخليج" },
+      { p: "نبدأ بمسح شامل لأصول المنشأة، ثم نبني جدول صيانة وقائية لكل أصل، ونربط البلاغات بنظام تتبّع يقيس زمن الاستجابة والإغلاق، مع تقرير أداء دوري يوضح ما تم إنجازه وما هو قادم." },
+    ],
+    bodyEn: [
+      { p: "A facility going down from a sudden failure costs far more than the repair itself: lost productivity, disrupted users, and sometimes safety risks. Preventive maintenance turns maintenance from a reaction into a planned discipline." },
+      { h: "Preventive vs. corrective maintenance" },
+      { p: "Corrective maintenance waits for a breakdown, then fixes it. Preventive maintenance inspects and services assets on a regular schedule before they fail, guided by manufacturer recommendations, each asset's condition, and its failure history." },
+      { h: "The practical benefits" },
+      { ul: [
+        "Fewer costly, unexpected emergency failures",
+        "Longer operating life for equipment, deferring replacement",
+        "More efficient energy use when systems run at their optimum",
+        "A safer environment for users and staff",
+        "More predictable operating costs within budget",
+      ] },
+      { h: "How we apply it at Ijtiyaz Al Khaleej" },
+      { p: "We start with a full asset survey, build a preventive schedule for every asset, link fault reports to a tracking system that measures response and closure times, and share a regular performance report of what was done and what's next." },
+    ],
   },
   {
     slug: "hard-fm-vs-soft-fm",
+    category: "facility-management",
+    readingTimeMinutes: 4,
     titleAr: "الفرق بين Hard FM وSoft FM",
     titleEn: "Hard FM vs. Soft FM: What's the Difference?",
+    excerptAr: "تنقسم خدمات إدارة المرافق إلى خدمات صلبة تتعلق بالمبنى وأنظمته، وخدمات ناعمة تتعلق بتجربة المستخدم والبيئة. فهم الفرق يساعدك على اختيار العقد المناسب.",
+    excerptEn: "Facility management splits into 'hard' services tied to the building and its systems, and 'soft' services tied to user experience and environment. Knowing the difference helps you choose the right contract.",
+    bodyAr: [
+      { p: "عند التعاقد على إدارة مرافق، ستصادف مصطلحي Hard FM وSoft FM. كلاهما ضروري، لكنهما يغطيان جوانب مختلفة من تشغيل المنشأة." },
+      { h: "الخدمات الصلبة (Hard FM)" },
+      { p: "تشمل الأنظمة الفيزيائية للمبنى التي تؤثر على سلامته ووظيفته: التكييف والتهوية، الكهرباء، السباكة، المصاعد، وأنظمة مكافحة الحريق. هذه الخدمات غالبًا إلزامية ومرتبطة بمعايير سلامة." },
+      { h: "الخدمات الناعمة (Soft FM)" },
+      { p: "تركّز على بيئة المستخدم ومظهر المنشأة وراحتها: النظافة، الأمن، مكافحة الآفات، تنسيق المساحات الخضراء، وإدارة النفايات. لا تتعلق مباشرة بسلامة المبنى لكنها تصنع الانطباع والتجربة." },
+      { h: "لماذا يهم الجمع بينهما؟" },
+      { ul: [
+        "مزوّد واحد يوحّد المسؤولية ويقلل التنسيق بين عدة عقود",
+        "رؤية متكاملة لحالة المنشأة بدل صور مجزّأة",
+        "استجابة أسرع لأن الفريق نفسه يغطي الجوانب المختلفة",
+      ] },
+      { p: "في اجتياز الخليج نقدّم الخدمات الصلبة والناعمة تحت إدارة واحدة، ما يمنحك نقطة مساءلة واحدة لكل احتياجات مرفقك." },
+    ],
+    bodyEn: [
+      { p: "When you contract facility management, you'll meet the terms Hard FM and Soft FM. Both are essential, but they cover different sides of running a facility." },
+      { h: "Hard FM" },
+      { p: "These are the building's physical systems that affect its safety and function: HVAC, electrical, plumbing, elevators, and fire systems. They are often mandatory and tied to safety standards." },
+      { h: "Soft FM" },
+      { p: "These focus on the user environment, appearance, and comfort: cleaning, security, pest control, landscaping, and waste management. They aren't directly about building safety, but they shape the impression and experience." },
+      { h: "Why combine them?" },
+      { ul: [
+        "One provider unifies accountability and reduces coordination across contracts",
+        "An integrated view of facility condition instead of fragmented snapshots",
+        "Faster response because the same team covers the different sides",
+      ] },
+      { p: "At Ijtiyaz Al Khaleej we deliver both hard and soft services under one management, giving you a single point of accountability for all your facility's needs." },
+    ],
   },
   {
     slug: "choosing-a-facility-management-contract",
+    category: "buyers-guide",
+    readingTimeMinutes: 6,
     titleAr: "كيف تختار عقد إدارة مرافق مناسبًا؟",
     titleEn: "How to Choose the Right Facility Management Contract",
+    excerptAr: "اختيار عقد إدارة المرافق قرار طويل الأمد. إليك المعايير العملية التي تساعدك على المقارنة بين المزوّدين واختيار الشريك الأنسب لمنشأتك.",
+    excerptEn: "Choosing a facility management contract is a long-term decision. Here are the practical criteria to help you compare providers and pick the right partner for your facility.",
+    bodyAr: [
+      { p: "عقد إدارة المرافق ليس مجرد سعر شهري، بل شراكة تشغيلية تؤثر على جاهزية مرافقك يوميًا. قبل التوقيع، قيّم المزوّد وفق معايير واضحة." },
+      { h: "1. نطاق واضح ومتفق عليه" },
+      { p: "تأكد أن العقد يحدد بدقة الخدمات المشمولة، وما هو خارج النطاق، وكيف تُسعّر الأعمال الإضافية. الغموض هنا مصدر رئيسي للنزاعات لاحقًا." },
+      { h: "2. اتفاقيات مستوى الخدمة (SLA)" },
+      { p: "اطلب مؤشرات قابلة للقياس: زمن الاستجابة للبلاغات، زمن الإغلاق، ونسبة إنجاز الصيانة الوقائية. المؤشرات تحوّل الوعود إلى التزامات قابلة للمتابعة." },
+      { h: "3. الشفافية والتقارير" },
+      { ul: [
+        "تقارير أداء دورية توضح ما أُنجز فعلاً",
+        "نظام بلاغات يمكنك متابعته",
+        "وضوح في التصعيد عند تكرار مشكلة",
+      ] },
+      { h: "4. الكفاءة والسلامة" },
+      { p: "تحقق من تأهيل الكوادر والتزام المزوّد بمعايير الصحة والسلامة المهنية، خصوصًا في القطاعات الحساسة كالصحي والصناعي." },
+      { h: "5. القدرة على التكامل" },
+      { p: "المزوّد القادر على تقديم الخدمات الصلبة والناعمة معًا يوفّر عليك تعدد العقود والتنسيق. نقطة مساءلة واحدة أسهل في الإدارة وأسرع في الاستجابة." },
+      { p: "في اجتياز الخليج نبدأ بمعاينة ميدانية مجانية لفهم منشأتك قبل تقديم عرض مبني على احتياجك الفعلي، لا قالب جاهز." },
+    ],
+    bodyEn: [
+      { p: "A facility management contract isn't just a monthly price — it's an operational partnership that affects your facility's readiness every day. Before signing, evaluate the provider against clear criteria." },
+      { h: "1. A clear, agreed scope" },
+      { p: "Make sure the contract precisely defines which services are included, what's out of scope, and how additional work is priced. Ambiguity here is a leading source of disputes later." },
+      { h: "2. Service level agreements (SLAs)" },
+      { p: "Ask for measurable indicators: fault response time, closure time, and preventive-maintenance completion rate. Metrics turn promises into trackable commitments." },
+      { h: "3. Transparency and reporting" },
+      { ul: [
+        "Regular performance reports of what was actually done",
+        "A fault system you can follow",
+        "Clear escalation when an issue recurs",
+      ] },
+      { h: "4. Competence and safety" },
+      { p: "Check staff qualifications and the provider's commitment to occupational health and safety standards, especially in sensitive sectors like healthcare and industry." },
+      { h: "5. Ability to integrate" },
+      { p: "A provider that can deliver both hard and soft services saves you multiple contracts and coordination. A single point of accountability is easier to manage and faster to respond." },
+      { p: "At Ijtiyaz Al Khaleej we start with a free site visit to understand your facility before offering a proposal built on your actual need — not a template." },
+    ],
   },
 ];
 
-async function seedDraftInsights(payload: Payload) {
-  for (const item of DRAFT_INSIGHTS) {
+async function seedInsights(payload: Payload) {
+  for (const item of INSIGHTS) {
+    const extra = {
+      slug: item.slug,
+      category: item.category,
+      readingTimeMinutes: item.readingTimeMinutes,
+      publishedAt: new Date().toISOString(),
+      _status: "published" as const,
+    };
     const existing = await payload.find({
       collection: "insights",
       where: { slug: { equals: item.slug } },
       overrideAccess: true,
       limit: 1,
     });
-    if (existing.docs[0]) continue;
+
+    if (existing.docs[0]) {
+      // Upgrade the earlier placeholder drafts to the full published article.
+      const id = existing.docs[0].id;
+      await payload.update({
+        collection: "insights",
+        id,
+        locale: "ar",
+        overrideAccess: true,
+        data: { title: item.titleAr, excerpt: item.excerptAr, body: lexBody(item.bodyAr, "rtl"), ...extra },
+      });
+      await payload.update({
+        collection: "insights",
+        id,
+        locale: "en",
+        overrideAccess: true,
+        data: { title: item.titleEn, excerpt: item.excerptEn, body: lexBody(item.bodyEn, "ltr") },
+      });
+      console.log(`[seed] published insight ${item.slug}`);
+      continue;
+    }
 
     await createBilingual(
       payload,
       "insights",
-      {
-        title: item.titleAr,
-        excerpt: "مسودة — محتوى قيد الإعداد من فريق التسويق قبل المراجعة والنشر.",
-        body: {
-          root: {
-            type: "root",
-            children: [{ type: "paragraph", children: [{ type: "text", text: "مسودة أولية." }] }],
-          },
-        },
-      },
-      {
-        title: item.titleEn,
-        excerpt: "Draft — content is being prepared by the marketing team ahead of review and publishing.",
-        body: {
-          root: {
-            type: "root",
-            children: [{ type: "paragraph", children: [{ type: "text", text: "Initial draft." }] }],
-          },
-        },
-      },
-      { slug: item.slug, _status: "draft" }
+      { title: item.titleAr, excerpt: item.excerptAr, body: lexBody(item.bodyAr, "rtl") },
+      { title: item.titleEn, excerpt: item.excerptEn, body: lexBody(item.bodyEn, "ltr") },
+      extra
     );
-    console.log(`[seed] created draft insight ${item.slug}`);
+    console.log(`[seed] created published insight ${item.slug}`);
   }
 }
 
@@ -681,7 +854,7 @@ async function run() {
   await attachSolutionMedia(payload, mediaIdByFilename);
   await seedCertifications(payload);
   await seedDraftProjects(payload, sectorIdBySlug);
-  await seedDraftInsights(payload);
+  await seedInsights(payload);
   await seedGlobals(payload);
   await seedAboutQualityPages(payload);
   await attachPageMedia(payload, mediaIdByFilename);

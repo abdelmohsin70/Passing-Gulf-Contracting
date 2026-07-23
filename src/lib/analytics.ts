@@ -11,6 +11,8 @@ export type AnalyticsEvent =
   | "whatsapp_click"
   | "phone_click"
   | "service_view"
+  | "sector_view"
+  | "insight_view"
   | "case_study_view";
 
 declare global {

@@ -9,6 +9,7 @@ const dictionary = {
     solutions: "الحلول",
     sectors: "القطاعات",
     projects: "المشاريع",
+    insights: "مركز المعرفة",
     qualitySafety: "الجودة والسلامة",
     careers: "الوظائف",
     contact: "تواصل معنا",
@@ -117,6 +118,23 @@ const dictionary = {
   sectorsIndex: {
     title: "القطاعات",
     subtitle: "نصمم حلولنا حسب طبيعة كل قطاع نخدمه في أنحاء المملكة.",
+    challengesTitle: "أبرز تحديات القطاع",
+    operatingModelTitle: "نموذج التشغيل المناسب",
+    solutionsTitle: "حلولنا لهذا القطاع",
+    intro: "نفهم طبيعة هذا القطاع ومتطلباته التشغيلية، ونصمم منظومة خدمات متكاملة تحت إدارة واحدة تحافظ على جاهزية مرافقك واستمرارية أعمالك.",
+  },
+  insightsIndex: {
+    title: "مركز المعرفة",
+    subtitle: "مقالات ونصائح عملية في إدارة المرافق والصيانة والجودة والسلامة.",
+    emptyState: "المقالات قيد الإعداد وستُنشر قريبًا.",
+    readingTime: "دقائق قراءة",
+    backToInsights: "العودة لمركز المعرفة",
+    categories: {
+      maintenance: "صيانة وتشغيل",
+      "facility-management": "إدارة مرافق",
+      "quality-safety": "الجودة والسلامة",
+      "buyers-guide": "دليل الشراء",
+    },
   },
   projectsIndex: {
     title: "المشاريع ودراسات الحالة",

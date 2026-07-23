@@ -133,3 +133,56 @@ html[lang="en"] body {
 [dir="rtl"] .dir-flip {
   transform: scaleX(-1);
 }
+
+/* Article body (CMS rich text) — readable long-form typography for the
+   Knowledge Center, using the design-system tokens so it stays on-brand
+   and adapts if the neutral palette changes. */
+.prose-insight {
+  color: var(--color-slate);
+  font-size: 1.0625rem;
+  line-height: 1.9;
+}
+.prose-insight > * + * {
+  margin-top: 1.15em;
+}
+.prose-insight h2 {
+  color: var(--color-navy);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 2em;
+}
+.prose-insight h3 {
+  color: var(--color-navy);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-top: 1.6em;
+}
+.prose-insight a {
+  color: var(--color-orange-dark);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose-insight ul,
+.prose-insight ol {
+  padding-inline-start: 1.4em;
+}
+.prose-insight ul {
+  list-style: disc;
+}
+.prose-insight ol {
+  list-style: decimal;
+}
+.prose-insight li + li {
+  margin-top: 0.4em;
+}
+.prose-insight strong {
+  color: var(--color-navy);
+  font-weight: 700;
+}
+.prose-insight blockquote {
+  border-inline-start: 3px solid var(--color-orange);
+  padding-inline-start: 1.1em;
+  color: var(--color-navy);
+  font-style: normal;
+}

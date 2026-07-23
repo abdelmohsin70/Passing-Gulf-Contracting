@@ -67,22 +67,22 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
-    media: Media;
     pages: Page;
     solutions: Solution;
     sectors: Sector;
     projects: Project;
     insights: Insight;
     faqs: Faq;
-    testimonials: Testimonial;
-    clients: Client;
-    certifications: Certification;
-    'team-members': TeamMember;
     leads: Lead;
     'lead-activities': LeadActivity;
     careers: Career;
     'job-applications': JobApplication;
+    testimonials: Testimonial;
+    clients: Client;
+    certifications: Certification;
+    'team-members': TeamMember;
+    media: Media;
+    users: User;
     redirects: Redirect;
     'audit-logs': AuditLog;
     'analytics-daily': AnalyticsDaily;
@@ -93,22 +93,22 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     solutions: SolutionsSelect<false> | SolutionsSelect<true>;
     sectors: SectorsSelect<false> | SectorsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     insights: InsightsSelect<false> | InsightsSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
-    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
-    clients: ClientsSelect<false> | ClientsSelect<true>;
-    certifications: CertificationsSelect<false> | CertificationsSelect<true>;
-    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
     'lead-activities': LeadActivitiesSelect<false> | LeadActivitiesSelect<true>;
     careers: CareersSelect<false> | CareersSelect<true>;
     'job-applications': JobApplicationsSelect<false> | JobApplicationsSelect<true>;
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
+    certifications: CertificationsSelect<false> | CertificationsSelect<true>;
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'audit-logs': AuditLogsSelect<false> | AuditLogsSelect<true>;
     'analytics-daily': AnalyticsDailySelect<false> | AnalyticsDailySelect<true>;
@@ -122,25 +122,25 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('ar' | 'en') | ('ar' | 'en')[];
   globals: {
-    'site-settings': SiteSetting;
-    'contact-settings': ContactSetting;
     homepage: Homepage;
     'about-page': AboutPage;
     'quality-safety-page': QualitySafetyPage;
     header: Header;
     footer: Footer;
+    'site-settings': SiteSetting;
+    'contact-settings': ContactSetting;
     'seo-settings': SeoSetting;
     'analytics-settings': AnalyticsSetting;
     'notification-settings': NotificationSetting;
   };
   globalsSelect: {
-    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
-    'contact-settings': ContactSettingsSelect<false> | ContactSettingsSelect<true>;
     homepage: HomepageSelect<false> | HomepageSelect<true>;
     'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
     'quality-safety-page': QualitySafetyPageSelect<false> | QualitySafetyPageSelect<true>;
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'contact-settings': ContactSettingsSelect<false> | ContactSettingsSelect<true>;
     'seo-settings': SeoSettingsSelect<false> | SeoSettingsSelect<true>;
     'analytics-settings': AnalyticsSettingsSelect<false> | AnalyticsSettingsSelect<true>;
     'notification-settings': NotificationSettingsSelect<false> | NotificationSettingsSelect<true>;
@@ -174,40 +174,50 @@ export interface UserAuthOperations {
   };
 }
 /**
- * لوحة الوصول: من يستطيع الدخول للوحة التحكم ودوره.
- *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "pages".
  */
-export interface User {
+export interface Page {
   id: number;
-  name: string;
+  title: string;
   /**
-   * super-admin: كل الصلاحيات · content-manager: المحتوى والوسائط · sales: الطلبات والعملاء · analyst: التقارير فقط · viewer: قراءة فقط.
+   * مثال: about، quality-safety، privacy، careers
    */
-  roles: ('super-admin' | 'content-manager' | 'sales' | 'analyst' | 'viewer')[];
+  slug: string;
+  subtitle?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
   /**
-   * عطّل هذا الخيار لإيقاف دخول المستخدم دون حذف حسابه.
+   * عنوان ووصف الصفحة في نتائج البحث ومشاركات التواصل.
    */
-  active?: boolean | null;
+  seo?: {
+    /**
+     * 60 حرفًا تقريبًا. اتركه فارغًا لاستخدام العنوان الافتراضي.
+     */
+    metaTitle?: string | null;
+    /**
+     * 155 حرفًا تقريبًا.
+     */
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    noIndex?: boolean | null;
+  };
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * مكتبة الصور والملفات — لكل صورة نص بديل بالعربي والإنجليزي.
@@ -276,52 +286,6 @@ export interface Media {
       filename?: string | null;
     };
   };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
- */
-export interface Page {
-  id: number;
-  title: string;
-  /**
-   * مثال: about، quality-safety، privacy، careers
-   */
-  slug: string;
-  subtitle?: string | null;
-  body?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * عنوان ووصف الصفحة في نتائج البحث ومشاركات التواصل.
-   */
-  seo?: {
-    /**
-     * 60 حرفًا تقريبًا. اتركه فارغًا لاستخدام العنوان الافتراضي.
-     */
-    metaTitle?: string | null;
-    /**
-     * 155 حرفًا تقريبًا.
-     */
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    noIndex?: boolean | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * عائلات وخدمات الحلول الثمانية المعروضة في /solutions.
@@ -554,6 +518,42 @@ export interface Insight {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * لوحة الوصول: من يستطيع الدخول للوحة التحكم ودوره.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name: string;
+  /**
+   * super-admin: كل الصلاحيات · content-manager: المحتوى والوسائط · sales: الطلبات والعملاء · analyst: التقارير فقط · viewer: قراءة فقط.
+   */
+  roles: ('super-admin' | 'content-manager' | 'sales' | 'analyst' | 'viewer')[];
+  /**
+   * عطّل هذا الخيار لإيقاف دخول المستخدم دون حذف حسابه.
+   */
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
+}
+/**
  * أسئلة عامة (غير مرتبطة بحل معيّن) تُستخدم حيث يلزم عبر الموقع.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -565,86 +565,6 @@ export interface Faq {
   answer: string;
   topic?: ('general' | 'quotes' | 'quality' | 'careers') | null;
   sortOrder?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials".
- */
-export interface Testimonial {
-  id: number;
-  quote: string;
-  /**
-   * الاسم/المسمى — أو وصف عام إذا طُلبت السرية.
-   */
-  attribution: string;
-  organization?: string | null;
-  sector?: (number | null) | Sector;
-  approved?: boolean | null;
-  /**
-   * لا يظهر أي عنصر بحالة غير "موثّق ومعتمد" في الموقع العام.
-   */
-  verificationStatus: 'unverified' | 'pending' | 'verified' | 'rejected';
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * لا يظهر أي شعار في "عملاؤنا" إلا إذا كان usageApproved مفعّلًا هنا وعلى ملف الصورة نفسه.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "clients".
- */
-export interface Client {
-  id: number;
-  name: string;
-  logo: number | Media;
-  sector?: (number | null) | Sector;
-  serviceLabel?: string | null;
-  usageApproved?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * شهادات ISO وغيرها. لا تُعرض للعامة حتى يتم رفع نسخة سارية وتفعيل الظهور العام.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "certifications".
- */
-export interface Certification {
-  id: number;
-  /**
-   * مثال: ISO 9001:2015
-   */
-  code: string;
-  labelAr?: string | null;
-  labelEn?: string | null;
-  issuer?: string | null;
-  certificateNumber?: string | null;
-  issuedAt?: string | null;
-  expiresAt?: string | null;
-  /**
-   * نسخة الشهادة الفعلية (PDF/صورة).
-   */
-  document?: (number | null) | Media;
-  publicVisibility?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team-members".
- */
-export interface TeamMember {
-  id: number;
-  name: string;
-  roleAr?: string | null;
-  roleEn?: string | null;
-  photo?: (number | null) | Media;
-  sortOrder?: number | null;
-  published?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -749,6 +669,86 @@ export interface JobApplication {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  quote: string;
+  /**
+   * الاسم/المسمى — أو وصف عام إذا طُلبت السرية.
+   */
+  attribution: string;
+  organization?: string | null;
+  sector?: (number | null) | Sector;
+  approved?: boolean | null;
+  /**
+   * لا يظهر أي عنصر بحالة غير "موثّق ومعتمد" في الموقع العام.
+   */
+  verificationStatus: 'unverified' | 'pending' | 'verified' | 'rejected';
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * لا يظهر أي شعار في "عملاؤنا" إلا إذا كان usageApproved مفعّلًا هنا وعلى ملف الصورة نفسه.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  name: string;
+  logo: number | Media;
+  sector?: (number | null) | Sector;
+  serviceLabel?: string | null;
+  usageApproved?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * شهادات ISO وغيرها. لا تُعرض للعامة حتى يتم رفع نسخة سارية وتفعيل الظهور العام.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "certifications".
+ */
+export interface Certification {
+  id: number;
+  /**
+   * مثال: ISO 9001:2015
+   */
+  code: string;
+  labelAr?: string | null;
+  labelEn?: string | null;
+  issuer?: string | null;
+  certificateNumber?: string | null;
+  issuedAt?: string | null;
+  expiresAt?: string | null;
+  /**
+   * نسخة الشهادة الفعلية (PDF/صورة).
+   */
+  document?: (number | null) | Media;
+  publicVisibility?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: number;
+  name: string;
+  roleAr?: string | null;
+  roleEn?: string | null;
+  photo?: (number | null) | Media;
+  sortOrder?: number | null;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -840,14 +840,6 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
-    | ({
         relationTo: 'pages';
         value: number | Page;
       } | null)
@@ -872,6 +864,22 @@ export interface PayloadLockedDocument {
         value: number | Faq;
       } | null)
     | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'lead-activities';
+        value: number | LeadActivity;
+      } | null)
+    | ({
+        relationTo: 'careers';
+        value: number | Career;
+      } | null)
+    | ({
+        relationTo: 'job-applications';
+        value: number | JobApplication;
+      } | null)
+    | ({
         relationTo: 'testimonials';
         value: number | Testimonial;
       } | null)
@@ -888,20 +896,12 @@ export interface PayloadLockedDocument {
         value: number | TeamMember;
       } | null)
     | ({
-        relationTo: 'leads';
-        value: number | Lead;
+        relationTo: 'media';
+        value: number | Media;
       } | null)
     | ({
-        relationTo: 'lead-activities';
-        value: number | LeadActivity;
-      } | null)
-    | ({
-        relationTo: 'careers';
-        value: number | Career;
-      } | null)
-    | ({
-        relationTo: 'job-applications';
-        value: number | JobApplication;
+        relationTo: 'users';
+        value: number | User;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -956,100 +956,6 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  roles?: T;
-  active?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  altAr?: T;
-  altEn?: T;
-  captionAr?: T;
-  captionEn?: T;
-  credit?: T;
-  category?: T;
-  tags?: T;
-  usageApproved?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumbnail?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        card?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        hero?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        og?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1244,66 +1150,6 @@ export interface FaqsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials_select".
- */
-export interface TestimonialsSelect<T extends boolean = true> {
-  quote?: T;
-  attribution?: T;
-  organization?: T;
-  sector?: T;
-  approved?: T;
-  verificationStatus?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "clients_select".
- */
-export interface ClientsSelect<T extends boolean = true> {
-  name?: T;
-  logo?: T;
-  sector?: T;
-  serviceLabel?: T;
-  usageApproved?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "certifications_select".
- */
-export interface CertificationsSelect<T extends boolean = true> {
-  code?: T;
-  labelAr?: T;
-  labelEn?: T;
-  issuer?: T;
-  certificateNumber?: T;
-  issuedAt?: T;
-  expiresAt?: T;
-  document?: T;
-  publicVisibility?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "team-members_select".
- */
-export interface TeamMembersSelect<T extends boolean = true> {
-  name?: T;
-  roleAr?: T;
-  roleEn?: T;
-  photo?: T;
-  sortOrder?: T;
-  published?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "leads_select".
  */
 export interface LeadsSelect<T extends boolean = true> {
@@ -1391,6 +1237,160 @@ export interface JobApplicationsSelect<T extends boolean = true> {
   assignedTo?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials_select".
+ */
+export interface TestimonialsSelect<T extends boolean = true> {
+  quote?: T;
+  attribution?: T;
+  organization?: T;
+  sector?: T;
+  approved?: T;
+  verificationStatus?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  sector?: T;
+  serviceLabel?: T;
+  usageApproved?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "certifications_select".
+ */
+export interface CertificationsSelect<T extends boolean = true> {
+  code?: T;
+  labelAr?: T;
+  labelEn?: T;
+  issuer?: T;
+  certificateNumber?: T;
+  issuedAt?: T;
+  expiresAt?: T;
+  document?: T;
+  publicVisibility?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members_select".
+ */
+export interface TeamMembersSelect<T extends boolean = true> {
+  name?: T;
+  roleAr?: T;
+  roleEn?: T;
+  photo?: T;
+  sortOrder?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  altAr?: T;
+  altEn?: T;
+  captionAr?: T;
+  captionEn?: T;
+  credit?: T;
+  category?: T;
+  tags?: T;
+  usageApproved?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  roles?: T;
+  active?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1485,70 +1485,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "site-settings".
- */
-export interface SiteSetting {
-  id: number;
-  nameAr: string;
-  /**
-   * TODO_VERIFY: الاسم القانوني الإنجليزي المعتمد لم يُؤكَّد بعد.
-   */
-  nameEn: string;
-  nameEnStatus?: ('pending' | 'confirmed') | null;
-  foundedYear?: number | null;
-  foundedCityAr?: string | null;
-  foundedCityEn?: string | null;
-  /**
-   * TODO_VERIFY
-   */
-  commercialRegistrationNumber?: string | null;
-  /**
-   * TODO_VERIFY
-   */
-  vatNumber?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-settings".
- */
-export interface ContactSetting {
-  id: number;
-  phone?: string | null;
-  phoneDisplay?: string | null;
-  phoneStatus?: ('pending' | 'confirmed') | null;
-  whatsapp?: string | null;
-  whatsappStatus?: ('pending' | 'confirmed') | null;
-  email?: string | null;
-  emailStatus?: ('pending' | 'confirmed') | null;
-  addressAr?: string | null;
-  addressEn?: string | null;
-  addressStatus?: ('pending' | 'confirmed') | null;
-  workingHoursAr?: string | null;
-  workingHoursEn?: string | null;
-  socials?: {
-    instagram?: string | null;
-    linkedin?: string | null;
-    x?: string | null;
-  };
-  /**
-   * شريط الشهادات المختصر في الهيدر/الفوتر (تفاصيلها الكاملة في مجموعة Certifications).
-   */
-  certifications?:
-    | {
-        code?: string | null;
-        labelAr?: string | null;
-        labelEn?: string | null;
-        status?: ('pending' | 'confirmed') | null;
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1764,6 +1700,70 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  nameAr: string;
+  /**
+   * TODO_VERIFY: الاسم القانوني الإنجليزي المعتمد لم يُؤكَّد بعد.
+   */
+  nameEn: string;
+  nameEnStatus?: ('pending' | 'confirmed') | null;
+  foundedYear?: number | null;
+  foundedCityAr?: string | null;
+  foundedCityEn?: string | null;
+  /**
+   * TODO_VERIFY
+   */
+  commercialRegistrationNumber?: string | null;
+  /**
+   * TODO_VERIFY
+   */
+  vatNumber?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-settings".
+ */
+export interface ContactSetting {
+  id: number;
+  phone?: string | null;
+  phoneDisplay?: string | null;
+  phoneStatus?: ('pending' | 'confirmed') | null;
+  whatsapp?: string | null;
+  whatsappStatus?: ('pending' | 'confirmed') | null;
+  email?: string | null;
+  emailStatus?: ('pending' | 'confirmed') | null;
+  addressAr?: string | null;
+  addressEn?: string | null;
+  addressStatus?: ('pending' | 'confirmed') | null;
+  workingHoursAr?: string | null;
+  workingHoursEn?: string | null;
+  socials?: {
+    instagram?: string | null;
+    linkedin?: string | null;
+    x?: string | null;
+  };
+  /**
+   * شريط الشهادات المختصر في الهيدر/الفوتر (تفاصيلها الكاملة في مجموعة Certifications).
+   */
+  certifications?:
+    | {
+        code?: string | null;
+        labelAr?: string | null;
+        labelEn?: string | null;
+        status?: ('pending' | 'confirmed') | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "seo-settings".
  */
 export interface SeoSetting {
@@ -1815,60 +1815,6 @@ export interface NotificationSetting {
   notifyOnNewJobApplication?: boolean | null;
   updatedAt?: string | null;
   createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "site-settings_select".
- */
-export interface SiteSettingsSelect<T extends boolean = true> {
-  nameAr?: T;
-  nameEn?: T;
-  nameEnStatus?: T;
-  foundedYear?: T;
-  foundedCityAr?: T;
-  foundedCityEn?: T;
-  commercialRegistrationNumber?: T;
-  vatNumber?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "contact-settings_select".
- */
-export interface ContactSettingsSelect<T extends boolean = true> {
-  phone?: T;
-  phoneDisplay?: T;
-  phoneStatus?: T;
-  whatsapp?: T;
-  whatsappStatus?: T;
-  email?: T;
-  emailStatus?: T;
-  addressAr?: T;
-  addressEn?: T;
-  addressStatus?: T;
-  workingHoursAr?: T;
-  workingHoursEn?: T;
-  socials?:
-    | T
-    | {
-        instagram?: T;
-        linkedin?: T;
-        x?: T;
-      };
-  certifications?:
-    | T
-    | {
-        code?: T;
-        labelAr?: T;
-        labelEn?: T;
-        status?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2055,6 +2001,60 @@ export interface FooterSelect<T extends boolean = true> {
               path?: T;
               id?: T;
             };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  nameAr?: T;
+  nameEn?: T;
+  nameEnStatus?: T;
+  foundedYear?: T;
+  foundedCityAr?: T;
+  foundedCityEn?: T;
+  commercialRegistrationNumber?: T;
+  vatNumber?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-settings_select".
+ */
+export interface ContactSettingsSelect<T extends boolean = true> {
+  phone?: T;
+  phoneDisplay?: T;
+  phoneStatus?: T;
+  whatsapp?: T;
+  whatsappStatus?: T;
+  email?: T;
+  emailStatus?: T;
+  addressAr?: T;
+  addressEn?: T;
+  addressStatus?: T;
+  workingHoursAr?: T;
+  workingHoursEn?: T;
+  socials?:
+    | T
+    | {
+        instagram?: T;
+        linkedin?: T;
+        x?: T;
+      };
+  certifications?:
+    | T
+    | {
+        code?: T;
+        labelAr?: T;
+        labelEn?: T;
+        status?: T;
         id?: T;
       };
   updatedAt?: T;

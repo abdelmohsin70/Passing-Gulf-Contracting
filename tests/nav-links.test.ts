@@ -7,6 +7,7 @@ const knownRoutes = new Set([
   "/solutions",
   "/sectors",
   "/projects",
+  "/insights",
   "/about",
   "/quality-safety",
   "/contact",

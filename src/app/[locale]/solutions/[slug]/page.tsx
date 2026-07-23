@@ -165,7 +165,7 @@ export default async function SolutionPage({ params }: { params: Promise<{ local
                 <ul className="mt-4 space-y-2.5">
                   {relevantSectors.map((sector) => (
                     <li key={sector.slug}>
-                      <a href={`${base}/sectors#${sector.slug}`} className="focus-ring text-sm font-medium text-navy hover:text-orange">
+                      <a href={`${base}/sectors/${sector.slug}`} className="focus-ring text-sm font-medium text-navy hover:text-orange">
                         {sector.title[locale]}
                       </a>
                     </li>

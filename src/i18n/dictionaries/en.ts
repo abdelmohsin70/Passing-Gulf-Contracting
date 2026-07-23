@@ -11,6 +11,7 @@ const dictionary: Dictionary = {
     solutions: "Solutions",
     sectors: "Sectors",
     projects: "Projects",
+    insights: "Insights",
     qualitySafety: "Quality & Safety",
     careers: "Careers",
     contact: "Contact",
@@ -119,6 +120,23 @@ const dictionary: Dictionary = {
   sectorsIndex: {
     title: "Sectors",
     subtitle: "We tailor our solutions to the nature of every sector we serve across the Kingdom.",
+    challengesTitle: "Key sector challenges",
+    operatingModelTitle: "The right operating model",
+    solutionsTitle: "Our solutions for this sector",
+    intro: "We understand this sector's nature and operational demands, and design an integrated set of services under one management that keeps your facilities ready and your business running.",
+  },
+  insightsIndex: {
+    title: "Knowledge Center",
+    subtitle: "Practical articles and guidance on facility management, maintenance, quality, and safety.",
+    emptyState: "Articles are being prepared and will be published soon.",
+    readingTime: "min read",
+    backToInsights: "Back to Knowledge Center",
+    categories: {
+      maintenance: "Maintenance & Operations",
+      "facility-management": "Facility Management",
+      "quality-safety": "Quality & Safety",
+      "buyers-guide": "Buyer's Guide",
+    },
   },
   projectsIndex: {
     title: "Projects & Case Studies",

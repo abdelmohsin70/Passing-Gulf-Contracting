@@ -10,6 +10,7 @@ import { Section } from "@/components/primitives/Section";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SectorIcon } from "@/components/sections/SectorIcon";
 import { SolutionIcon } from "@/components/sections/SolutionIcon";
+import { ChevronIcon } from "@/components/icons/icons";
 import { HeroSlider } from "@/components/sections/HeroSlider";
 import { Reveal } from "@/components/Reveal";
 
@@ -100,7 +101,11 @@ export default async function SectorsPage({ params }: { params: Promise<{ locale
                       </span>
                     </div>
                     <div className="flex-1 p-6 sm:p-8">
-                      <h2 className="text-xl font-bold text-navy">{sector.title[locale]}</h2>
+                      <h2 className="text-xl font-bold text-navy">
+                        <Link href={`${base}/sectors/${sector.slug}`} className="focus-ring hover:text-orange">
+                          {sector.title[locale]}
+                        </Link>
+                      </h2>
                       <p className="mt-2 leading-relaxed text-slate">{sector.description[locale]}</p>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {relevant.map((solution) => (
@@ -114,6 +119,13 @@ export default async function SectorsPage({ params }: { params: Promise<{ locale
                           </Link>
                         ))}
                       </div>
+                      <Link
+                        href={`${base}/sectors/${sector.slug}`}
+                        className="focus-ring mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-orange"
+                      >
+                        {dictionary.common.learnMore}
+                        <ChevronIcon className="size-4 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
+                      </Link>
                     </div>
                   </div>
                 </Reveal>
