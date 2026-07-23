@@ -35,10 +35,15 @@ export const ContactSettings: GlobalConfig = {
     {
       name: "socials",
       type: "group",
+      admin: { description: "روابط كاملة لصفحات التواصل الاجتماعي (تبدأ بـ https://). تظهر في الفوتر تلقائيًا عند إضافتها." },
       fields: [
         { name: "instagram", type: "text" },
         { name: "linkedin", type: "text" },
         { name: "x", type: "text" },
+        { name: "youtube", type: "text" },
+        { name: "snapchat", type: "text" },
+        { name: "tiktok", type: "text" },
+        { name: "facebook", type: "text" },
       ],
     },
     {

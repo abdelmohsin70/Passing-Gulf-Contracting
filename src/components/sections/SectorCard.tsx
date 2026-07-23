@@ -6,7 +6,7 @@ import { SectorIcon } from "@/components/sections/SectorIcon";
 export function SectorCard({ sector, locale, href }: { sector: Sector; locale: Locale; href?: string }) {
   return (
     <Link
-      href={href ?? `/${locale}/sectors#${sector.slug}`}
+      href={href ?? `/${locale}/sectors/${sector.slug}`}
       id={href ? undefined : sector.slug}
       className="focus-ring group flex flex-col items-start rounded-[var(--radius-card)] border border-navy/10 bg-sand p-6 transition-all hover:-translate-y-1 hover:border-orange/40 hover:bg-white hover:shadow-soft"
     >

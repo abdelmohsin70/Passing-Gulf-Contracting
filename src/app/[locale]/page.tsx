@@ -87,7 +87,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {sectors.map((sector, index) => (
               <Reveal key={sector.slug} delay={(index % 3) * 90}>
-                <SectorCard sector={sector} locale={locale} href={`${base}/sectors#${sector.slug}`} />
+                <SectorCard sector={sector} locale={locale} href={`${base}/sectors/${sector.slug}`} />
               </Reveal>
             ))}
           </div>

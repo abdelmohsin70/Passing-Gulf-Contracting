@@ -317,3 +317,64 @@ export function MoonIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function InstagramIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function LinkedInIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <rect x="3" y="3" width="18" height="18" rx="3" />
+      <path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 17v-7" />
+    </svg>
+  );
+}
+
+export function XIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M4 4l16 16M20 4L4 20" />
+    </svg>
+  );
+}
+
+export function YouTubeIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <rect x="2.5" y="6" width="19" height="12" rx="3" />
+      <path d="M10 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function SnapchatIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M12 3c2.5 0 4 2 4 4.5 0 1 .3 2 1.5 2.5 .8.3 1.5.5 1.5 1s-1 .8-1.8 1.2c-.5.3-.2 1 .3 1.6.4.5 1 .9 1 1.4 0 .6-1.2.6-2.2.9-.6.2-.5 1.1-1 1.4-.6.3-1.5-.4-2.6-.4s-2 .7-2.6.4c-.5-.3-.4-1.2-1-1.4-1-.3-2.2-.3-2.2-.9 0-.5.6-.9 1-1.4.5-.6.8-1.3.3-1.6C6.9 10.3 6 10 6 9.5s.7-.7 1.5-1C8.7 8 9 7 9 6c0-2.5 1.5-3 3-3z" />
+    </svg>
+  );
+}
+
+export function TikTokIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M10 8v8a3 3 0 1 1-3-3M10 8V4c0 2.5 2 4 4.5 4.2" />
+    </svg>
+  );
+}
+
+export function FacebookIcon(props: IconProps) {
+  return (
+    <svg {...base(props)}>
+      <path d="M14 8h2M14 8c0-1.5.5-3 2.5-3M14 8v3m0 0h-2m2 0v9" />
+      <rect x="3" y="3" width="18" height="18" rx="4" />
+    </svg>
+  );
+}
