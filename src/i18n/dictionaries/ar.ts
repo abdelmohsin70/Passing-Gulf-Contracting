@@ -33,6 +33,7 @@ const dictionary = {
     closeMenu: "إغلاق القائمة",
     language: "English",
     skipToContent: "تخطَّ إلى المحتوى",
+    theme: { light: "الوضع الفاتح", dark: "الوضع الداكن" },
     breadcrumbHome: "الرئيسية",
     since: "منذ",
     pendingVerification: "قيد التوثيق",

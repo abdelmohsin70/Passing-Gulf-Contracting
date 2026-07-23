@@ -82,6 +82,89 @@
   color-scheme: light;
 }
 
+/* ---------------------------------------------------------------------
+   Dark mode. The marketing site is built on static color utilities
+   (text-navy, bg-white, bg-sand, …) rather than per-element dark:
+   variants, so dark mode is delivered by remapping those utilities under
+   [data-theme="dark"] in one place. Brand-navy dark sections (hero,
+   footer) stay dark and on-brand; white card surfaces and light neutrals
+   flip to a near-black surface scale; headings and muted text lighten.
+   Orange (brand/CTA) and white text are unchanged. Preference is applied
+   before paint by an inline script in the locale layout (no FOUC). */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  /* Section/page neutrals (bg-sand / bg-sand-dark) → dark surfaces */
+  --color-sand: #0c0c0f;
+  --color-sand-dark: #17171b;
+  --color-surface: #17171b;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.16);
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 45%);
+  --shadow-lift: 0 4px 12px rgb(0 0 0 / 45%), 0 16px 40px rgb(0 0 0 / 55%);
+}
+
+:root[data-theme="dark"] body {
+  background: #08080a;
+  color: #f4f4f6;
+}
+
+/* White card/panel surfaces → dark surface */
+:root[data-theme="dark"] .bg-white {
+  background-color: #17171b;
+}
+:root[data-theme="dark"] .bg-white\/50 {
+  background-color: rgb(23 23 27 / 60%);
+}
+:root[data-theme="dark"] .bg-white\/10 {
+  background-color: rgb(255 255 255 / 10%);
+}
+
+/* Headings / dark text → light */
+:root[data-theme="dark"] .text-navy {
+  color: #f4f4f6;
+}
+:root[data-theme="dark"] .text-navy\/50,
+:root[data-theme="dark"] .text-navy\/30 {
+  color: rgb(244 244 246 / 60%);
+}
+/* Muted text → lighter muted */
+:root[data-theme="dark"] .text-slate {
+  color: #9a9aa4;
+}
+:root[data-theme="dark"] .text-slate\/60,
+:root[data-theme="dark"] .text-slate\/50 {
+  color: rgb(154 154 164 / 70%);
+}
+
+/* Navy-tinted borders → light hairlines */
+:root[data-theme="dark"] .border-navy\/5,
+:root[data-theme="dark"] .border-navy\/10,
+:root[data-theme="dark"] .border-navy\/15,
+:root[data-theme="dark"] .border-navy\/20 {
+  border-color: rgb(255 255 255 / 12%);
+}
+
+/* Subtle navy wash (e.g. icon chips) → subtle light wash */
+:root[data-theme="dark"] .bg-navy\/5 {
+  background-color: rgb(255 255 255 / 6%);
+}
+
+/* Dashed empty-state borders */
+:root[data-theme="dark"] .border-dashed.border-navy\/15 {
+  border-color: rgb(255 255 255 / 18%);
+}
+
+/* Article long-form body in dark */
+:root[data-theme="dark"] .prose-insight {
+  color: #b9b9c2;
+}
+:root[data-theme="dark"] .prose-insight h2,
+:root[data-theme="dark"] .prose-insight h3,
+:root[data-theme="dark"] .prose-insight strong,
+:root[data-theme="dark"] .prose-insight blockquote {
+  color: #f4f4f6;
+}
+
 html {
   scroll-behavior: smooth;
 }

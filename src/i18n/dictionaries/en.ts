@@ -35,6 +35,7 @@ const dictionary: Dictionary = {
     closeMenu: "Close menu",
     language: "العربية",
     skipToContent: "Skip to content",
+    theme: { light: "Light mode", dark: "Dark mode" },
     breadcrumbHome: "Home",
     since: "since",
     pendingVerification: "Pending verification",

@@ -6,6 +6,7 @@ import { Button } from "@/components/primitives/Button";
 import { Container } from "@/components/primitives/Container";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { StickyHeaderShell } from "@/components/layout/StickyHeaderShell";
 import { ClockIcon, MapPinIcon } from "@/components/icons/icons";
 
@@ -63,6 +64,7 @@ export function SiteHeader({ locale, dictionary }: { locale: Locale; dictionary:
           <div className="hidden lg:block">
             <LanguageSwitcher locale={locale} label={dictionary.common.language} />
           </div>
+          <ThemeToggle label={dictionary.common.theme} />
           <Button href={contactHref} size="sm" className="hidden sm:inline-flex">
             {dictionary.nav.requestQuote}
           </Button>
