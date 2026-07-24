@@ -58,7 +58,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     components: {
-      actions: ["@/payload/components/LanguageToggle#LanguageToggle"],
+      actions: ["@/payload/components/LocaleLanguageSync#LocaleLanguageSync"],
       beforeDashboard: ["@/payload/components/DashboardOverview#DashboardOverview"],
       graphics: {
         Logo: "@/payload/components/Logo#Logo",
