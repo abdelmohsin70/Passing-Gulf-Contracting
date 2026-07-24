@@ -188,7 +188,7 @@ const MEDIA_ALT: Record<string, { ar: string; en: string }> = {
   "wrenches-hand.jpg": { ar: "أدوات صيانة يدوية", en: "Hand maintenance tools" },
   "cleaning-soft-services-banner.jpg": { ar: "فريق نظافة يعمل في منشأة", en: "Cleaning team at work in a facility" },
   "cleaning-supplies.jpg": { ar: "مستلزمات ومعدات نظافة", en: "Cleaning supplies and equipment" },
-  "renovation-projects-banner.jpg": { ar: "أعمال ترميم وتجديد مبنى", en: "Building renovation work" },
+  "renovation-projects-banner.jpg": { ar: "فني ينفّذ أعمالًا كهروميكانيكية (MEP) في موقع مشروع", en: "Technician performing MEP works on a project site" },
   "landscape-agriculture-hero.jpg": { ar: "تنسيق وصيانة مساحات خضراء", en: "Landscaping and green space maintenance" },
   "airport-services-hero.jpg": { ar: "خدمات أرضية في مطار", en: "Airport ground services" },
   "pest-control-hero.jpg": { ar: "أعمال مكافحة حشرية", en: "Pest control work" },
