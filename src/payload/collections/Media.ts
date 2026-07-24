@@ -31,7 +31,7 @@ export const Media: CollectionConfig = {
       name: "altEn",
       type: "text",
       required: true,
-      label: "Alt text (English)",
+      label: { en: "Alt text (English)", ar: "النص البديل (إنجليزي)" },
     },
     {
       name: "captionAr",
@@ -41,7 +41,7 @@ export const Media: CollectionConfig = {
     {
       name: "captionEn",
       type: "text",
-      label: "Caption (English)",
+      label: { en: "Caption (English)", ar: "تعليق الصورة (إنجليزي)" },
     },
     {
       name: "credit",
@@ -52,6 +52,7 @@ export const Media: CollectionConfig = {
     {
       name: "category",
       type: "select",
+      label: { en: "Category", ar: "التصنيف" },
       options: [
         { label: { en: "Team", ar: "فريق العمل" }, value: "team" },
         { label: { en: "Job locations", ar: "مواقع العمل" }, value: "sites" },
@@ -65,6 +66,7 @@ export const Media: CollectionConfig = {
       name: "tags",
       type: "text",
       hasMany: true,
+      label: { en: "Tags", ar: "وسوم" },
     },
     {
       name: "usageApproved",

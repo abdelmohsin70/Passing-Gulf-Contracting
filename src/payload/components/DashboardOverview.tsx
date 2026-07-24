@@ -2,9 +2,114 @@ import React from "react";
 import { headers as getHeaders } from "next/headers";
 import { getPayload } from "payload";
 import config from "@payload-config";
+import type { ServerProps } from "payload";
 import type { Role } from "../access";
 
 const OPEN_LEAD_STATUSES = ["new", "contacted", "qualified", "site-visit", "scheduled", "proposal-sent"];
+
+/**
+ * The custom dashboard is a server component that renders its own copy (not
+ * driven by field/label config), so it must localise its strings by hand to
+ * follow the admin UI language. `i18n.language` is the code Payload resolved
+ * for the current request ("ar" or "en"); everything user-facing here reads
+ * from this table instead of hardcoded Arabic.
+ */
+type Lang = "ar" | "en";
+
+function dict(lang: Lang) {
+  const ar = {
+    brand: "اجتياز الخليج للمقاولات",
+    greeting: (name?: string) => (name ? `أهلًا ${name} 👋` : "أهلًا بك في لوحة التحكم"),
+    intro: "من هنا تدير محتوى الموقع بالعربية والإنجليزية، وتتابع طلبات العملاء لحظة وصولها.",
+    quickLook: "نظرة سريعة",
+    leadsToday: "طلبات اليوم",
+    leadsWeek: "طلبات هذا الأسبوع",
+    leadsMonth: "طلبات هذا الشهر",
+    newLeads: "طلبات جديدة غير معالجة",
+    contentQueue: "محتوى قيد المراجعة",
+    draftSolutions: (n: number) => `${n} حل بحالة مسودة`,
+    draftProjects: (n: number) => `${n} مشروع/دراسة حالة بحالة مسودة`,
+    certsExpiring: "شهادات تنتهي خلال 90 يومًا",
+    followUps: "متابعات مستحقة اليوم أو متأخرة",
+    byService: "حسب الخدمة",
+    bySector: "حسب القطاع",
+    byCity: "حسب المدينة",
+    bySource: "حسب المصدر",
+    unspecified: "غير محدد",
+    direct: "مباشر",
+    noData: "لا توجد بيانات",
+    recentLeads: "آخر الطلبات",
+    colRef: "المرجع",
+    colName: "الاسم",
+    colType: "النوع",
+    colStatus: "الحالة",
+    integrations: "حالة الربط بالأنظمة الخارجية",
+    funnel: "الزيارات وقمع التحويل (آخر 7 أيام)",
+    noAnalytics: "لا يوجد مزود تحليلات مربوط بعد — لا تُعرض أرقام افتراضية. اربط GA4 أو PostHog من إعدادات التحليلات لتفعيل هذا القسم.",
+    pageViews: "مشاهدات الصفحات",
+    quoteStarts: "بدايات طلب عرض",
+    quoteSubmits: "طلبات مكتملة",
+    intWebhook: "إشعارات الطلبات (Webhook)",
+    intMedia: "تخزين الوسائط",
+    intEmail: "البريد الإلكتروني",
+    intAnalytics: "التحليلات",
+    enabled: "مفعّل",
+    webhookOff: "غير مربوط — الطلبات تُسجَّل في قاعدة البيانات فقط وتُطبع في سجل الخادم",
+    mediaCloud: "مربوط بتخزين سحابي",
+    mediaLocal: "تخزين محلي (بيئة تطوير فقط، غير مناسب للإنتاج)",
+    emailOff: "غير مربوط — الرسائل تُطبع في سجل الخادم فقط",
+    notConnected: "غير مربوط",
+    ga4: "مربوط بـ Google Analytics 4",
+    posthog: "مربوط بـ PostHog",
+  };
+  if (lang === "ar") return ar;
+  const en: typeof ar = {
+    brand: "Ijtiyaz Al Khaleej Contracting",
+    greeting: (name?: string) => (name ? `Welcome, ${name} 👋` : "Welcome to the dashboard"),
+    intro: "Manage the site's Arabic and English content here, and track client leads the moment they arrive.",
+    quickLook: "Quick look",
+    leadsToday: "Leads today",
+    leadsWeek: "Leads this week",
+    leadsMonth: "Leads this month",
+    newLeads: "New unprocessed leads",
+    contentQueue: "Content under review",
+    draftSolutions: (n: number) => `${n} solution${n === 1 ? "" : "s"} in draft`,
+    draftProjects: (n: number) => `${n} project/case stud${n === 1 ? "y" : "ies"} in draft`,
+    certsExpiring: "Certifications expiring within 90 days",
+    followUps: "Follow-ups due today or overdue",
+    byService: "By service",
+    bySector: "By sector",
+    byCity: "By city",
+    bySource: "By source",
+    unspecified: "Unspecified",
+    direct: "Direct",
+    noData: "No data",
+    recentLeads: "Latest leads",
+    colRef: "Ref.",
+    colName: "Name",
+    colType: "Type",
+    colStatus: "Status",
+    integrations: "External systems status",
+    funnel: "Traffic & conversion funnel (last 7 days)",
+    noAnalytics: "No analytics provider connected yet — no placeholder numbers are shown. Connect GA4 or PostHog from Analytics settings to enable this section.",
+    pageViews: "Page views",
+    quoteStarts: "Quote starts",
+    quoteSubmits: "Completed quotes",
+    intWebhook: "Lead notifications (Webhook)",
+    intMedia: "Media storage",
+    intEmail: "Email",
+    intAnalytics: "Analytics",
+    enabled: "Enabled",
+    webhookOff: "Not connected — leads are only saved to the database and printed to the server log",
+    mediaCloud: "Connected to cloud storage",
+    mediaLocal: "Local storage (development only, not suitable for production)",
+    emailOff: "Not connected — emails are only printed to the server log",
+    notConnected: "Not connected",
+    ga4: "Connected to Google Analytics 4",
+    posthog: "Connected to PostHog",
+  };
+  return en;
+}
 
 function startOf(period: "day" | "week" | "month"): Date {
   const now = new Date();
@@ -43,7 +148,8 @@ function topCounts(values: Array<string | null | undefined>, fallbackLabel: stri
 type IntegrationStatus = { label: string; configured: boolean; note: string };
 
 async function getIntegrationHealth(
-  payload: Awaited<ReturnType<typeof getPayload>>
+  payload: Awaited<ReturnType<typeof getPayload>>,
+  t: ReturnType<typeof dict>
 ): Promise<IntegrationStatus[]> {
   const analyticsSettings = await payload
     .findGlobal({ slug: "analytics-settings" })
@@ -52,33 +158,36 @@ async function getIntegrationHealth(
 
   return [
     {
-      label: "إشعارات الطلبات (Webhook)",
+      label: t.intWebhook,
       configured: Boolean(process.env.NOTIFY_WEBHOOK_URL),
-      note: process.env.NOTIFY_WEBHOOK_URL ? "مفعّل" : "غير مربوط — الطلبات تُسجَّل في قاعدة البيانات فقط وتُطبع في سجل الخادم",
+      note: process.env.NOTIFY_WEBHOOK_URL ? t.enabled : t.webhookOff,
     },
     {
-      label: "تخزين الوسائط",
+      label: t.intMedia,
       configured: Boolean(process.env.S3_BUCKET || process.env.S3_ENDPOINT),
-      note: process.env.S3_BUCKET || process.env.S3_ENDPOINT ? "مربوط بتخزين سحابي" : "تخزين محلي (بيئة تطوير فقط، غير مناسب للإنتاج)",
+      note: process.env.S3_BUCKET || process.env.S3_ENDPOINT ? t.mediaCloud : t.mediaLocal,
     },
     {
-      label: "البريد الإلكتروني",
+      label: t.intEmail,
       configured: Boolean(process.env.SMTP_HOST || process.env.RESEND_API_KEY),
-      note: process.env.SMTP_HOST || process.env.RESEND_API_KEY ? "مفعّل" : "غير مربوط — الرسائل تُطبع في سجل الخادم فقط",
+      note: process.env.SMTP_HOST || process.env.RESEND_API_KEY ? t.enabled : t.emailOff,
     },
     {
-      label: "التحليلات",
+      label: t.intAnalytics,
       configured: provider !== "none",
-      note: provider === "none" ? "غير مربوط" : provider === "ga4" ? "مربوط بـ Google Analytics 4" : "مربوط بـ PostHog",
+      note: provider === "none" ? t.notConnected : provider === "ga4" ? t.ga4 : t.posthog,
     },
   ];
 }
 
-export async function DashboardOverview() {
+export async function DashboardOverview({ i18n }: { i18n?: ServerProps["i18n"] }) {
   const payload = await getPayload({ config });
   const headers = await getHeaders();
   const { user } = await payload.auth({ headers });
   const roles = (user?.roles as Role[] | undefined) ?? [];
+  const lang: Lang = i18n?.language === "en" ? "en" : "ar";
+  const t = dict(lang);
+  const dateLocale = lang === "en" ? "en-GB" : "ar";
 
   const canSeeLeads = hasAnyRole(roles, ["super-admin", "sales"]);
   const canSeeContentQueue = hasAnyRole(roles, ["super-admin", "content-manager"]);
@@ -152,25 +261,25 @@ export async function DashboardOverview() {
           .then((r) => r.docs)
           .catch(() => [])
       : [],
-    canSeeIntegrations ? getIntegrationHealth(payload) : [],
+    canSeeIntegrations ? getIntegrationHealth(payload, t) : [],
   ]);
 
   const byService = canSeeLeads
     ? topCounts(
         breakdownLeads.map((lead) => String(lead.serviceSlug ?? "")),
-        "غير محدد"
+        t.unspecified
       )
     : [];
   const bySector = canSeeLeads
     ? topCounts(
         breakdownLeads.map((lead) => String(lead.sectorSlug ?? "")),
-        "غير محدد"
+        t.unspecified
       )
     : [];
   const byCity = canSeeLeads
     ? topCounts(
         breakdownLeads.map((lead) => String(lead.city ?? "")),
-        "غير محدد"
+        t.unspecified
       )
     : [];
   const bySource = canSeeLeads
@@ -179,7 +288,7 @@ export async function DashboardOverview() {
           const utm = lead.utm as { source?: string } | null | undefined;
           return utm?.source ?? "";
         }),
-        "مباشر"
+        t.direct
       )
     : [];
 
@@ -223,13 +332,13 @@ export async function DashboardOverview() {
         />
         <div style={{ position: "relative" }}>
           <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#f36b2b", letterSpacing: "0.02em" }}>
-            اجتياز الخليج للمقاولات
+            {t.brand}
           </p>
           <h2 style={{ margin: "6px 0 0", fontSize: 24, fontWeight: 700 }}>
-            {user?.name ? `أهلًا ${String(user.name)} 👋` : "أهلًا بك في لوحة التحكم"}
+            {t.greeting(user?.name ? String(user.name) : undefined)}
           </h2>
           <p style={{ margin: "8px 0 0", fontSize: 14, color: "rgba(255, 255, 255, 0.75)", maxWidth: 560 }}>
-            من هنا تدير محتوى الموقع بالعربية والإنجليزية، وتتابع طلبات العملاء لحظة وصولها.
+            {t.intro}
           </p>
         </div>
       </div>
@@ -245,35 +354,35 @@ export async function DashboardOverview() {
           display: "inline-block",
         }}
       >
-        نظرة سريعة
+        {t.quickLook}
       </h2>
 
       {canSeeLeads ? (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 20 }}>
-          <KpiCard label="طلبات اليوم" value={leadsToday} />
-          <KpiCard label="طلبات هذا الأسبوع" value={leadsWeek} />
-          <KpiCard label="طلبات هذا الشهر" value={leadsMonth} />
-          <KpiCard label="طلبات جديدة غير معالجة" value={newLeads} accent />
+          <KpiCard label={t.leadsToday} value={leadsToday} />
+          <KpiCard label={t.leadsWeek} value={leadsWeek} />
+          <KpiCard label={t.leadsMonth} value={leadsMonth} />
+          <KpiCard label={t.newLeads} value={newLeads} accent />
         </div>
       ) : null}
 
       {canSeeContentQueue && (pendingSolutions > 0 || pendingProjects > 0) ? (
         <div style={{ marginBottom: 20 }}>
-          <SectionTitle>محتوى قيد المراجعة</SectionTitle>
+          <SectionTitle>{t.contentQueue}</SectionTitle>
           <ul style={{ margin: 0, paddingInlineStart: 18 }}>
-            {pendingSolutions > 0 ? <li>{pendingSolutions} حل بحالة مسودة</li> : null}
-            {pendingProjects > 0 ? <li>{pendingProjects} مشروع/دراسة حالة بحالة مسودة</li> : null}
+            {pendingSolutions > 0 ? <li>{t.draftSolutions(pendingSolutions)}</li> : null}
+            {pendingProjects > 0 ? <li>{t.draftProjects(pendingProjects)}</li> : null}
           </ul>
         </div>
       ) : null}
 
       {expiringCerts.length > 0 ? (
         <div style={{ marginBottom: 20 }}>
-          <SectionTitle>شهادات تنتهي خلال 90 يومًا</SectionTitle>
+          <SectionTitle>{t.certsExpiring}</SectionTitle>
           <ul style={{ margin: 0, paddingInlineStart: 18 }}>
             {expiringCerts.map((cert) => (
               <li key={String(cert.id)}>
-                {String(cert.code)} — {cert.expiresAt ? new Date(String(cert.expiresAt)).toLocaleDateString("ar") : ""}
+                {String(cert.code)} — {cert.expiresAt ? new Date(String(cert.expiresAt)).toLocaleDateString(dateLocale) : ""}
               </li>
             ))}
           </ul>
@@ -282,12 +391,12 @@ export async function DashboardOverview() {
 
       {canSeeLeads && followUpsDue.length > 0 ? (
         <div style={{ marginBottom: 20 }}>
-          <SectionTitle>متابعات مستحقة اليوم أو متأخرة</SectionTitle>
+          <SectionTitle>{t.followUps}</SectionTitle>
           <ul style={{ margin: 0, paddingInlineStart: 18 }}>
             {followUpsDue.map((lead) => (
               <li key={String(lead.id)}>
                 <a href={`/admin/collections/leads/${lead.id}`}>{String(lead.name ?? lead.referenceNumber)}</a> —{" "}
-                {lead.followUpAt ? new Date(String(lead.followUpAt)).toLocaleDateString("ar") : ""}
+                {lead.followUpAt ? new Date(String(lead.followUpAt)).toLocaleDateString(dateLocale) : ""}
               </li>
             ))}
           </ul>
@@ -296,23 +405,23 @@ export async function DashboardOverview() {
 
       {canSeeLeads && breakdownLeads.length > 0 ? (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 20 }}>
-          <BreakdownCard title="حسب الخدمة" entries={byService} />
-          <BreakdownCard title="حسب القطاع" entries={bySector} />
-          <BreakdownCard title="حسب المدينة" entries={byCity} />
-          <BreakdownCard title="حسب المصدر" entries={bySource} />
+          <BreakdownCard title={t.byService} entries={byService} emptyLabel={t.noData} />
+          <BreakdownCard title={t.bySector} entries={bySector} emptyLabel={t.noData} />
+          <BreakdownCard title={t.byCity} entries={byCity} emptyLabel={t.noData} />
+          <BreakdownCard title={t.bySource} entries={bySource} emptyLabel={t.noData} />
         </div>
       ) : null}
 
       {canSeeLeads && recentLeads.length > 0 ? (
         <div style={{ marginBottom: 20 }}>
-          <SectionTitle>آخر الطلبات</SectionTitle>
+          <SectionTitle>{t.recentLeads}</SectionTitle>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
             <thead>
               <tr style={{ textAlign: "start", borderBottom: "2px solid var(--theme-elevation-200)" }}>
-                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>المرجع</th>
-                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>الاسم</th>
-                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>النوع</th>
-                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>الحالة</th>
+                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>{t.colRef}</th>
+                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>{t.colName}</th>
+                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>{t.colType}</th>
+                <th style={{ padding: "6px 8px", color: "var(--theme-text)" }}>{t.colStatus}</th>
               </tr>
             </thead>
             <tbody>
@@ -335,7 +444,7 @@ export async function DashboardOverview() {
 
       {canSeeIntegrations ? (
         <div style={{ marginBottom: 20 }}>
-          <SectionTitle>حالة الربط بالأنظمة الخارجية</SectionTitle>
+          <SectionTitle>{t.integrations}</SectionTitle>
           <ul style={{ margin: 0, paddingInlineStart: 18 }}>
             {integrations.map((item) => (
               <li key={item.label}>
@@ -352,17 +461,16 @@ export async function DashboardOverview() {
 
       {canSeeIntegrations ? (
         <div>
-          <SectionTitle>الزيارات وقمع التحويل (آخر 7 أيام)</SectionTitle>
+          <SectionTitle>{t.funnel}</SectionTitle>
           {analyticsDaily.length === 0 ? (
             <p style={{ fontSize: 13, color: "var(--theme-elevation-500)", margin: 0 }}>
-              لا يوجد مزود تحليلات مربوط بعد — لا تُعرض أرقام افتراضية. اربط GA4 أو PostHog من إعدادات التحليلات
-              لتفعيل هذا القسم.
+              {t.noAnalytics}
             </p>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12 }}>
-              <KpiCard label="مشاهدات الصفحات" value={analyticsTotals.pageViews} />
-              <KpiCard label="بدايات طلب عرض" value={analyticsTotals.quoteStarts} />
-              <KpiCard label="طلبات مكتملة" value={analyticsTotals.quoteSubmits} />
+              <KpiCard label={t.pageViews} value={analyticsTotals.pageViews} />
+              <KpiCard label={t.quoteStarts} value={analyticsTotals.quoteStarts} />
+              <KpiCard label={t.quoteSubmits} value={analyticsTotals.quoteSubmits} />
             </div>
           )}
         </div>
@@ -374,7 +482,7 @@ export async function DashboardOverview() {
 // These read from Payload's theme variables (which flip between light and
 // dark) rather than hardcoded hex, so the custom dashboard adapts to the
 // editor's chosen admin theme. The orange accent is brand and stays fixed.
-function BreakdownCard({ title, entries }: { title: string; entries: Array<[string, number]> }) {
+function BreakdownCard({ title, entries, emptyLabel }: { title: string; entries: Array<[string, number]>; emptyLabel: string }) {
   return (
     <div
       style={{
@@ -386,7 +494,7 @@ function BreakdownCard({ title, entries }: { title: string; entries: Array<[stri
     >
       <h4 style={{ fontSize: 13, fontWeight: 700, margin: "0 0 8px", color: "var(--theme-text)" }}>{title}</h4>
       {entries.length === 0 ? (
-        <p style={{ fontSize: 12, color: "var(--theme-elevation-500)", margin: 0 }}>لا توجد بيانات</p>
+        <p style={{ fontSize: 12, color: "var(--theme-elevation-500)", margin: 0 }}>{emptyLabel}</p>
       ) : (
         <ul style={{ margin: 0, paddingInlineStart: 16, fontSize: 12, color: "var(--theme-elevation-500)" }}>
           {entries.map(([label, count]) => (

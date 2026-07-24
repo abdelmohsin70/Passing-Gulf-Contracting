@@ -19,7 +19,7 @@ export const Certifications: CollectionConfig = {
   fields: [
     { name: "code", type: "text", required: true, admin: { description: { en: "e.g. ISO 9001:2015", ar: "مثال: ISO 9001:2015" } } },
     { name: "labelAr", type: "text", label: { en: "Description (Arabic)", ar: "الوصف (عربي)" } },
-    { name: "labelEn", type: "text", label: "Description (English)" },
+    { name: "labelEn", type: "text", label: { en: "Description (English)", ar: "الوصف (إنجليزي)" } },
     { name: "issuer", type: "text" },
     { name: "certificateNumber", type: "text" },
     { name: "issuedAt", type: "date" },
