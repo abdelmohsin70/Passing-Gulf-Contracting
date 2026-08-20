@@ -194,7 +194,7 @@ const MEDIA_ALT: Record<string, { ar: string; en: string }> = {
   "pest-control-hero.jpg": { ar: "أعمال مكافحة حشرية", en: "Pest control work" },
   "arabic-hospitality.jpg": { ar: "خدمات ضيافة", en: "Hospitality services" },
   "workforce-driver.jpg": { ar: "سائق ضمن فريق التشغيل", en: "Driver as part of the operations workforce" },
-  "home-care-pool.jpg": { ar: "عناية منزلية — صيانة مسبح", en: "Home care — pool maintenance" },
+  "home-care-pool.jpg": { ar: "فني صيانة منزلية بعدّته في خدمة الفلل والمنازل", en: "Home-maintenance technician with tools for villa and home services" },
   "safety-helmets.jpg": { ar: "خوذات سلامة لفريق العمل", en: "Safety helmets for the operations team" },
 };
 
